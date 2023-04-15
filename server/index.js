@@ -1,156 +1,119 @@
-const express =require('express');
-const mysql=require('mysql');
+const express = require("express");
+const mysql = require("mysql");
 const cors = require("cors");
-const bcrypt = require('bcrypt');
-const bodyParser=require("body-parser");
-const cookieparser=require("cookie-parser");
-const session=require("express-session");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
+const app = express();
+const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 
-const app=express();
-app.use(cors({
-    origin:"http://localhost:3000",
-    credentials:true,
-}));
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+    methods: ["GET", "POST"],
+    credentials: true,
+  })
+);
 app.use(express.json());
-app.use(cookieparser());
-app.use(bodyParser.urlencoded({extended:true}));
-app.use(session({
-    key:"userId",
-    secret:"secret",
-    resave:false,
-    saveUninitialized:false,
-    
-}))
 
-const db=mysql.createConnection({
-    host:'localhost',
-    user:'root',
-    password:'',
-    database:'bank1'
-})
+app.use(
+  session({
+    key: "userId",
+    secret: "subscribe",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      expires: 60 * 60 * 24,
+    },
+  })
+);
+
+const db = mysql.createConnection({
+  user: "root",
+  host: "localhost",
+  password: "password",
+  database: "bank1",
+});
+
+app.post("/register", (req, res)=>{
+const userloginreg = req.body.userloginreg;
+const userpasswordreg = req.body.userpasswordreg;
+const pesel = req.body.pesel;
+const email = req.body.email;
+const firstname = req.body.firstname;
+const lastname = req.body.lastname;
+const mothername = req.body.mothername;
+const phonenumber = req.body.phonenumber;
+
+bcrypt.hash(userpasswordreg, saltRounds, (err, hash) => {
+  if (err) {
+    console.log(err);
+  }
+  let sqlqu = `INSERT INTO reg_request (login,pesel,email, firstName, lastName, motherName, phoneNumber, password) VALUES ("?",?,"?","?","?","?",?,"?")`;
 
 
 
-app.post("/register",(req,res)=>{
-    const login=req.body.login;
-    const password=req.body.password;
-    const email = req.body.email;
-    const pesel = req.body.pesel;
-    const firstName = req.body.firstName;
-    const lastName = req.body.lastName;
-    const motherName = req.body.motherName;
-    const phoneNumber = req.body.phoneNumber;
-    const hash = bcrypt.hash(password,saltRounds)
-      
-       
-        let sqll=`SELECT login.login, user.email, user.pesel, user.phoneNumber FROM user join login ON login.userId = user.userId 
-        where login = '${login}' OR email = '${email}' OR pesel = '${pesel}' OR phoneNumber = '${pesel}'` ;
-        db.query(sqll,
-            (er,resul)=>{
-            if(resul.length > 0)
-            {
-                resul.forEach(row => {
-                    if (row.email === email) {
-                        res.send({msg:"Email jest używany"})
-                    }
-                    if (row.login === login) {
-                        res.send({msg:"Login jest używany"})
-                    }
-                    if (row.pesel === pesel) {
-                        res.send({msg:"Zły pesel"})
-                    }i
-                    if (row.phoneNumber === phoneNumber) {
-                        res.send({msg:"Zły numer"})
-                    }
-                  });
+  db.query(sqlqu,
+    [userloginreg,pesel,email, firstname,lastname,mothername,phonenumber,hash],
+    (err,result)=>{
+      console.log(err);
+    }
+    );
 
-            }
-            else{
-                let sql=`INSERT INTO user (pesel,email,firstName,lastName,motherName,phoneNumber,login,password) VALUES (?,"?","?","?","?",?,"?","?")`;
-                
-             //let sql2=`INSERT INTO login (login,password,userId )   VALUES ("?","?",(select userId from user where pesel ='${pesel}' ))`;
-             //let sql="INSERT INTO `user` SET ?";
-                db.query(sql,
-                    [pesel,email,firstName,lastName,motherName,phoneNumber,login,hash],
-                    (err,result)=>{
-                    if(err)
 
-                    {
-                        console.log(err)
-                    }
-                    else{
-                         res.send(result);
-                    }
+});
 
-                  
-                })
-                // db.query(sql2,
-                //     [login,data],
-                //     (err,result)=>{
-                //     if(err)
-                //     {
-                //         console.log(err)
-                //     }
-                //     else{
-                //          res.send(result);
-                //     }
+});
 
-                  
-                // })       
-            }
-        })
 
-       
-    
-  
 
-})
 
+
+app.get("/login", (req, res) => {
+  if (req.session.user) {
+    res.send({ loggedIn: true, user: req.session.user });
+  } else {
+    res.send({ loggedIn: false });
+  }
+});
 
 
 app.post("/login",(req,res)=>{
-    const login=req.body.login;
-     const password=req.body.password;
+  const userlogin = req.body.userlogin;
+  const userpassword = req.body.userpassword;
+  db.query(
+    "SELECT * FROM req_request WHERE login = ?;",
+    username,
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      }
 
-         let sql=`select * from login where login='${login}'`;
+      if (result.length > 0) {
+        bcrypt.compare(userpassword, result[0].userpassword, (error, response) => {
+          if (response) {
+            req.session.user = result;
+            console.log(req.session.user);
+            res.send(result);
+          } else {
+            res.send({ message: "Złe dane" });
+          }
+        });
+      } else {
+        res.send({ message: "Złe dane" });
+      }
+    }
+  );
 
-         db.query(sql,(err,result)=>{
-             if(err)
-             {
-                
-                 console.log(err);
-             }
-             else{
-               
-                if(result.length > 0)
-                {
-  
-                 bcrypt.compare(password,result[0].password,(errr,response)=>{
-                     if(response)
-                     {
-                         req.session.user=result;
-                        
-                      res.send({login:true,userlogin:login});
-                     }
-                     else{
-                      res.send({login:false,msg:"Złe hasło"});
-                     
-                     }
-                 })
- 
-                }
+ });
 
-                else{
-                     res.send({login:false,msg:"Użytkownik o takim loginie nie istnieje"});
-               
-                }
-                
-             }
-         })       
- })
 
- app.listen(3001,()=>{
-    console.log(`running` )
-})
+
+app.listen(3001, () => {
+  console.log("running server");
+});

@@ -1,24 +1,41 @@
-import React from 'react';
-import { Switch, Route } from 'react-router-dom';
-import Home from './Home';
-import Login from './Login';
-import Navbar from './Navbar';
-import Register from './Register';
-import Profil from './Profil';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import "./App.css";
+import Home from "./Components/Home";
+import Login from "./Components/Login"
+import Register from "./Components/register"
 
-const App = () => {
+
+function App() {
   return (
-    <>
-    <Navbar/>
-    <Switch>
-      <Route exact path ="/" component={Home}/>
-      <Route exact path ="/login" component={Login}/>
-      <Route exact path ="/register" component={Register}/>
-      <Route exact path ="/profil" component={Profil}/>
-     
-    </Switch>
-</>
+   
+    <div className="App">
+    <Router>
+      <div className="navbar">
+        <nav>
+          <ul>
+            <li> <Link to="/"> Home Page</Link></li>
+            <li><Link to="/login"> Login</Link></li>
+            <li> <Link to="/register"> Stwórz konto</Link></li>
+
+          </ul>
+        </nav>
+       
+      
+        
+      </div>
+      <Switch>
+        <Route path="/" exact component={Home} />
+      
+        <Route path="/login" exact component={Login} />
+
+        <Route path="/register" exact component={Register} />
+
+      </Switch>
+    </Router>
+  </div>
+
+
   );
 }
 
