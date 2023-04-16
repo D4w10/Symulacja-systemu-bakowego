@@ -1,6 +1,7 @@
-import React from "react";
-import { useState } from "react";
+
+import React,{ useEffect ,useState } from "react";
 import Axios from "axios";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 
 
@@ -14,7 +15,7 @@ function Register(){
     const [lastname, setLastname] = useState("");
     const [mothername, setMothername] = useState("");
     const [phonenumber, setPhonenumber] = useState(0);
-
+    const his=useHistory();
     Axios.defaults.withCredentials = true;
 
     const register = () => {
@@ -31,6 +32,21 @@ function Register(){
             console.log("WOWREG");
         });
     };
+
+    useEffect(() => {
+      const checkLogin= async ()=>{
+       let val= await Axios.get("http://localhost:3001/login");
+      
+       if(val.data.user)
+       {
+           his.push("/profile")
+           // console.log(val.data.user[0].email);
+       }
+      }
+      checkLogin();
+   }, [])
+
+
 
     return(
         <div className="AppRegister" >
