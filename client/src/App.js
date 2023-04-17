@@ -10,19 +10,21 @@ function App() {
   return (
    
     <div className="App">
-    <Router>
+    <Router >
       <div className="navbar">
         <nav>
-          <ul>
-            <li> <Link to="/"> Home Page</Link></li>
-            <li><Link to="/login"> Login</Link></li>
-            <li> <Link to="/register"> Stwórz konto</Link></li>
+          <ul >
+            <li className="head_img"><a ></a></li>
+            <li > <Link className="text-link" to="/"> Strona głowna</Link></li>
+            <li><Link className="text-link" to="/login"> Zaloguj</Link></li>
+            <li> <Link className="text-link" to="/register"> Stwórz konto</Link></li>
+            <li> <Link className="text-link" to="/information"> Informacje</Link></li>
+
+            
 
           </ul>
         </nav>
        
-      
-        
       </div>
       <Switch>
         <Route path="/" exact component={Home} />

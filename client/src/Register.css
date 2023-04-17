@@ -1,0 +1,37 @@
+.AppRegister{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    color: black;
+    align-content: center;
+    justify-content: center;
+}
+label{
+    width:15%;height:100%
+}
+input{
+    margin-bottom: 50px;
+    flex-basis: 30%;
+    margin-right: 10px;
+   
+}
+button{
+    margin: 0 auto;
+    display: block;
+    color: White;
+    background-color:#920035;
+    padding: 1rem 6rem;
+    border: 2px solid #920035 ;
+}
+button:hover{
+    color: black;
+    background-color: yellow;
+    border: 2px solid gray ;
+    cursor: pointer;
+  }
+  .separate{
+    flex-basis: 40%;
+  }
+
+  .btn-register{}
+  

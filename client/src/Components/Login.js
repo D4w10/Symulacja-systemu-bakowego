@@ -62,6 +62,7 @@
 import React,{useState,useEffect} from 'react'
 import {NavLink, useHistory} from 'react-router-dom'
 import axios from 'axios';
+import "../Login.css";
 
 
 const Login = () => {
@@ -150,15 +151,15 @@ if(val.data.msg)
                }
                <br />
            <form onSubmit={onSub}>
-  <div>
+  <div className='wrap_login'>
     <label >Login:</label>
     <input  type='text'  placeholder="Login" name="login" value={user.login} onChange={userInput} required />
   
-    <label for="pwd">Password:</label>
-    <input type="password" className="form-control" placeholder="Enter password" name="password" value={user.password} onChange={userInput}  required/>
+    <label for="pwd">Hasło:</label>
+    <input type="password" className="form-control" placeholder="Podaj hasło" name="password" value={user.password} onChange={userInput}  required/>
   </div>
   
-  <button type="submit" className="btn btn-primary">Submit</button>
+  <button type="submit" className="btn btn-primary">Zaloguj się</button>
 </form>
 <br />
 

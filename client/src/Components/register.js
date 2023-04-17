@@ -2,6 +2,7 @@
 import React,{ useEffect ,useState } from "react";
 import Axios from "axios";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import"../Register.css"
 
 
 
@@ -94,10 +95,11 @@ function Register(){
             onChange={(e) => {
                 setPhonenumber(e.target.value);
               }}/>
-
-              <button onClick={register}> Stwórz konto </button>
+               <div className="separate"><button className="btn-register" onClick={register}> Stwórz konto </button></div>
+              
 
         </div>
+        
     )
 
 }
