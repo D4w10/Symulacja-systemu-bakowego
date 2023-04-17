@@ -4,6 +4,7 @@ import "./App.css";
 import Home from "./Components/Home";
 import Login from "./Components/Login"
 import Register from "./Components/register"
+import Profile from "./Components/Profile";
 
 
 function App() {
@@ -32,7 +33,7 @@ function App() {
         <Route path="/login" exact component={Login} />
 
         <Route path="/register" exact component={Register} />
-
+        <Route path="/profile" exact component={Profile} />
       </Switch>
     </Router>
   </div>

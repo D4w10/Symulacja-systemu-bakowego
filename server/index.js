@@ -4,11 +4,12 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
-const app = express();
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
-app.use(express.json());
 
+
+
+const app = express();
 
 
 
@@ -19,6 +20,7 @@ app.use(
     credentials: true,
   })
 );
+app.use(express.json());
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -41,7 +43,7 @@ const db = mysql.createConnection({
   database: "bank1",
 });
 
-app.post("/register", (req, res)=>{
+app.post("/register", async (req, res)=>{
   const userloginreg = req.body.userloginreg;
   const userpasswordreg = req.body.userpasswordreg;
   const pesel = req.body.pesel;
@@ -51,11 +53,12 @@ app.post("/register", (req, res)=>{
   const mothername = req.body.mothername;
   const phonenumber = req.body.phonenumber;
   
-  bcrypt.hash(userpasswordreg, saltRounds, (err, hash) => {
+  bcrypt.genSalt(saltRounds, function(err, salt) {
+   bcrypt.hash(userpasswordreg, salt, (err, hash) => {
     if (err) {
       console.log(err);
     }
-    let sqlqu = `INSERT INTO reg_request (login,pesel,email, firstName, lastName, motherName, phoneNumber, password) VALUES ("?",?,"?","?","?","?",?,"?")`;
+    let sqlqu = `INSERT INTO reg_request (login,pesel,email, firstName, lastName, motherName, phoneNumber, password) VALUES (?,?,?,?,?,?,?,?)`;
   
   
   
@@ -74,60 +77,124 @@ app.post("/register", (req, res)=>{
   
   
   });
+
+});
+
+  
   
   });
 
 
 
-app.post("/login",(req,res)=>{
-  const userlogin = req.body.login;
-  const password = req.body.password;
-  db.query(
-    "SELECT login, password FROM reg_request WHERE login = '\'?\'';",
-    userlogin,
-    (err, result) => {
-      if(err)
-      {
-          // res.send({err:err})
-          console.log(err);
-      }
-      else{
-        console.log(password);
-       console.log(result[0].password);
-         if(result.length > 0)
-         {
-          const isValid = bcrypt.compare(password,result[0].password)
+// app.post("/login", async (req,res)=>{
+//   const userlogin = req.body.login;
+//   const password = req.body.password;
+//   db.query(
+//     "SELECT * FROM reg_request WHERE login = '\'?\'';",
+//     userlogin,
+//     (err, result) => {
+//       if(err)
+//       {
+//           // res.send({err:err})
+//           console.log(err);
+//       }
+//       else{
+//         console.log(password);
+//        console.log(result[0].password);
+//          if(result.length > 0)
+//          {
+
+//           async function compar(){
+//            return await bcrypt.compare(password,result[0].password);
+//           }
+
+//           isValid = compar();
               
-            console.log(isValid);
-            if(isValid)
-              {
-                  req.session.user=result;
-                  // console.log(req.session.user);
+//             console.log(isValid);
+//             if(isValid)
+//               {
+//                   req.session.user=result;
+//                   // console.log(req.session.user);
                
-               res.send({login:true,userlogin:userlogin});
+//                res.send({login:true,userlogin:userlogin});
+//               }
+//               else{
+//                res.send({login:false,msg:"Wrong Password"});
+              
+//               }
+          
+
+          
+
+//          }
+//          else{
+//               res.send({login:false,msg:"User Not Exits"});
+//           // console.log("noo email ")
+//          }
+          
+
+//       }
+//     }
+//   );
+
+//  });
+
+app.post("/login",(req,res)=>{
+  const userlogin=req.body.login;
+   const password=req.body.password;
+
+   console.log(userlogin);
+       
+ 
+       let sql=`select * from reg_request where login='${userlogin}'`;
+       // console.log(sql);
+       db.query(sql,(err,result)=>{
+        console.log(password);
+        console.log(result[0]);
+
+           if(err)
+           {
+               // res.send({err:err})
+               console.log(err);
+           }
+           else{
+             
+              if(result.length > 0)
+              {
+               bcrypt.compare(password,result[0].password,(errr,response)=>{
+                   console.log(password);
+                   console.log(result[0].password);
+                   console.log(response);
+                   if(response)
+                   {
+                       req.session.user=result;
+                       // console.log(req.session.user);
+                    
+                    res.send({login:true,userlogin:userlogin});
+                     
+                   }
+                   else{
+                    res.send({login:false,msg:"Wrong Password"});
+                   
+                   }
+               })
+
+               
+
               }
               else{
-               res.send({login:false,msg:"Wrong Password"});
-              
+                   res.send({login:false,msg:"User Email Not Exits"});
+               // console.log("noo email ")
               }
-          
+               
+   
+           }
+       })
 
-          
-
-         }
-         else{
-              res.send({login:false,msg:"User Not Exits"});
-          // console.log("noo email ")
-         }
-          
-
-      }
-    }
-  );
-
- });
-
-
+     
+   
+    
+})
 
  app.get("/login", (req, res) => {
   if (req.session.user) {
