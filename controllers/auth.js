@@ -57,13 +57,17 @@ exports.register = (req, res) => {
   console.log(req.body);
 
   const{ login, email, pesel, password, confirmpassword, firstName, lastName, motherName, phoneNumber} = req.body;
-  let sqll = 'SELECT login, email, pesel, phoneNumber from reg_request WHERE login = ? OR email = ? OR pesel = ? OR phoneNumber = ? ';
+  let sqll = 'SELECT * from reg_request WHERE login = ? OR email = ? OR pesel = ? OR phoneNumber = ? ';
   db.query(sqll,[login, email, pesel, phoneNumber], async (error, results)=> {
+
+    console.log(results);
+
     if(error) {
       console.log(error);
     }
 
-    if( results.length > 0 ) {
+    
+    if( results.lenght > 0 || login == 'admin' || login == 'Admin') {
       return res.render('register', {
         message: 'Niektóre dane są już używane'
       })
@@ -71,12 +75,12 @@ exports.register = (req, res) => {
       return res.render('register', {
         message: 'Passwords do not match'
       });
-    }
-
+    }else{
+        
     let hashedPassword = await bcrypt.hash(password, 8);
     console.log(hashedPassword);
 
-    let sqlq = `INSERT INTO reg_request (login,pesel,email, firstName, lastName, motherName, phoneNumber, password) VALUES (?,?,?,?,?,?,?,?)`;
+    let sqlq = `INSERT INTO reg_request (login,pesel,email, firstName, lastName, motherName, phoneNumber, password, role) VALUES (?,?,?,?,?,?,?,?,'user')`;
            
     db.query(sqlq, 
       [login,pesel,email, firstName,lastName,motherName,phoneNumber,hashedPassword],
@@ -91,13 +95,16 @@ exports.register = (req, res) => {
       }
     })
 
-
+    }
+  
+  
+  
   });
 
 }
 
 exports.isLoggedIn = async (req, res, next) => {
-  // console.log(req.cookies);
+   console.log(req.cookies.jwt + "A===================");
   if( req.cookies.jwt) {
     try {
       //1) verify the token
@@ -105,7 +112,7 @@ exports.isLoggedIn = async (req, res, next) => {
       process.env.JWT_SECRET
       );
 
-      console.log(decoded);
+      console.log(decoded );
 
       //2) Check if the user still exists
       db.query('SELECT * FROM reg_request WHERE id = ?', [decoded.id], (error, result) => {
