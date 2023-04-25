@@ -29,7 +29,7 @@ router.get('/profile', authController.isLoggedIn, (req, res) => {
   
 })
 
-router.get('/admin', authController.isLoggedIn, (req, res) => {
+router.get('/admin',authController.isLoggedIn,(req, res) => {
   console.log(req.user);
   if( req.user.role == 'admin' ) {
     res.render('admin', {
@@ -37,6 +37,21 @@ router.get('/admin', authController.isLoggedIn, (req, res) => {
     });
   } else {
     res.redirect('/profile');
+  }
+  
+})
+
+
+
+
+router.get('/history', authController.isLoggedIn, (req, res) => {
+  console.log(req.user);
+  if( req.user ) {
+    res.render('history', {
+      user: req.user
+    });
+  } else {
+    res.redirect('/login');
   }
   
 })

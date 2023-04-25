@@ -116,14 +116,14 @@ exports.isLoggedIn = async (req, res, next) => {
    console.log(req.cookies.jwt + "A===================");
   if( req.cookies.jwt) {
     try {
-      //1) verify the token
+     
       const decoded = await promisify(jwt.verify)(req.cookies.jwt,
       process.env.JWT_SECRET
       );
 
       console.log(decoded );
 
-      //2) Check if the user still exists
+     
       db.query('SELECT * FROM reg_request WHERE id = ?', [decoded.id], (error, result) => {
         console.log(result);
 
@@ -154,3 +154,4 @@ exports.logout = async (req, res) => {
 
   res.status(200).redirect('/');
 }
+
