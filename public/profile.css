@@ -1,0 +1,45 @@
+*{
+   
+    box-sizing: border-box;
+}
+
+.fa-address-card{
+    margin-right: 10px;
+    font-size: 36px;
+    line-height: inherit!important; vertical-align: middle;
+
+    
+}
+.avatar-ico{
+    line-height: 36px;
+    font-size: 22px;
+    padding: 40px;
+    border: none;
+}
+.card{
+    border: none;
+}
+.row{
+    justify-content: center;
+}
+.separate{
+    width: 25vw;
+    border-top: 1px solid rgba(0,0,0,.125);
+    margin-bottom: 1px;
+
+}
+.card-body{
+    /* border-top: 1px solid rgba(0,0,0,.125); */
+    display: flex;
+    justify-content: space-between;
+   
+}
+.card-text{
+    padding: 0.375rem 0.75rem;
+}
+.btn-primary{
+    padding: 0.375rem 0.75rem;
+    width: 100px;
+   
+   
+}
