@@ -11,10 +11,11 @@ const db = mysql.createConnection({
 });
 
 exports.login = async (req, res) => {
+
   try {
     const { login, password } = req.body;
 
-    if( !login || !password ) {
+    if (!login || !password) {
       return res.status(400).render('login', {
         message: 'Wpisz login i hasło'
       })
@@ -22,14 +23,15 @@ exports.login = async (req, res) => {
 
     db.query('SELECT * FROM reg_request WHERE login = ?', [login], async (error, results) => {
       console.log(results);
-      if( !results || !(await bcrypt.compare(password, results[0].password)) ) {
+      if (!results || !(await bcrypt.compare(password, results[0].password))) {
         res.status(401).render('login', {
           message: 'Login lub hasło są niepoprawne'
         })
       } else {
         const id = results[0].id;
+        const isAdmin = (results[0].role === 'admin');
 
-        const token = jwt.sign({ id }, process.env.JWT_SECRET, {
+        const token = jwt.sign({ id, isAdmin }, process.env.JWT_SECRET, {
           expiresIn: process.env.JWT_EXPIRES_IN
         });
 
@@ -37,13 +39,18 @@ exports.login = async (req, res) => {
 
         const cookieOptions = {
           expires: new Date(
-            Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
+            Date.now() + process.env.JWT_COOKIE_EXPIRES * 15 * 60 * 1000
           ),
           httpOnly: true
         }
 
-        res.cookie('jwt', token, cookieOptions );
-        res.status(200).redirect("/");
+        res.cookie('jwt', token, cookieOptions);
+
+        if (isAdmin) {
+          res.status(200).redirect("/admin");
+        } else {
+          res.status(200).redirect("/");
+        }
       }
 
     })
@@ -51,6 +58,8 @@ exports.login = async (req, res) => {
   } catch (error) {
     console.log(error);
   }
+
+
 }
 
 exports.register = (req, res) => {

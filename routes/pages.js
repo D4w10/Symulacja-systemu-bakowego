@@ -29,4 +29,15 @@ router.get('/profile', authController.isLoggedIn, (req, res) => {
   
 })
 
+router.get('/admin', authController.isLoggedIn, (req, res) => {
+  console.log(req.user);
+  if( req.user.role == 'admin' ) {
+    res.render('admin', {
+      user: req.user
+    });
+  } else {
+    res.redirect('/profile');
+  }
+  
+})
 module.exports = router;
