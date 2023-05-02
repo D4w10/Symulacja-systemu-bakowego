@@ -1,0 +1,10 @@
+.separate{
+    border-bottom: 1px solid rgba(0,0,0,0.125);
+}
+.row{
+    justify-content: center;
+}
+i{
+    font-size: 32px;
+    margin-right: 5px;
+}
