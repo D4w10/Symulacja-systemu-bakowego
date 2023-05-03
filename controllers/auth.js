@@ -22,9 +22,11 @@ exports.login = async (req, res) => {
       })
     }
 
+ 
+
     db.query('SELECT * FROM reg_request WHERE login = ?', [login], async (error, results) => {
       console.log(results);
-      if (!results || !(await bcrypt.compare(password, results[0].password))) {
+      if( results == "" || !(await bcrypt.compare(password, results[0].password)) )  {
         res.status(401).render('login', {
           message: 'Login lub hasło są niepoprawne'
         })
