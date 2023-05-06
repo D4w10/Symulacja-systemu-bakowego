@@ -1,21 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <link rel="stylesheet" href="/style.css">
   <title>Document</title>
 </head>
+
 <body>
-    
- <nav>
+
+  <nav>
     <h4>Admin panel</h4>
     <ul>
       <li><a href="/admin">Profile</a></li>
       <li><a href="/auth/logout">Logout</a></li>
     </ul>
   </nav>
+  <main>
+    <h2>Wybierz użytkownika któremu chcesz przelac pieniadze</h2>
+
+    <p>Użytkownicy znajduja sie w rozwijanej liscie:</p>
+
+
+    {{!-- <form>
+      <label for="user_balance">Wybierz użytkownika:</label>
+      <select id="user_balance" name="balance">
+        <option value=""></option>
+      </select>
+      <input type="submit">
+    </form> --}}
+
+    <form>
+      <label for="user_balance">Wybierz użytkownika:</label>
+      <select id="user_balance" name="balance">
+        <option value=""></option>
+        {{#each bil}}
+        <option value="{{this.id}}">{{this.firstName}}</option>
+        {{/each}}
+      </select>
+      <input type="number">
+      <input type="submit">
+    </form>
+
+
+    <div>
+
+
+
+      <h2>Bilans użytkowników:</h2>
+
+      {{#each bil}}
+      <div>
+        <p>Imię: {{this.firstName}}</p>
+        <p>Nazwisko: {{this.lastName}}</p>
+        <p>Stan konta:{{this.bilans}}</p>
+        <!-- Dodaj inne informacje o użytkownikach, takie jak bilans -->
+      </div>
+      {{/each}}
+
+
+
+
+    </div>
+
+
+  </main>
 
 </body>
+
 </html>

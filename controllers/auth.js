@@ -11,6 +11,7 @@ const db = mysql.createConnection({
   database: process.env.DATABASE
 });
 
+
 exports.login = async (req, res) => {
 
   try {
@@ -18,7 +19,8 @@ exports.login = async (req, res) => {
 
     if (!login || !password) {
       return res.status(400).render('login', {
-        message: 'Wpisz login i hasło'
+        message: 'Wpisz login i hasło' 
+        
       })
     }
 
@@ -162,7 +164,7 @@ exports.isLoggedIn = async (req, res, next) => {
       console.log(decoded );
 
      
-      db.query('SELECT * FROM reg_request WHERE id = ?', [decoded.id], (error, result) => {
+      db.query('SELECT * FROM reg_request INNER JOIN account ON reg_request.id = account.user_id WHERE reg_request.id = ?', [decoded.id], (error, result) => {
         console.log(result);
 
         if(!result) {
@@ -182,6 +184,8 @@ exports.isLoggedIn = async (req, res, next) => {
   } else {
     next();
   }
+
+
 }
 
 exports.logout = async (req, res) => {
