@@ -20,6 +20,7 @@
       <li><a href="/">Home</a></li>
       <li><a href="/profile">Profil</a></li>
       <li><a href="/history">Lista operacji</a></li>
+       <li><a href="/transfer">Przelew</a></li>
       <li><a href="/auth/logout">Wyloguj</a></li>
     </ul>
   </nav>
@@ -29,34 +30,38 @@
       <div class="col-4">
         <div class="card">
           <div class="avatar-ctn">
-            {{!-- <img src="/avatar.png" class="avatar" alt="user profile picture" /> --}}
             <p class="avatar-ico"> <i class="fa-regular fa-address-card"></i>Dane</p>
           </div>
           <div class="separate first"></div>
           <div class="card-body">
             <p class="card-text">Adres e-mail:</p>
-            <a href="#" class="btn btn-primary">{{user.email}}</a>
+            <span> {{user.email}}</span>
           </div>
           <div class="separate"></div>
           <div class="card-body">
             <p class="card-text">Imie:</p>
-            <a href="#" class="btn btn-primary">{{user.firstName}}</a>
+            <span> {{user.firstName}}</span>
           </div>
           <div class="separate"></div>
           <div class="card-body">
             <p class="card-text">Nazwisko:</p>
-            <a href="#" class="btn btn-primary">{{user.lastName}}</a>
+            <span> {{user.lastName}}</span>
           </div>
           <div class="separate"></div>
           <div class="card-body">
             <p class="card-text">Telefon:</p>
-            <a href="#" class="btn btn-primary">{{user.phonenumber}}</a>
+            <span> {{user.phonenumber}}</span>
           </div>
 
         </div>
+
+      </div>
+      <div class="col-4">
+        <p><i class="fa-regular fa-money-bill-1"></i>Stan konta: {{user.bilans}}</p>
       </div>
 
     </div>
+
 
 
   </div>

@@ -3,6 +3,7 @@ const path = require('path');
 const mysql = require("mysql");
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
+const { connect } = require("http2");
 
 dotenv.config({ path: './.env'});
 
@@ -14,6 +15,10 @@ const db = mysql.createConnection({
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE
 });
+
+
+
+
 
 const publicDirectory = path.join(__dirname, './public');
 app.use(express.static(publicDirectory));
