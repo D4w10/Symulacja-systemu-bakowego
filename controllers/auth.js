@@ -290,6 +290,32 @@ exports.transfer = async (req, res) => {
   }
 };
 
+// exports.adminTransf= async (req, res) => {
+//   try{
+//     const userIdd = req.body.balance; // Pobiera ID wybranego użytkownika z formularza
+//     const amounty = req.body.amount; 
+//     console.log(userIdd,amounty);
+//   db.commit((error) => {
+//     if (error) {
+//       db.rollback(() => {
+//         throw error;
+//       });
+      
+//     }
+    
+    
+//     res.status(200).render('admin',{ message: 'Przelew wykonany pomyślnie.' });
+//   });
+// }
+//   catch (error) {
+//     // await db.rollback();
+//      console.log(error);
+//      res.status(500).render('admin',{ message: 'Wystąpił błąd podczas wykonywania przelewu.' });
+//    }
+  
+
+// }
+
 
 exports.logout = async (req, res) => {
   res.cookie('jwt', 'logout', {

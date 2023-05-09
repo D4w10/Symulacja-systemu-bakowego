@@ -25,15 +25,8 @@
     <p>Użytkownicy znajduja sie w rozwijanej liscie:</p>
 
 
-    {{!-- <form>
-      <label for="user_balance">Wybierz użytkownika:</label>
-      <select id="user_balance" name="balance">
-        <option value=""></option>
-      </select>
-      <input type="submit">
-    </form> --}}
 
-    <form>
+    <form action="/adminTransf" method="post">
       <label for="user_balance">Wybierz użytkownika:</label>
       <select id="user_balance" name="balance">
         <option value=""></option>
@@ -41,11 +34,14 @@
         <option value="{{this.id}}">{{this.firstName}}</option>
         {{/each}}
       </select>
-      <input type="number">
+      <input type="number" name="amount">
       <input type="submit">
     </form>
 
-
+    {{#if messages }}
+    <h4 class="alert alert-danger mt-4">{{messages}}</h4>
+    {{/if}}
+    {{!-- cos nie dziala --}}
     <div>
 
 
@@ -57,7 +53,6 @@
         <p>Imię: {{this.firstName}}</p>
         <p>Nazwisko: {{this.lastName}}</p>
         <p>Stan konta:{{this.bilans}}</p>
-        <!-- Dodaj inne informacje o użytkownikach, takie jak bilans -->
       </div>
       {{/each}}
 
@@ -68,6 +63,7 @@
 
 
   </main>
+
 
 </body>
 

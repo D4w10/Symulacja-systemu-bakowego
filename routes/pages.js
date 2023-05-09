@@ -2,6 +2,8 @@ const mysql = require("mysql");
 const express = require('express');
 const authController = require('../controllers/auth');
 
+
+
 const router = express.Router();
 const db = mysql.createConnection({
   host: process.env.DATABASE_HOST,
@@ -9,6 +11,7 @@ const db = mysql.createConnection({
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE
 });
+
 
 router.get('/', authController.isLoggedIn, (req, res) => {
   res.render('index', {
@@ -68,6 +71,7 @@ router.get('/admin', authController.isLoggedIn, async (req, res) => {
           });
         });
       };
+     
 
       const users = await getUsers();
     
@@ -76,7 +80,7 @@ router.get('/admin', authController.isLoggedIn, async (req, res) => {
  
     res.render('admin', {
       user: req.user,
-      bil:users
+      bil:users,
     });
 
   }catch (error) {
@@ -87,7 +91,25 @@ router.get('/admin', authController.isLoggedIn, async (req, res) => {
     res.redirect('/profile');
   }
 
-})
+});
+router.post('/adminTransf', authController.isLoggedIn, async (req, res) => {
+  const userId = req.body.balance; // Pobierz ID wybranego użytkownika z formularza
+  const amount = req.body.amount; // Pobierz przekazywaną kwotę z formularza
+console.log(amount);
+  try {
+    // Zaktualizuj wartość "bilans" w tabeli "account" dla wybranego użytkownika
+    const updateQuery = 'UPDATE account SET bilans = bilans + ? WHERE user_id = ?';
+    await db.query(updateQuery, [amount, userId]);
+
+    res.redirect('/admin'); // Przekierowanie na stronę sukcesu
+
+    
+  } catch (error) {
+    console.error('Błąd podczas aktualizacji bilansu: ', error);
+    res.status(500).send('Wystąpił błąd podczas aktualizacji bilansu.');
+  }
+  
+});
 
 
 
