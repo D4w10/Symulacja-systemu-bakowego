@@ -4,8 +4,9 @@ const mysql = require("mysql");
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 const { connect } = require("http2");
-
 dotenv.config({ path: './.env'});
+
+
 
 const app = express();
 
@@ -29,8 +30,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
 
-app.set('view engine', 'hbs');
 
+
+
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+//app.engine('hbs', hbs.engine);
 db.connect( (error) => {
   if(error) {
     console.log(error)

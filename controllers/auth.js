@@ -189,12 +189,12 @@ exports.isLoggedIn = async (req, res, next) => {
 exports.transfer = async (req, res) => {
 
   try {
-    const { amount, banknumber, info } = req.body;
+    const { amount, banknumber, description } = req.body;
     console.log(req.body);
     const decoded = await promisify(jwt.verify)(req.cookies.jwt,
       process.env.JWT_SECRET);
 
-    const description = info;
+
     const senderId = decoded.id;
 
     // Pobierz informacje o użytkowniku odbiorcy

@@ -1,6 +1,6 @@
 
 nav {
-  background-color: #563d7c;
+  background-color: #004d9c;
   color: #fff;
   padding: 30px 60px;
   display: flex;
@@ -40,7 +40,7 @@ span{
   padding: 0.375rem 0.75rem;
 }
 
-/* .avatar-ctn {
+ .avatar-ctn {
   background-color: orange;
   text-align: center;
 }
@@ -48,4 +48,4 @@ span{
 .avatar {
   width: 65%;
   border-bottom: 1px solid rgba(0,0,0,0.125);
-} */
+} 

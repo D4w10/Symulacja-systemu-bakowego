@@ -27,16 +27,86 @@ router.get('/login', (req, res) => {
   res.render('login');
 });
 
+
+
 router.get('/profile', authController.isLoggedIn, (req, res) => {
-  console.log(req.user);
+  console.log("sadsdsdadksjhkjh");
+  console.log(req.user.id);
   if( req.user ) {
-    res.render('profile', {
-      user: req.user
-    });
+
+ 
+    try {
+      // Pobierz listę danych z bazy danych
+      const getDataQuery = `SELECT *, DATE_FORMAT(created_at, '%d.%m.%Y') as data,DATE_FORMAT(created_at, '%T') as czas  FROM transactions Where sender_id = ? OR recipient_id ORDER BY created_at DESC LIMIT 15`;
+      db.query(getDataQuery,[req.user.id], (err,transrow)=>{
+        
+        res.render('profile', {
+          user: req.user,
+          transfer: transrow
+        });
+          console.log(transrow);
+      });
+  
+      
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Wystąpił błąd podczas pobierania listy danych.');
+    }
+
+
+
+   
+
+
+
   } else {
     res.redirect('/login');
   }
   
+
+
+
+})
+
+
+
+router.get('/history', authController.isLoggedIn, (req, res) => {
+  console.log("sadsdsdadksjhkjh");
+  console.log(req.user.id);
+  if( req.user ) {
+
+ 
+    try {
+      // Pobierz listę danych z bazy danych
+      const getDataQuery = `SELECT *, DATE_FORMAT(created_at, '%d.%m.%Y') as data,DATE_FORMAT(created_at, '%T') as czas  FROM transactions Where sender_id = ? OR recipient_id ORDER BY created_at DESC`;
+      db.query(getDataQuery,[req.user.id], (err,transrow)=>{
+        db.query
+        res.render('history', {
+          user: req.user,
+          transfer: transrow
+        });
+          console.log(transrow);
+      });
+  
+      
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Wystąpił błąd podczas pobierania listy danych.');
+    }
+
+
+
+   
+
+
+
+  } else {
+    res.redirect('/login');
+  }
+  
+
+
+
 })
 
 // router.get('/admin',authController.isLoggedIn,(req, res) => {
@@ -58,7 +128,7 @@ router.get('/profile', authController.isLoggedIn, (req, res) => {
 
 router.get('/admin', authController.isLoggedIn, async (req, res) => {
   console.log(req.user);
-  if (req.user.role == 'admin') {
+  //sif (req.user.role == 'admin') {
     try {
       const getUsers = () => {
         return new Promise((resolve, reject) => {
@@ -86,12 +156,15 @@ router.get('/admin', authController.isLoggedIn, async (req, res) => {
   }catch (error) {
     console.error(error);
     // Obsługa błędu
-  }}
-   else {
-    res.redirect('/profile');
   }
+// }
+//    else {
+//     res.redirect('/profile');
+//   }
 
 });
+
+
 router.post('/adminTransf', authController.isLoggedIn, async (req, res) => {
   const userId = req.body.balance; // Pobierz ID wybranego użytkownika z formularza
   const amount = req.body.amount; // Pobierz przekazywaną kwotę z formularza
