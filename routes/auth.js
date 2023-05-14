@@ -1,5 +1,6 @@
 const express = require('express');
 const authController = require('../controllers/auth');
+const przelewController = require('../controllers/przelewy');
 
 const router = express.Router();
           
@@ -9,6 +10,8 @@ router.post('/login', authController.login );
 
 router.get('/logout', authController.logout );
 
-router.post('/transfer', authController.transfer);
+router.post('/transfer', przelewController.transfer);
+
+//router.post('/transfer2', authController.transfer);
 
 module.exports = router;

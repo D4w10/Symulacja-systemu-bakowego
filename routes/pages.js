@@ -212,7 +212,17 @@ router.get('/transfer', authController.isLoggedIn, (req, res) => {
   
 })
 
-
+router.get('/transfer2', authController.isLoggedIn, (req, res) => {
+  console.log(req.user);
+  if( req.user ) {
+    res.render('transfer2',{
+      user: req.user
+    });
+  } else {
+    res.redirect('/login');
+  }
+  
+})
 
 
 

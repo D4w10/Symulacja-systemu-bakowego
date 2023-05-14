@@ -186,135 +186,110 @@ exports.isLoggedIn = async (req, res, next) => {
 }
 
 
-exports.transfer = async (req, res) => {
+// exports.transfer = async (req, res) => {
 
-  try {
-    const { amount, banknumber, description } = req.body;
-    console.log(req.body);
-    const decoded = await promisify(jwt.verify)(req.cookies.jwt,
-      process.env.JWT_SECRET);
+//   try {
+//     const { amount, banknumber, description } = req.body;
+//     console.log(req.body);
+//     const decoded = await promisify(jwt.verify)(req.cookies.jwt,
+//       process.env.JWT_SECRET);
 
 
-    const senderId = decoded.id;
+//     const senderId = decoded.id;
 
-    // Pobierz informacje o użytkowniku odbiorcy
-    db.query('SELECT COUNT(*) istn from account where account_number = ?', [banknumber], async (error, row) =>{
-      console.log(row[0].istn)
-      if(row[0].istn == 0){
-        console.log("BŁĄDDDD")
-        return res.status(400).render('transfer',{ message: 'Nie znaleziono odbiorcy.' });
-      }else{
+//     // Pobierz informacje o użytkowniku odbiorcy
+//     db.query('SELECT COUNT(*) istn from account where account_number = ?', [banknumber], async (error, row) =>{
+//       console.log(row[0].istn)
+//       if(row[0].istn == 0){
+//         console.log("BŁĄDDDD")
+//         return res.status(400).render('transfer',{ message: 'Nie znaleziono odbiorcy.' });
+//       }else{
 
-    const getRecipientQuery = 'SELECT * FROM reg_request INNER JOIN account ON reg_request.id = account.user_id  WHERE account.account_number = ?';
-    db.query(getRecipientQuery, [banknumber], async (error, recipientResult) => {
-      if (error) throw error;
-      console.log("ssssssssssssssssssssssssdsds")
-      console.log(recipientResult);
-      console.log("ssssssssssssssssssssssssdsds")
-      if (!recipientResult || recipientResult === '[]') {
-        console.log("BŁĄDDDD")
-        return res.status(400).render('transfer',{ message: 'Nie znaleziono odbiorcy.' });
-      }
+//     const getRecipientQuery = 'SELECT * FROM reg_request INNER JOIN account ON reg_request.id = account.user_id  WHERE account.account_number = ?';
+//     db.query(getRecipientQuery, [banknumber], async (error, recipientResult) => {
+//       if (error) throw error;
+//       console.log("ssssssssssssssssssssssssdsds")
+//       console.log(recipientResult);
+//       console.log("ssssssssssssssssssssssssdsds")
+//       if (!recipientResult || recipientResult === '[]') {
+//         console.log("BŁĄDDDD")
+//         return res.status(400).render('transfer',{ message: 'Nie znaleziono odbiorcy.' });
+//       }
       
      
-      //console.log(recipientId);
-      // Sprawdź czy użytkownik ma wystarczająco środków na koncie
-      const getSenderAccountQuery = 'SELECT * FROM account WHERE user_id = ?';
-      db.query(getSenderAccountQuery, [senderId], async (error, senderAccountResult) => {
-        if (error) throw error;
+//       //console.log(recipientId);
+//       // Sprawdź czy użytkownik ma wystarczająco środków na koncie
+//       const getSenderAccountQuery = 'SELECT * FROM account WHERE user_id = ?';
+//       db.query(getSenderAccountQuery, [senderId], async (error, senderAccountResult) => {
+//         if (error) throw error;
 
-        if (senderAccountResult[0].bilans < amount) {
-          return res.status(400).render('transfer',{ message: 'Brak wystarczających środków na koncie.' });
-        }
+//         if (senderAccountResult[0].bilans < amount) {
+//           return res.status(400).render('transfer',{ message: 'Brak wystarczających środków na koncie.' });
+//         }
         
-        // Wykonaj przelew
-        // const recipientId = recipientResult.id;
-        const recipientId = recipientResult[0].id;
-        const senderAccountNumber = senderAccountResult[0].account_number;
-        const recipientAccountNumber = recipientResult[0].account_number;
-        console.log("ssssssssssssssssssssssssssssdsds")
-        console.log(recipientAccountNumber);
+//         // Wykonaj przelew
+//         // const recipientId = recipientResult.id;
+//         const recipientId = recipientResult[0].id;
+//         const senderAccountNumber = senderAccountResult[0].account_number;
+//         const recipientAccountNumber = recipientResult[0].account_number;
+//         console.log("ssssssssssssssssssssssssssssdsds")
+//         console.log(recipientAccountNumber);
 
         
-        db.beginTransaction(async (error) => {
-          if (error) throw error;
+//         db.beginTransaction(async (error) => {
+//           if (error) throw error;
           
-          // Odejmij kwotę od konta użytkownika wysyłającego
-          const updateSenderAccountQuery = 'UPDATE account SET bilans = bilans - ? WHERE user_id = ?';
-          db.query(updateSenderAccountQuery, [amount, senderId], async (error) => {
-            if (error) {
-              db.rollback(() => {
-                throw error;
-              });
-            }
+//           // Odejmij kwotę od konta użytkownika wysyłającego
+//           const updateSenderAccountQuery = 'UPDATE account SET bilans = bilans - ? WHERE user_id = ?';
+//           db.query(updateSenderAccountQuery, [amount, senderId], async (error) => {
+//             if (error) {
+//               db.rollback(() => {
+//                 throw error;
+//               });
+//             }
             
-            // Dodaj kwotę do konta użytkownika odbierającego
-            const updateRecipientAccountQuery = 'UPDATE account SET bilans = bilans + ? WHERE user_id = ?';
-            db.query(updateRecipientAccountQuery, [amount, recipientId], async (error) => {
-              if (error) {
-                db.rollback(() => {
-                  throw error;
-                });
-              }
+//             // Dodaj kwotę do konta użytkownika odbierającego
+//             const updateRecipientAccountQuery = 'UPDATE account SET bilans = bilans + ? WHERE user_id = ?';
+//             db.query(updateRecipientAccountQuery, [amount, recipientId], async (error) => {
+//               if (error) {
+//                 db.rollback(() => {
+//                   throw error;
+//                 });
+//               }
               
-              // Zapisz transakcję w tabeli transactions
-              const addTransactionQuery = 'INSERT INTO transactions (sender_id, recipient_id, amount, sender_account_number, recipient_account_number, descrip) VALUES (?, ?, ?, ?, ?, ?)';
-              db.query(addTransactionQuery, [senderId, recipientId, amount, senderAccountNumber, recipientAccountNumber, description], async (error) => {
-                if (error) {
-                  db.rollback(() => {
-                    throw error;
-                  });
-                }
+//               // Zapisz transakcję w tabeli transactions
+//               const addTransactionQuery = 'INSERT INTO transactions (sender_id, recipient_id, amount, sender_account_number, recipient_account_number, descrip) VALUES (?, ?, ?, ?, ?, ?)';
+//               db.query(addTransactionQuery, [senderId, recipientId, amount, senderAccountNumber, recipientAccountNumber, description], async (error) => {
+//                 if (error) {
+//                   db.rollback(() => {
+//                     throw error;
+//                   });
+//                 }
                 
-                db.commit((error) => {
-                  if (error) {
-                    db.rollback(() => {
-                      throw error;
-                    });
-                  }
+//                 db.commit((error) => {
+//                   if (error) {
+//                     db.rollback(() => {
+//                       throw error;
+//                     });
+//                   }
                   
-                  res.status(200).render('transfer',{ message: 'Przelew wykonany pomyślnie.' });
-                });
-              });
-            });
-          });
-        });
-      });
-    
-    });
-  }});
-  } catch (error) {
-   // await db.rollback();
-    console.log(error);
-    res.status(500).render('transfer',{ message: 'Wystąpił błąd podczas wykonywania przelewu.' });
-  }
-};
-
-// exports.adminTransf= async (req, res) => {
-//   try{
-//     const userIdd = req.body.balance; // Pobiera ID wybranego użytkownika z formularza
-//     const amounty = req.body.amount; 
-//     console.log(userIdd,amounty);
-//   db.commit((error) => {
-//     if (error) {
-//       db.rollback(() => {
-//         throw error;
+//                   res.status(200).render('transfer',{ message: 'Przelew wykonany pomyślnie.' });
+//                 });
+//               });
+//             });
+//           });
+//         });
 //       });
-      
-//     }
     
-    
-//     res.status(200).render('admin',{ message: 'Przelew wykonany pomyślnie.' });
-//   });
-// }
-//   catch (error) {
-//     // await db.rollback();
-//      console.log(error);
-//      res.status(500).render('admin',{ message: 'Wystąpił błąd podczas wykonywania przelewu.' });
-//    }
-  
+//     });
+//   }});
+//   } catch (error) {
+//    // await db.rollback();
+//     console.log(error);
+//     res.status(500).render('transfer',{ message: 'Wystąpił błąd podczas wykonywania przelewu.' });
+//   }
+// };
 
-// }
 
 
 exports.logout = async (req, res) => {
