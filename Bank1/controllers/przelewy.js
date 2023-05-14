@@ -24,7 +24,8 @@ exports.transfer = async (req, res) => {
       const decoded = await promisify(jwt.verify)(req.cookies.jwt,
         process.env.JWT_SECRET);
   
-  
+        console.log("-------------------");
+        console.log(decoded);
       const senderId = decoded.id;
   
       // Pobierz informacje o użytkowniku odbiorcy
@@ -56,7 +57,17 @@ exports.transfer = async (req, res) => {
           if (senderAccountResult[0].bilans < amount) {
             return res.status(400).render('transfer',{ message: 'Brak wystarczających środków na koncie.' });
           }
-          
+          console.log("sssssssssssssssssssssdddddddddddddddddddddddddddddddddd");
+          console.log("")
+         if(banknumber==senderAccountResult[0].account_number){
+            console.log("BŁĄDDDD")
+            return res.status(400).render('transfer',{ message: 'Podałeś swój Numer konta.' });
+  
+        }
+          if(amount<0){
+            console.log("BŁĄDDDD")
+            return res.status(400).render('transfer',{ message: 'Kwota musi być wieksz od zera' });
+        }
           // Wykonaj przelew
           // const recipientId = recipientResult.id;
           const recipientId = recipientResult[0].id;
