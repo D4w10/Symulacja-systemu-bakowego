@@ -12,6 +12,6 @@ router.get('/logout', authController.logout );
 
 router.post('/transfer', przelewController.transfer);
 
-//router.post('/transfer2', authController.transfer);
+router.post('/transfer2', przelewController.transfer2);
 
 module.exports = router;

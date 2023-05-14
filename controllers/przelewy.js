@@ -3,6 +3,9 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { promisify } = require('util');
 const crypto = require('crypto');
+const express = require('express');
+const axios = require('axios');
+
 
 const db = mysql.createConnection({
   host: process.env.DATABASE_HOST,
@@ -115,4 +118,35 @@ exports.transfer = async (req, res) => {
       console.log(error);
       res.status(500).render('transfer',{ message: 'Wystąpił błąd podczas wykonywania przelewu.' });
     }
+  };
+
+
+
+exports.transfer2 = async (req, res) => {
+
+const dataToSend = {
+    name: 'John Doe',
+    age: 30,
+    email: 'johndoe@example.com'
+  };
+
+  axios.post('http://localhost:5002/receive', dataToSend)
+    .then(response => {
+      console.log('Dane zostały wysłane pomyślnie');
+      // Obsłuż odpowiedź serwera
+      res.send('Dane zostały wysłane pomyślnie');
+    })
+    .catch(error => {
+      console.error('Wystąpił błąd podczas wysyłania danych:', error);
+      // Obsłuż błąd
+      res.status(500).send('Wystąpił błąd podczas wysyłania danych');
+    });
+
+
+
+    console.log("TESS");
+
+
+
+
   };

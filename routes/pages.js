@@ -227,10 +227,4 @@ router.get('/transfer2', authController.isLoggedIn, (req, res) => {
 
 
 
-
-
-
-
-
-
 module.exports = router;
