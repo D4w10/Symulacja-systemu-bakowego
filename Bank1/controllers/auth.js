@@ -162,18 +162,27 @@ exports.isLoggedIn = async (req, res, next) => {
 
      
       db.query('SELECT * FROM reg_request INNER JOIN account ON reg_request.id = account.user_id WHERE reg_request.id = ?', [decoded.id], (error, result) => {
+        db.query('SELECT * FROM k_oscz where id_account=?',[result[0].id_account],(errorr,resultt)=>{
+          if(!result) {
+            return next();
+          }
+  
+          req.user = result[0];
+          req.userid=decoded;
+          req.oszczed=resultt[0];
+          console.log("user is")
+          console.log(req.user);
+          return next();
+          
+        })
         console.log(result);
 
-        if(!result) {
-          return next();
-        }
-
-        req.user = result[0];
-        console.log("user is")
-        console.log(req.user);
-        return next();
+      
 
       });
+      
+
+
     } catch (error) {
       console.log(error);
       return next();
