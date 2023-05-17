@@ -136,9 +136,9 @@ exports.transfer = async (req, res) => {
 exports.transfer2 = async (req, res) => {
 
 const dataToSend = {
-    name: 'John Doe',
+    name: 'ADAM',
     age: 30,
-    email: 'johndoe@example.com'
+    email: 'ADam@Małysz'
   };
 
   axios.post('http://localhost:5002/receive', dataToSend)

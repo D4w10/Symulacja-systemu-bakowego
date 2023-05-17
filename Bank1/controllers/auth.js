@@ -54,7 +54,7 @@ exports.login = async (req, res) => {
         if (isAdmin) {
           res.status(200).redirect("/admin");
         } else {
-          res.status(200).redirect("/");
+          res.status(200).redirect("/profile");
         }
       }
 

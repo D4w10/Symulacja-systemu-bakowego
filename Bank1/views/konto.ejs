@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+  <script src="https://kit.fontawesome.com/edb0032d42.js" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/profile.css">
+  <title>Document</title>
+</head>
+
+<body>
+  <nav>
+    <h4><a href="/konto"><img src="/avatar.png" alt=""></a></h4>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/profile">Profil</a></li>
+ 
+      <li><a href="/transfer">Przelew</a></li>
+      <li><a href="/auth/logout">Wyloguj</a></li>
+    </ul>
+  </nav>
+  <div>
+  <div class="dane">
+
+    <div>Imię: <p><%= user.firstName %></p></div>
+    <div>Nazwisko: <p><%= user.lastName %></p></div>
+    <div>Login: <p><%= user.login %></p></div>
+    <div>Email: <p><%= user.email %></p></div>
+    <div>Pesel: <p><%= user.pesel %></p></div>
+    <div>Numer konta: <p><%= user.account_number%></p></div>
+    <div>Numer Telefonu: <p><%= user.phonenumber%></p></div>
+    <div>Nazwisko matki: <p><%= user.motherName%></p></div>
+
+  </div>
+
+  <div class="datachange">
+    <form action="/auth/datachange" method="POST">
+
+      <label for="currentPassword">Obecne hasło:</label>
+      <input type="password" id="currentPassword" name="currentPassword" required><br>
+  
+      <label for="newPassword">Nowe hasło:</label>
+      <input type="password" id="newPassword" name="newPassword" required><br>
+  
+      <label for="confirmPassword">Powtórz hasło:</label>
+      <input type="password" id="confirmPassword" name="confirmPassword" required><br>
+  
+      <button type="submit">Zmień hasło</button>
+
+    </form>
+    <% if (typeof message != "undefined" && message) { %>
+      <h4 class="alert alert-danger mt-4"><%= message %></h4>
+      <% } %>
+
+
+  </div>
+  </div>
+
+
+
+</body>
+</html>

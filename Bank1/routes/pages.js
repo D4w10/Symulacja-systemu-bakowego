@@ -264,6 +264,20 @@ router.post('/create_savings_account', authController.isLoggedIn, (req, res) => 
 
 
 
+router.get('/konto', authController.isLoggedIn, (req, res) => {
+  console.log(req.user);
+  if( req.user ) {
+    res.render('konto',{
+      user: req.user
+    });
+  } else {
+    res.redirect('/login');
+  }
+  
+})
+
+
+
 
 
 
