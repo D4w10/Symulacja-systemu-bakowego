@@ -169,9 +169,14 @@ exports.isLoggedIn = async (req, res, next) => {
   
           req.user = result[0];
           req.userid=decoded;
+        
           req.oszczed=resultt[0];
+
+            //
+            console.log("-------------------------------------=================================")
+          console.log(resultt[0]);
           console.log("user is")
-          console.log(req.user);
+         // console.log(req.user);
           return next();
           
         })

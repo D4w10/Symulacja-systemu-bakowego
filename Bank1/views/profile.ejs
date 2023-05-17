@@ -99,8 +99,15 @@
  <div class="oszcz">
   
   <div class="historia">
-    <h4>Środki znajdujące sie na koncie oszczednosciowym: <%=oszcz.wplacone_srodki%> </h4>  <a href="/konto-oszczednosciowe">Przejdź do konta oszczędnościowego</a>
+    <% if (typeof oszcz != "undefined" && oszcz) { %>
+      
+      <h4>Środki znajdujące sie na koncie oszczednosciowym: <%=oszcz.wplacone_srodki%> </h4>  <a href="/konto-oszczednosciowe">Przejdź do konta oszczędnościowego</a>
 
+
+      <% }else{ %>
+<h4 >Stwórz konto oszczędnościowe</h4>
+</h4>  <a href="/konto-oszczednosciowe">Przejdź do konta oszczędnościowego</a>
+        <% }%>
   
  </div>
 </div>
