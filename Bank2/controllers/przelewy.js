@@ -35,6 +35,8 @@ exports.transfer = async (req, res) => {
 
         if(przelew == 'wew'){
 
+        
+        
       // Pobierz informacje o użytkowniku odbiorcy
       db.query('SELECT COUNT(*) istn from account where account_number = ?', [banknumber], async (error, row) =>{
         console.log(row[0].istn)
@@ -138,76 +140,11 @@ exports.transfer = async (req, res) => {
 
       if(przelew == 'elixir' ){
         console.log("elixir");
-
-
-
-
-        
-
-
-
-
       }
 
       
       if(przelew == 'sorbnet' ){
-        console.log("sorbnet");
-
-        const getSenderAccountQuery = 'SELECT * FROM account WHERE user_id = ?';
-
-
-
-
-
-        db.query(getSenderAccountQuery, [senderId], async (error, senderAccountResult2) => {
-
-          console.log(senderAccountResult2);
-
-
-
-          axios.post('http://localhost:5002/7777', )
-
-
-
-
-
-          const dataToSend = {
-            name: 'ADAM',
-            age: 30,
-            email: 'ADam@Małysz',
-            banknumber: '7777'
-          };
-
-
-
-
-
-             axios.post('http://localhost:5002/7777', dataToSend)
-                .then(response => {
-                  console.log('Dane zostały wysłane pomyślnie');
-                  // Obsłuż odpowiedź serwera
-                  res.render('transfer',{ message: 'Przelew wykonany pomyślnie.' });
-                })
-                .catch(error => {
-                  console.error('Wystąpił błąd podczas wysyłania danych:', error);
-                  // Obsłuż błąd
-                  res.render('transfer',{ message: 'błąd podczas wykonywania przelewu' });
-                });
-            
-
-        })
-      
-        
-      
-      
-          console.log("TESS");
-      
-      
-      
-      
-
-
-
+        console.log("elixir");
       }
 
 
@@ -220,3 +157,32 @@ exports.transfer = async (req, res) => {
   };
 
 
+
+exports.transfer2 = async (req, res) => {
+
+const dataToSend = {
+    name: 'ADAM',
+    age: 30,
+    email: 'ADam@Małysz'
+  };
+
+  axios.post('http://localhost:5002/receive', dataToSend)
+    .then(response => {
+      console.log('Dane zostały wysłane pomyślnie');
+      // Obsłuż odpowiedź serwera
+      res.send('Dane zostały wysłane pomyślnie');
+    })
+    .catch(error => {
+      console.error('Wystąpił błąd podczas wysyłania danych:', error);
+      // Obsłuż błąd
+      res.status(500).send('Wystąpił błąd podczas wysyłania danych');
+    });
+
+
+
+    console.log("TESS");
+
+
+
+
+  };

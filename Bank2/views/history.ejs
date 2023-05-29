@@ -22,37 +22,9 @@
       <li><a href="/profile">Profil</a></li>
  
       <li><a href="/transfer">Przelew</a></li>
-      <li><a href="/transfer2">Kip test</a></li>
       <li><a href="/auth/logout">Wyloguj</a></li>
     </ul>
   </nav>
-<div class="wrap">
-  <div class="konto">
-    
-    <div class="kontodata">
-
-      <div class="user"> <div class="imie"><%= user.firstName %> <%= user.lastName %></div></div>
-     
-      <div class="numerkonto"><p>Konto</p> <div class="Numer"><%= user.account_number %></div></div>
-
-    </div>
-
-
-    <div class="kontosrodki">
-      <p>Dostepne środki</p>
-
-      <div class="srodki"><%= user.bilans %></div>
-
-
-    </div>
-
-
-    <div class="przelej-button">
-    <a href="/transfer">Przelej</a>
-  </div>
-
-
-  </div>
 
 
   <div class="historia">
@@ -61,7 +33,7 @@
     <div class="listatranzakcji">
       <ul>
         <li>
-          <p>Id odbiorcy</p>
+          <p>Imię</p>
           <p>Numer konta </p>
           <p>bilans</p>
           <p>Opis</p>
@@ -97,23 +69,6 @@
     </div>
  </div>
 
- <div class="oszcz">
-  
-  <div class="historia">
-    <% if (typeof oszcz != "undefined" && oszcz) { %>
-      
-      <h4>Środki znajdujące sie na koncie oszczednosciowym: <%=oszcz.wplacone_srodki%> </h4>  <a href="/konto-oszczednosciowe">Przejdź do konta oszczędnościowego</a>
-
-
-      <% }else{ %>
-<h4 >Stwórz konto oszczędnościowe</h4>
-</h4>  <a href="/konto-oszczednosciowe">Przejdź do konta oszczędnościowego</a>
-        <% }%>
-  
- </div>
-</div>
-
-</div>
 
 </body>
 </html>

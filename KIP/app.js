@@ -15,6 +15,11 @@ app.post('/receive', (req, res) => {
   res.json({ message: 'Dane zostały odebrane pomyślnie' });
 });
 
+
+
+
+
+
 app.listen(5002, () => {
-  console.log('Serwer nasłuchuje na porcie 5002');
+  console.log('Port 5002');
 });

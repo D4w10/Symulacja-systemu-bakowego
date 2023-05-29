@@ -234,9 +234,12 @@ router.post('/create_savings_account', authController.isLoggedIn, (req, res) => 
     const id_account=result[0].id_account;
     console.log(result);
 
-    const wplacone_srodki = 0; 
+    const wplacone_srodki = 0; // Ustawienie domyślnej wartości na 0
+
+    // Pobieranie oprocentowania z konta administratora
     const adminOprocentowanie = getAdminOprocentowanie();
   
+    // Tworzenie konta oszczędnościowego z domyślną wartością wplacone_srodki
     const query = 'INSERT INTO k_oscz (id_account, wplacone_srodki, oprocentowanie) VALUES (?, ?, ?)';
     const values = [id_account, wplacone_srodki, adminOprocentowanie];
   
