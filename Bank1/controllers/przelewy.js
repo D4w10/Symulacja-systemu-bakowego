@@ -139,72 +139,95 @@ exports.transfer = async (req, res) => {
       if(przelew == 'elixir' ){
         console.log("elixir");
 
-
-
-
-        
-
-
-
-
       }
 
       
       if(przelew == 'sorbnet' ){
         console.log("sorbnet");
 
-        const getSenderAccountQuery = 'SELECT * FROM account WHERE user_id = ?';
+        const getSenderAccountQuery = 'SELECT * FROM reg_request INNER JOIN account ON reg_request.id = account.user_id WHERE reg_request.id = ?'; 
+        
+        const receiverBank = banknumber.slice(0,4);
 
 
 
+        db.query(getSenderAccountQuery, [senderId], async (error, senderAccountResult2) => {// Pobranie danych użytkowniaka
 
 
-        db.query(getSenderAccountQuery, [senderId], async (error, senderAccountResult2) => {
+          const senderBalance = senderAccountResult2[0].bilans; //bilans konta uzytkownika wysyłającego
+          const datatosend = {
+            senderBank: "7777",
+            senderNumber: senderAccountResult2[0].account_number,
+            receiverBank,
+            receiverNumber: banknumber,
+            description,
+            amount,
 
-          console.log(senderAccountResult2);
+        }
+          if (senderBalance >= amount){    //Sprawdzenie czy uzytkownik ma wystarczająco pieniedzy
 
+            const newSenderBalance = senderBalance - amount; //zmienna przetrzymujaca nowa kwote
+            
+            db.query('UPDATE account SET bilans = ? WHERE user_id = ?', [newSenderBalance,senderId],(error,result)=>{ //ustawienie nowej kwoty w bazie danych
+              if (error) {
+                console.error(error);
+                res.json({ success: false, message: 'An error occurred during bank A transfer.' });
+                return;
+              }
 
+              axios.post('http://localhost:5002/sorb',datatosend)  //Wysyłanie danych do serwera KIP
+              .then(response =>{
+                if (response.data.success){
+                  res.json({success:true});
+                }else{
 
-          axios.post('http://localhost:5002/7777', )
+                  db.query('UPDATE account SET bilans = ? WHERE user_id = ?', [senderBalance,senderId],(error,result)=>{ //przywrucenie stanu konta przed przelewem jeśli wystąpi bład
+                    if (error) {
+                      console.error(error);
+                    }
+                  });
 
+                  res.json({ success: false, message: 'Błąd przelwu, pieniadze zwrócone' });
 
-
-
-
-          const dataToSend = {
-            name: 'ADAM',
-            age: 30,
-            email: 'ADam@Małysz',
-            banknumber: '7777'
-          };
-
-
-
-
-
-             axios.post('http://localhost:5002/7777', dataToSend)
+                }
+                axios.get('http://localhost:5002/sorb')
                 .then(response => {
-                  console.log('Dane zostały wysłane pomyślnie');
-                  // Obsłuż odpowiedź serwera
-                  res.render('transfer',{ message: 'Przelew wykonany pomyślnie.' });
+                  console.log(response.data);
                 })
                 .catch(error => {
-                  console.error('Wystąpił błąd podczas wysyłania danych:', error);
-                  // Obsłuż błąd
-                  res.render('transfer',{ message: 'błąd podczas wykonywania przelewu' });
+                  console.error(error);
                 });
-            
 
+
+              })
+              .catch(error => {
+                console.error(error);
+                res.json({ success: false, message: 'Błąd podczas przelewu.' });
+              });
+
+              
+  
+            });
+
+          }else{
+            res.render({ success: false, message: 'Brak środków na koncie' });
+          }
+
+
+      
+         
         })
       
         
       
       
-          console.log("TESS");
       
       
       
       
+      
+
+
 
 
 

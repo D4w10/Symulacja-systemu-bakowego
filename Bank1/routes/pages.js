@@ -73,24 +73,77 @@ router.get('/profile', authController.isLoggedIn, (req, res) => {
 
 })
 
-
-
 router.get('/history', authController.isLoggedIn, (req, res) => {
   console.log("sadsdsdadksjhkjh");
   console.log(req.user.id);
   if( req.user ) {
 
- 
+
     try {
       // Pobierz listę danych z bazy danych
       const getDataQuery = `SELECT *, DATE_FORMAT(created_at, '%d.%m.%Y') as data,DATE_FORMAT(created_at, '%T') as czas  FROM transactions Where sender_id = ? OR recipient_id ORDER BY created_at DESC`;
       db.query(getDataQuery,[req.user.id], (err,transrow)=>{
-        db.query
+        
+        const statrec = `
+        SELECT AVG(amount) AS sred_wyd, SUM(amount) AS all_wyd
+        FROM transactions
+        WHERE recipient_id = ? AND created_at BETWEEN ? AND ?
+      `;
+      const statsend = `
+      SELECT AVG(amount) AS sred_wyd, SUM(amount) AS all_wyd
+      FROM transactions
+      WHERE sender_id = ? AND created_at BETWEEN ? AND ?
+    `;
+
+    let startDate = req.body.startDate;
+    let endDate = req.body.endDate;
+    if (!startDate || !endDate) {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1; 
+  
+    startDate = `${currentYear}-${currentMonth}-01`;
+    endDate = `${currentYear}-${currentMonth + 1}-01`; 
+    }
+    db.query(statrec, [req.user.id, startDate, endDate], (error, results) => {
+      if (error) {
+        console.error('Wystąpił błąd podczas wykonywania zapytania:', error);
+        return res.status(500).send('Wystąpił błąd podczas pobierania danych.');
+      }
+      db.query(statsend, [req.user.id, startDate, endDate], (error, results2) => {
+        if (error) {
+          console.error('Wystąpił błąd podczas wykonywania zapytania:', error);
+          return res.status(500).send('Wystąpił błąd podczas pobierania danych.');
+        }
+
+        const wszystkiewydatki = results2[0].all_wyd;
+        const wszystkieprzychody = results[0].all_wyd;
+
+        const sredniewydatki = results2[0].sred_wyd;
+        const srednieprzychody = results[0].sred_wyd;
+        const bilanswydatkow = wszystkieprzychody - wszystkiewydatki;
+
         res.render('history', {
           user: req.user,
-          transfer: transrow
+          transfer: transrow,
+          wszystkiewydatki,
+          wszystkieprzychody,
+          sredniewydatki,
+          srednieprzychody,
+          bilanswydatkow
         });
-          console.log(transrow);
+
+      });
+  
+
+
+
+      
+    });
+
+
+        
+          //console.log(transrow);
       });
   
       
@@ -98,6 +151,116 @@ router.get('/history', authController.isLoggedIn, (req, res) => {
       console.error(error);
       res.status(500).send('Wystąpił błąd podczas pobierania listy danych.');
     }
+
+
+
+  } else {
+    res.redirect('/login');
+  }
+  
+
+})
+
+
+router.post('/history', authController.isLoggedIn, (req, res) => {
+  console.log("sadsdsdadksjhkjh");
+  console.log(req.user.id);
+  if( req.user ) {
+
+
+    try {
+      // Pobierz listę danych z bazy danych
+      const getDataQuery = `SELECT *, DATE_FORMAT(created_at, '%d.%m.%Y') as data,DATE_FORMAT(created_at, '%T') as czas  FROM transactions Where sender_id = ? OR recipient_id ORDER BY created_at DESC`;
+      db.query(getDataQuery,[req.user.id], (err,transrow)=>{
+        
+        const statrec = `
+        SELECT AVG(amount) AS sred_wyd, SUM(amount) AS all_wyd
+        FROM transactions
+        WHERE recipient_id = ? AND created_at BETWEEN ? AND ?
+      `;
+      const statsend = `
+      SELECT AVG(amount) AS sred_wyd, SUM(amount) AS all_wyd
+      FROM transactions
+      WHERE sender_id = ? AND created_at BETWEEN ? AND ?
+    `;
+
+    let startDate = req.body.startDate;
+    let endDate = req.body.endDate;
+    if (!startDate || !endDate) {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1; 
+  
+    startDate = `${currentYear}-${currentMonth}-01`;
+    endDate = `${currentYear}-${currentMonth + 1}-01`; 
+    }
+    db.query(statrec, [req.user.id, startDate, endDate], (error, results) => {
+      if (error) {
+        console.error('Wystąpił błąd podczas wykonywania zapytania:', error);
+        return res.status(500).send('Wystąpił błąd podczas pobierania danych.');
+      }
+      db.query(statsend, [req.user.id, startDate, endDate], (error, results2) => {
+        if (error) {
+          console.error('Wystąpił błąd podczas wykonywania zapytania:', error);
+          return res.status(500).send('Wystąpił błąd podczas pobierania danych.');
+        }
+
+        const wszystkiewydatki = results2[0].all_wyd;
+        const wszystkieprzychody = results[0].all_wyd;
+
+        const sredniewydatki = results2[0].sred_wyd;
+        const srednieprzychody = results[0].sred_wyd;
+        const bilanswydatkow = wszystkieprzychody - wszystkiewydatki;
+
+        res.render('history', {
+          user: req.user,
+          transfer: transrow,
+          wszystkiewydatki,
+          wszystkieprzychody,
+          sredniewydatki,
+          srednieprzychody,
+          bilanswydatkow
+        });
+
+      });
+  
+
+
+
+      
+    });
+
+
+        
+          //console.log(transrow);
+      });
+  
+      
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Wystąpił błąd podczas pobierania listy danych.');
+    }
+
+
+
+ 
+    // try {
+    //   // Pobierz listę danych z bazy danych
+    //   const getDataQuery = `SELECT *, DATE_FORMAT(created_at, '%d.%m.%Y') as data,DATE_FORMAT(created_at, '%T') as czas  FROM transactions Where sender_id = ? OR recipient_id ORDER BY created_at DESC`;
+    //   db.query(getDataQuery,[req.user.id], (err,transrow)=>{
+    //     db.query
+    //     res.render('history', {
+    //       user: req.user,
+    //       transfer: transrow
+    //     });
+    //       console.log(transrow);
+    //   });
+  
+      
+    // } catch (error) {
+    //   console.error(error);
+    //   res.status(500).send('Wystąpił błąd podczas pobierania listy danych.');
+    // }
 
 
 
@@ -133,7 +296,9 @@ router.get('/history', authController.isLoggedIn, (req, res) => {
 
 router.get('/admin', authController.isLoggedIn, async (req, res) => {
   console.log(req.user);
-  //sif (req.user.role == 'admin') {
+
+  console.log("00202012391209012391023910239019230912034912039102390129")
+  if (req.user.role == 'admin') {
     try {
       const getUsers = () => {
         return new Promise((resolve, reject) => {
@@ -156,17 +321,16 @@ router.get('/admin', authController.isLoggedIn, async (req, res) => {
     res.render('admin', {
       user: req.user,
       bil:users,
+      
     });
 
   }catch (error) {
     console.error(error);
     // Obsługa błędu
   }
-// }
-//    else {
-//     res.redirect('/profile');
-//   }
-
+} else {
+  res.redirect('/profile');
+ }
 });
 
 
@@ -192,17 +356,17 @@ console.log(amount);
 
 
 
-router.get('/history', authController.isLoggedIn, (req, res) => {
-  console.log(req.user);
-  if( req.user ) {
-    res.render('history', {
-      user: req.user
-    });
-  } else {
-    res.redirect('/login');
-  }
+// router.get('/history', authController.isLoggedIn, (req, res) => {
+//   console.log(req.user);
+//   if( req.user ) {
+//     res.render('history', {
+//       user: req.user
+//     });
+//   } else {
+//     res.redirect('/login');
+//   }
   
-})
+// })
 
 
 router.get('/konto-oszczednosciowe', authController.isLoggedIn, (req, res) => {
