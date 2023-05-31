@@ -288,8 +288,11 @@ router.post('/create_savings_account', authController.isLoggedIn, (req, res) => 
  
 });
 
+
+
+
 router.post('/przelej-srodki', authController.isLoggedIn, (req, res) => {
-  const userId = req.session.userid; // Pobranie identyfikatora zalogowanego użytkownika z sesji
+  const userId = req.userid.id; // Pobranie identyfikatora zalogowanego użytkownika z sesji
 
   // Pobranie numeru konta użytkownika
   db.query('SELECT * FROM account WHERE user_id = ?', userId, (error, results) => {
@@ -305,17 +308,169 @@ router.post('/przelej-srodki', authController.isLoggedIn, (req, res) => {
     const accountNumber = results[0].account_number;
     const amount = req.body.amount;
 
-    // Zapisanie środków na koncie "k_oszcz" na podstawie numeru konta
-    db.query('INSERT INTO k_oszcz (id_account, wplacone_srodki) VALUES (?, ?)', [accountNumber, amount], (error) => {
+    // Sprawdzenie, czy użytkownik ma wystarczającą ilość środków na koncie
+    if (results[0].balance < amount) {
+      return res.status(400).send('Nie masz wystarczającej ilości środków na koncie.');
+    }
+
+    // Rozpoczęcie transakcji
+    db.beginTransaction((error) => {
       if (error) {
-        console.error('Błąd zapytania SQL: ', error);
+        console.error('Błąd rozpoczynania transakcji: ', error);
         return res.status(500).send('Wystąpił błąd podczas przesyłania środków.');
       }
 
-      return res.send('Przelew zakończony pomyślnie.');
+      // Zmniejszenie bilansu na koncie użytkownika
+      db.query('UPDATE account SET bilans = bilans - ? WHERE user_id = ?', [amount, userId], (error) => {
+        if (error) {
+          console.error('Błąd zapytania SQL: ', error);
+          return db.rollback(() => {
+            res.status(500).send('Wystąpił błąd podczas przesyłania środków.');
+          });
+        }
+        
+
+       
+
+        
+      // Zwiększenie wplaconych srodkow na koncie oszczednosciowym
+      db.query('UPDATE k_oscz SET wplacone_srodki = wplacone_srodki + ? WHERE id_account = ?', [amount, userId], (error) => {
+        if (error) {
+          console.error('Błąd zapytania SQL: ', error);
+          return db.rollback(() => {
+            res.status(500).send('Wystąpił błąd podczas przesyłania środków.');
+          });
+        }
+
+          // Zatwierdzenie transakcji
+          db.commit((error) => {
+            if (error) {
+              console.error('Błąd zatwierdzania transakcji: ', error);
+              return db.rollback(() => {
+                res.status(500).send('Wystąpił błąd podczas przesyłania środków.');
+              });
+            }
+
+            return res.redirect('/test')
+          });
+        });
+      });
     });
   });
 });
+
+// router.post('/przelej-srodki', authController.isLoggedIn, (req, res) => {
+//   const userId = req.userid.id; // Pobranie identyfikatora zalogowanego użytkownika z sesji
+
+//   // Pobranie numeru konta użytkownika
+//   db.query('SELECT * FROM account WHERE user_id = ?', userId, (error, results) => {
+//     if (error) {
+//       console.error('Błąd zapytania SQL: ', error);
+//       return res.status(500).send('Wystąpił błąd podczas przesyłania środków.');
+//     }
+
+//     if (results.length === 0) {
+//       return res.status(404).send('Nie znaleziono konta dla zalogowanego użytkownika.');
+//     }
+
+//     const accountNumber = results[0].account_number;
+//     const amount = req.body.amount;
+
+//     // Sprawdzenie, czy użytkownik ma wystarczającą ilość środków na koncie
+//     if (results[0].balance < amount) {
+//       return res.status(400).send('Nie masz wystarczającej ilości środków na koncie.');
+//     }
+
+//     // Rozpoczęcie transakcji
+//     db.beginTransaction((error) => {
+//       if (error) {
+//         console.error('Błąd rozpoczynania transakcji: ', error);
+//         return res.status(500).send('Wystąpił błąd podczas przesyłania środków.');
+//       }
+
+//       // Zmniejszenie bilansu na koncie użytkownika
+//       db.query('UPDATE account SET bilans = bilans - ? WHERE user_id = ?', [amount, userId], (error) => {
+//         if (error) {
+//           console.error('Błąd zapytania SQL: ', error);
+//           return db.rollback(() => {
+//             res.status(500).send('Wystąpił błąd podczas przesyłania środków.');
+//           });
+//         }
+        
+
+       
+
+        
+//         // Zwiększenie wplaconych srodkow na koncie oszczednosciowym
+//         db.query('INSERT INTO k_oscz (id_account, wplacone_srodki)  VALUES (?, ?)', [userId, amount], (error) => {
+//           if (error) {
+//             console.error('Błąd zapytania SQL: ', error);
+//             return db.rollback(() => {
+//               res.status(500).send('Wystąpił błąd podczas przesyłania środków.');
+//             });
+//           }
+
+//           // Zatwierdzenie transakcji
+//           db.commit((error) => {
+//             if (error) {
+//               console.error('Błąd zatwierdzania transakcji: ', error);
+//               return db.rollback(() => {
+//                 res.status(500).send('Wystąpił błąd podczas przesyłania środków.');
+//               });
+//             }
+
+//             return res.redirect('/test')
+//           });
+//         });
+//       });
+//     });
+//   });
+// });
+
+// router.post('/przelej-srodki', authController.isLoggedIn, (req, res) => {
+//   const userId = req.userid.id; // Pobranie identyfikatora zalogowanego użytkownika z sesji
+
+//   // Pobranie numeru konta użytkownika
+//   db.query('SELECT * FROM account WHERE user_id = ?', userId, (error, results) => {
+//     if (error) {
+//       console.error('Błąd zapytania SQL: ', error);
+//       return res.status(500).send('Wystąpił błąd podczas przesyłania środków.');
+//     }
+
+//     if (results.length === 0) {
+//       return res.status(404).send('Nie znaleziono konta dla zalogowanego użytkownika.');
+//     }
+
+//     const accountNumber = results[0].account_number;
+//     const amount = req.body.amount;
+
+//     // Zapisanie środków na koncie "k_oszcz" na podstawie numeru konta
+//     db.query('INSERT INTO k_oszcz (id_account, wplacone_srodki) VALUES (?, ?)', [accountNumber, amount], (error) => {
+//       if (error) {
+//         console.error('Błąd zapytania SQL: ', error);
+//         return res.status(500).send('Wystąpił błąd podczas przesyłania środków.');
+//       }
+
+//       return res.send('Przelew zakończony pomyślnie.');
+//     });
+//   });
+// });
+
+// router.post('/przelej-srodki', authController.isLoggedIn, (req, res) => {
+//   const userId = req.userid.id; // Pobranie identyfikatora zalogowanego użytkownika z sesji
+
+//   // Pobranie numeru konta użytkownika
+//   db.query('SELECT * FROM account WHERE user_id = ?', userId, (error, results) => {
+//     if (error) {
+//       console.error('Błąd zapytania SQL: ', error);
+//       return res.status(500).send('Wystąpił błąd podczas sprawdzania konta użytkownika.');
+//     }
+
+//     console.log('Wyniki zapytania SQL:', results);
+//     res.send('Sprawdzanie konta zakończone. Sprawdź konsolę, aby zobaczyć wyniki zapytania SQL.');
+//   });
+// });
+
 
 
 
