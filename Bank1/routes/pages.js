@@ -233,10 +233,56 @@ console.log(results.length);
 
 
 
-router.get('/test', (req, res) => {
-  // Obsługa żądania GET dla ścieżki /test
-  res.render('test');
-});
+
+router.get('/test', authController.isLoggedIn, (req, res) => {
+  console.log("sadsdsdadksjhkjh");
+ // console.log(req.user.id);
+  if( req.user ) {
+
+ 
+    try {
+      // Pobierz listę danych z bazy danych
+      const getDataQuery = `SELECT *, DATE_FORMAT(created_at, '%d.%m.%Y') as data,DATE_FORMAT(created_at, '%T') as czas  FROM transactions Where sender_id = ? OR recipient_id ORDER BY created_at DESC LIMIT 15`;
+      db.query(getDataQuery,[req.user.id], (err,transrow)=>{
+        
+        
+        res.render('test', {
+          user: req.user,
+          transfer: transrow,
+          oszcz: req.oszczed
+        });
+          console.log(transrow);
+      });
+  
+      
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Wystąpił błąd podczas pobierania listy danych.');
+    }
+
+
+
+
+   
+
+
+
+  } else {
+    res.redirect('/login');
+  }
+  
+
+
+
+})
+
+
+
+// router.get('/test', (req, res) => {
+//   // Obsługa żądania GET dla ścieżki /test
+//   res.render('test');
+ 
+// });
 router.get('/konto-oszczednosciowe', (req, res) => {
   // Obsługa żądania GET dla ścieżki /test
   res.render('konto-oszczednosciowe');
