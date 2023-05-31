@@ -205,18 +205,44 @@ router.get('/history', authController.isLoggedIn, (req, res) => {
 })
 
 
-router.get('/konto-oszczednosciowe', authController.isLoggedIn, (req, res) => {
-  console.log(req.user);
-  if( req.user ) {
-    res.render('konto-oszczednosciowe', {
-      
-      user: req.user
-    });
-  } else {
-    res.redirect('/login');
-  }
+
+
+
+router.get('/profile/konto-oszczednosciowe', authController.isLoggedIn, (req, res) => {
+  // Sprawdzenie stanu konta oszczędnościowego dla danego użytkownika
+  const userId = req.userid.id;
   
+
+
+
+  db.query('SELECT * FROM k_oscz WHERE id_oszcz = ?', userId, (error, results) => {
+    if (error) {
+      console.error('Błąd zapytania SQL: ', error);
+      return res.status(500).send('Wystąpił błąd podczas sprawdzania konta oszczędnościowego.');
+    }
+console.log(results.length);
+    if (results.length > 0) {
+      // Przekierowanie na stronę test, jeśli konto oszczędnościowe jest już utworzone
+      res.redirect('test');
+    } else {
+      // Przekierowanie na stronę konto-oszczednosciowe, jeśli konto nie zostało jeszcze utworzone
+      res.render('/profile/konto-oszczednosciowe');
+    }
+  });
 })
+
+
+
+router.get('/test', (req, res) => {
+  // Obsługa żądania GET dla ścieżki /test
+  res.render('test');
+});
+router.get('/konto-oszczednosciowe', (req, res) => {
+  // Obsługa żądania GET dla ścieżki /test
+  res.render('konto-oszczednosciowe');
+});
+
+
 
 
 
@@ -245,12 +271,101 @@ router.post('/create_savings_account', authController.isLoggedIn, (req, res) => 
         console.error('Błąd zapytania SQL: ', err);
         return res.status(500).send('Wystąpił błąd podczas tworzenia konta oszczędnościowego.');
       }
-  
-      res.status(200).render('konto-oszczednosciowe',{ message: 'Konto oszczędnościowe zostało utworzone.' });
+      const getDataQuery = `SELECT *, DATE_FORMAT(created_at, '%d.%m.%Y') as data, DATE_FORMAT(created_at, '%T') as czas FROM transactions WHERE sender_id = ? OR recipient_id ORDER BY created_at DESC LIMIT 15`;
+      db.query(getDataQuery, [req.user.id], (err, transrow) => {
+        if (err) {
+          console.error('Błąd zapytania SQL: ', err);
+          return res.status(500).send('Wystąpił błąd podczas pobierania danych.');
+        }
+        
+        
+        res.redirect(301,'/test')
+          console.log(transrow);
+      });
+
     });
   });
  
 });
+
+router.post('/przelej-srodki', authController.isLoggedIn, (req, res) => {
+  const userId = req.session.userid; // Pobranie identyfikatora zalogowanego użytkownika z sesji
+
+  // Pobranie numeru konta użytkownika
+  db.query('SELECT * FROM account WHERE user_id = ?', userId, (error, results) => {
+    if (error) {
+      console.error('Błąd zapytania SQL: ', error);
+      return res.status(500).send('Wystąpił błąd podczas przesyłania środków.');
+    }
+
+    if (results.length === 0) {
+      return res.status(404).send('Nie znaleziono konta dla zalogowanego użytkownika.');
+    }
+
+    const accountNumber = results[0].account_number;
+    const amount = req.body.amount;
+
+    // Zapisanie środków na koncie "k_oszcz" na podstawie numeru konta
+    db.query('INSERT INTO k_oszcz (id_account, wplacone_srodki) VALUES (?, ?)', [accountNumber, amount], (error) => {
+      if (error) {
+        console.error('Błąd zapytania SQL: ', error);
+        return res.status(500).send('Wystąpił błąd podczas przesyłania środków.');
+      }
+
+      return res.send('Przelew zakończony pomyślnie.');
+    });
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+// router.post('/create_savings_account', authController.isLoggedIn, (req, res) => {
+//   console.log(req.userid.id);
+   
+  
+//   db.query('SELECT * FROM reg_request INNER JOIN account ON reg_request.id = account.user_id WHERE reg_request.id=?',req.userid.id, (error, result) => {
+//     const id_account=result[0].id_account;
+//     console.log(result);
+
+//     const wplacone_srodki = 0; 
+//     const adminOprocentowanie = getAdminOprocentowanie();
+  
+//     const query = 'INSERT INTO k_oscz (id_account, wplacone_srodki, oprocentowanie) VALUES (?, ?, ?)';
+//     const values = [id_account, wplacone_srodki, adminOprocentowanie];
+  
+//     db.query(query, values, (err, result) => {
+//       if (err) {
+//         console.error('Błąd zapytania SQL: ', err);
+//         return res.status(500).send('Wystąpił błąd podczas tworzenia konta oszczędnościowego.');
+//       }
+  
+//       // res.status(200).render('konto-oszczednosciowe',{ message: 'Konto oszczędnościowe zostało utworzone.' });
+//       // res.status(200).render('profile',{}); // Przesłanie informacji o ukryciu przycisku
+//       const getDataQuery = `SELECT *, DATE_FORMAT(created_at, '%d.%m.%Y') as data,DATE_FORMAT(created_at, '%T') as czas  FROM transactions Where sender_id = ? OR recipient_id ORDER BY created_at DESC LIMIT 15`;
+//       db.query(getDataQuery,[req.user.id], (err,transrow)=>{
+        
+        
+//         res.status(200).render('profile', {
+//           user: req.user,
+//           transfer: transrow,
+//           oszcz: req.oszczed
+//         });
+//           console.log(transrow);
+//       });
+
+//     });
+//   });
+ 
+// });
 
 
  function getAdminOprocentowanie() {
@@ -281,8 +396,68 @@ router.get('/konto', authController.isLoggedIn, (req, res) => {
 
 
 
+// router.get('/konto-oszczednosciowe', authController.isLoggedIn, (req, res) => {
+//   console.log(req.user);
+//   if( req.user ) {
+//     res.render('konto-oszczednosciowe', {
+      
+//       user: req.user
+//     });
+//   } else {
+//     res.redirect('/login');
+//   }
+  
+// })
 
 
+
+
+
+
+
+
+// router.get('/konto-oszczednosciowe', authController.isLoggedIn, (req, res) => {
+//   const userId = req.userid.id;
+
+//   db.query('SELECT * FROM k_oscz WHERE id_oszcz = ?', userId, (error, results) => {
+//     if (error) {
+//       console.error('Błąd zapytania SQL: ', error);
+//       return res.status(500).send('Wystąpił błąd podczas sprawdzania konta oszczędnościowego.');
+//     }
+
+//     if (results.length > 0) {
+//       // Konto oszczędnościowe jest już utworzone, przekieruj na stronę "test"
+//       res.redirect('/test');
+//     } else {
+//       // Konto oszczędnościowe nie jest jeszcze utworzone, przekieruj na stronę "konto-oszczednosciowe"
+//       res.redirect('/konto-oszczednosciowe');
+//     }
+//   });
+// });
+
+
+
+
+
+// router.get('/konto-oszczednosciowe', authController.isLoggedIn, (req, res) => {
+//   // Sprawdzenie stanu konta oszczędnościowego dla danego użytkownika
+//   const userId = req.userid.id;
+
+//   db.query('SELECT * FROM k_oscz WHERE id_oszcz = ?', userId, (error, results) => {
+//     if (error) {
+//       console.error('Błąd zapytania SQL: ', error);
+//       return res.status(500).send('Wystąpił błąd podczas sprawdzania konta oszczędnościowego.');
+//     }
+
+//     if (results.length > 0) {
+//       // Przekierowanie na stronę docelową, jeśli konto oszczędnościowe jest już utworzone
+//       res.redirect('/test'); // Zastąp 'strona-docelowa' odpowiednią ścieżką do docelowej strony
+//     } else {
+//       // Przekierowanie do formularza tworzenia konta oszczędnościowego, jeśli konto nie zostało jeszcze utworzone
+//       res.redirect('/konto-oszczednosciowe'); // Zastąp 'formularz-utworzenia-konta-oszczednosciowego' odpowiednią ścieżką do formularza
+//     }
+//   });
+// });
 
 
 

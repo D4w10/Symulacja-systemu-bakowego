@@ -12,9 +12,11 @@ router.get('/logout', authController.logout );
 
 router.post('/transfer', przelewController.transfer);
 
-router.post('/transfer2', przelewController.transfer2);
+// router.post('/transfer2', przelewController.transfer2);
 
 router.post('/datachange', changeController.datachange);
 
 router.post('/datachangemail', changeController.datachange);
+
+
 module.exports = router;

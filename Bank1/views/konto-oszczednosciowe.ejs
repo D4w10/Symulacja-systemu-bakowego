@@ -28,35 +28,51 @@
 
   <div class="wrapp">
   <div class="przelejj-button">
-    <form id="savingsForm">
-      
+  
+
+
+
+    <!-- <form action="/create_savings_account" method="post" id="savingsForm">
+      <button id="createSavingsBtn" type="submit">Stwórz konto oszczędnościowe</button>
+
+    </form> -->
+
+
+
+
+    <form action="/create_savings_account" method="post" id="savingsForm">
+     <button id="createSavingsBtn" type="submit" >Stworz konto oszczędnościowe</button>
     </form>
 
 
 
-    <form action="/create_savings_account" method="post">
-      <button>Stwórz konto oszczędnościowe</button>
 
-    </form>
     <% if (typeof message != "undefined" && message) { %>
       <h4 class="alert alert-danger mt-4"><%= message %></h4>
       <% } %>
     
   </div>
-  <div class="perc">
-    
-    <!-- <p>8,25%</p> -->
-
-  </div>
  
+ 
+ 
+ <div class="perc">
+    
+  <!-- <p>8,25%</p> -->
+
+</div>
   
 </div>
 
 
 
 
-
-
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById('savingsForm').addEventListener('submit', function() {
+      document.getElementById('createSavingsBtn').style.display = 'none';
+    });
+  });
+</script>
 
 </body>
 </html>
