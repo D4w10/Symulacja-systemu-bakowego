@@ -169,6 +169,30 @@ router.get('/admin', authController.isLoggedIn, async (req, res) => {
 
 });
 
+router.get('/edit/:id', (req, res) => {
+  const userId = req.params.id;
+
+  db.query('SELECT * FROM reg_request INNER JOIN account ON reg_request.id = account.user_id WHERE reg_request.role != "admin" AND reg_request.id = ?', [userId], (error, results) => {
+
+
+    if (error) throw error;
+    res.render('edit', { user: results[0] });
+
+
+
+  });
+});
+
+router.post('/edit/:id', (req, res) => {
+  const userId = req.params.id;
+  const { name, email } = req.body;
+  db.query('UPDATE users SET name = ?, email = ? WHERE id = ?', [name, email, userId], (error, results) => {
+    if (error) throw error;
+    res.redirect('/admin');
+  });
+});
+
+
 
 router.post('/adminTransf', authController.isLoggedIn, async (req, res) => {
   const userId = req.body.balance; // Pobierz ID wybranego użytkownika z formularza

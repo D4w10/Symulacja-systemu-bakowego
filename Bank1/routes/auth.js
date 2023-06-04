@@ -16,7 +16,7 @@ router.post('/transfer', przelewController.transfer);
 
 router.post('/datachange', changeController.datachange);
 
-router.post('/datachangemail', changeController.datachange);
+router.post('/datachangemail', changeController.datachangemail);
 
 
 module.exports = router;
