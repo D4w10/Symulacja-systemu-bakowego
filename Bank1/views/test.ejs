@@ -26,7 +26,7 @@
       </nav>
       <form action="/przelej-srodki" method="POST">
         <label for="amount">Kwota:</label>
-        <input type="number" name="amount" id="amount" required>
+        <input type="number" name="amount" required min="0" id="amount" required>
       
         <button type="submit">Wyślij</button>
       </form>

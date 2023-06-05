@@ -149,8 +149,6 @@ function generateAccountNumber() {
 }
 
 
-
-
 exports.isLoggedIn = async (req, res, next) => {
   // console.log(req.cookies.jwt + "A===================");
   if( req.cookies.jwt) {
@@ -160,7 +158,7 @@ exports.isLoggedIn = async (req, res, next) => {
       process.env.JWT_SECRET
       );
 
-      console.log(decoded.id );
+      console.log(decoded );
 
      
       db.query('SELECT * FROM reg_request INNER JOIN account ON reg_request.id = account.user_id WHERE reg_request.id = ?', [decoded.id], (error, result) => {
@@ -168,16 +166,16 @@ exports.isLoggedIn = async (req, res, next) => {
           if(!result) {
             return next();
           }
-
+  
           req.user = result[0];
           req.userid=decoded;
         
-          //req.oszczed=resultt[0];
+          req.oszczed=resultt[0];
 
             //
             console.log("-------------------------------------=================================")
-         console.log(result[0]);
-          //console.log("user is")
+          console.log(resultt[0]);
+          console.log("user is")
          // console.log(req.user);
           return next();
           

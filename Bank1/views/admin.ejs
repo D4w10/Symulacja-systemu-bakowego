@@ -30,28 +30,16 @@
 
     
 
-    <!-- <form action="/adminTransf" method="post">
-      <label for="user_balance">Wybierz użytkownika:</label>
-      <select id="user_balance" name="balance"> -->
-
-<!-- 
-        <option value=""></option> -->
         <ul>
-        <% bil.forEach(function(user) { %>
+        <% users.forEach(function(users) { %>
 
           <li>
-            <%= user.firstName %> <%= user.lastName %> 
-            <a href="/edit/<%= user.id %>">Edytuj</a>
-            <a href="/delete/<%= user.id %>">Usuń</a>
+            <%= users.firstName %> <%= users.lastName %> 
+            <a href="/edit/<%= users.id %>">Edytuj</a>
+            <a href="/delete/<%= users.id %>">Usuń</a>
           </li>
 
 
-
-<!-- 
-
-
-        <option value="<%= user.id %>"><%= user.firstName %> <%= user.lastName %> </option>
- -->
 
 
 
@@ -60,26 +48,6 @@
 
 
 
-      <!-- </select>
-      <input type="number" name="amount">
-      <input type="submit">
-    </form>
-     -->
-<!-- 
-    <% if (typeof message != "undefined" && message) { %>
-    <h4 class="alert alert-danger mt-4"><%= messages %></h4>
-    <% } %> -->
-
-    <!-- <div>
-      <h2>Bilans użytkowników:</h2>
-      <% bil.forEach(function(user) { %>
-      <div>
-        <p>Imię: <%= user.firstName %></p>
-        <p>Nazwisko: <%= user.lastName %></p>
-        <p>Stan konta: <%= user.bilans %></p>
-      </div>
-      <% }); %>
-    </div> -->
   </main>
 
 </body>

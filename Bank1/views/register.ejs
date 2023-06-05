@@ -37,39 +37,40 @@
                 <form action="/auth/register" method="POST">
                     <div class="mb-3">
                         <label for="login" class="form-label">Login: </label>
-                        <input type="text" class="form-control" id="login" name="login">
+                        <input type="text" maxlength="50" class="form-control" id="login" name="login">
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email">
+                        <input type="email" maxlength="254" class="form-control" id="email" name="email">
+                        
                     </div>
                     <div class="mb-3">
                         <label for="pesel" class="form-label">Pesel</label>
-                        <input type="Number" class="form-control" id="pesel" name="pesel">
+                        <input type="text" pattern="[0-9]{11}" title="Pesel musi sie składać z 11 cyfr" maxlength="11" class="form-control" id="pesel" name="pesel">
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password">
+                        <input type="password" maxlength="50" class="form-control" id="password" name="password">
                     </div>
                     <div class="mb-3">
                         <label for="confirmpassword" class="form-label">Potwierdz hasło</label>
-                        <input type="password" class="form-control" id="confirmpassword" name="confirmpassword">
+                        <input type="password"  maxlength="50" class="form-control" id="confirmpassword" name="confirmpassword">
                     </div>
                     <div class="mb-3">
                         <label for="firstName" class="form-label">Imię</label>
-                        <input type="text" class="form-control" id="firstName" name="firstName">
+                        <input type="text" maxlength="50" class="form-control" id="firstName" name="firstName">
                     </div>
                     <div class="mb-3">
                         <label for="lastName" class="form-label">Nazwisko</label>
-                        <input type="text" class="form-control" id="lastName" name="lastName">
+                        <input type="text" maxlength="50" class="form-control" id="lastName" name="lastName">
                     </div>
                     <div class="mb-3">
                         <label for="motherName" class="form-label">Nazwisko panienskie matki</label>
-                        <input type="text" class="form-control" id="motherName" name="motherName">
+                        <input type="text" maxlength="50" class="form-control" id="motherName" name="motherName">
                     </div>
                     <div class="mb-3">
                         <label for="phoneNumber" class="form-label">Numer Telefonu</label>
-                        <input type="number" class="form-control" id="phoneNumber" name="phoneNumber">
+                        <input type="text" pattern="[0-9]{9}" title="Numer składa się z 9 cyfr" maxlength="9" class="form-control" id="phoneNumber" name="phoneNumber">
                     </div>
                     <button type="submit" class="btn btn-primary">Stwórz Konto</button>
                 </form>

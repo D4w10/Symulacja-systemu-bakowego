@@ -73,194 +73,31 @@ router.get('/profile', authController.isLoggedIn, (req, res) => {
 
 })
 
+
+
 router.get('/history', authController.isLoggedIn, (req, res) => {
   console.log("sadsdsdadksjhkjh");
   console.log(req.user.id);
   if( req.user ) {
 
-
-    try {
-      // Pobierz listę danych z bazy danych
-      const getDataQuery = `SELECT *, DATE_FORMAT(created_at, '%d.%m.%Y') as data,DATE_FORMAT(created_at, '%T') as czas  FROM transactions Where sender_id = ? OR recipient_id ORDER BY created_at DESC`;
-      db.query(getDataQuery,[req.user.id], (err,transrow)=>{
-        
-        const statrec = `
-        SELECT AVG(amount) AS sred_wyd, SUM(amount) AS all_wyd
-        FROM transactions
-        WHERE recipient_id = ? AND created_at BETWEEN ? AND ?
-      `;
-      const statsend = `
-      SELECT AVG(amount) AS sred_wyd, SUM(amount) AS all_wyd
-      FROM transactions
-      WHERE sender_id = ? AND created_at BETWEEN ? AND ?
-    `;
-
-    let startDate = req.body.startDate;
-    let endDate = req.body.endDate;
-    if (!startDate || !endDate) {
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const currentMonth = currentDate.getMonth() + 1; 
-  
-    startDate = `${currentYear}-${currentMonth}-01`;
-    endDate = `${currentYear}-${currentMonth + 1}-01`; 
-    }
-    db.query(statrec, [req.user.id, startDate, endDate], (error, results) => {
-      if (error) {
-        console.error('Wystąpił błąd podczas wykonywania zapytania:', error);
-        return res.status(500).send('Wystąpił błąd podczas pobierania danych.');
-      }
-      db.query(statsend, [req.user.id, startDate, endDate], (error, results2) => {
-        if (error) {
-          console.error('Wystąpił błąd podczas wykonywania zapytania:', error);
-          return res.status(500).send('Wystąpił błąd podczas pobierania danych.');
-        }
-
-        const wszystkiewydatki = results2[0].all_wyd;
-        const wszystkieprzychody = results[0].all_wyd;
-
-        const sredniewydatki = results2[0].sred_wyd;
-        const srednieprzychody = results[0].sred_wyd;
-        const bilanswydatkow = wszystkieprzychody - wszystkiewydatki;
-
-        res.render('history', {
-          user: req.user,
-          transfer: transrow,
-          wszystkiewydatki,
-          wszystkieprzychody,
-          sredniewydatki,
-          srednieprzychody,
-          bilanswydatkow
-        });
-
-      });
-  
-
-
-
-      
-    });
-
-
-        
-          //console.log(transrow);
-      });
-  
-      
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Wystąpił błąd podczas pobierania listy danych.');
-    }
-
-
-
-  } else {
-    res.redirect('/login');
-  }
-  
-
-})
-
-
-router.post('/history', authController.isLoggedIn, (req, res) => {
-  console.log("sadsdsdadksjhkjh");
-  console.log(req.user.id);
-  if( req.user ) {
-
-
-    try {
-      // Pobierz listę danych z bazy danych
-      const getDataQuery = `SELECT *, DATE_FORMAT(created_at, '%d.%m.%Y') as data,DATE_FORMAT(created_at, '%T') as czas  FROM transactions Where sender_id = ? OR recipient_id ORDER BY created_at DESC`;
-      db.query(getDataQuery,[req.user.id], (err,transrow)=>{
-        
-        const statrec = `
-        SELECT AVG(amount) AS sred_wyd, SUM(amount) AS all_wyd
-        FROM transactions
-        WHERE recipient_id = ? AND created_at BETWEEN ? AND ?
-      `;
-      const statsend = `
-      SELECT AVG(amount) AS sred_wyd, SUM(amount) AS all_wyd
-      FROM transactions
-      WHERE sender_id = ? AND created_at BETWEEN ? AND ?
-    `;
-
-    let startDate = req.body.startDate;
-    let endDate = req.body.endDate;
-    if (!startDate || !endDate) {
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const currentMonth = currentDate.getMonth() + 1; 
-  
-    startDate = `${currentYear}-${currentMonth}-01`;
-    endDate = `${currentYear}-${currentMonth + 1}-01`; 
-    }
-    db.query(statrec, [req.user.id, startDate, endDate], (error, results) => {
-      if (error) {
-        console.error('Wystąpił błąd podczas wykonywania zapytania:', error);
-        return res.status(500).send('Wystąpił błąd podczas pobierania danych.');
-      }
-      db.query(statsend, [req.user.id, startDate, endDate], (error, results2) => {
-        if (error) {
-          console.error('Wystąpił błąd podczas wykonywania zapytania:', error);
-          return res.status(500).send('Wystąpił błąd podczas pobierania danych.');
-        }
-
-        const wszystkiewydatki = results2[0].all_wyd;
-        const wszystkieprzychody = results[0].all_wyd;
-
-        const sredniewydatki = results2[0].sred_wyd;
-        const srednieprzychody = results[0].sred_wyd;
-        const bilanswydatkow = wszystkieprzychody - wszystkiewydatki;
-
-        res.render('history', {
-          user: req.user,
-          transfer: transrow,
-          wszystkiewydatki,
-          wszystkieprzychody,
-          sredniewydatki,
-          srednieprzychody,
-          bilanswydatkow
-        });
-
-      });
-  
-
-
-
-      
-    });
-
-
-        
-          //console.log(transrow);
-      });
-  
-      
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Wystąpił błąd podczas pobierania listy danych.');
-    }
-
-
-
  
-    // try {
-    //   // Pobierz listę danych z bazy danych
-    //   const getDataQuery = `SELECT *, DATE_FORMAT(created_at, '%d.%m.%Y') as data,DATE_FORMAT(created_at, '%T') as czas  FROM transactions Where sender_id = ? OR recipient_id ORDER BY created_at DESC`;
-    //   db.query(getDataQuery,[req.user.id], (err,transrow)=>{
-    //     db.query
-    //     res.render('history', {
-    //       user: req.user,
-    //       transfer: transrow
-    //     });
-    //       console.log(transrow);
-    //   });
+    try {
+      // Pobierz listę danych z bazy danych
+      const getDataQuery = `SELECT *, DATE_FORMAT(created_at, '%d.%m.%Y') as data,DATE_FORMAT(created_at, '%T') as czas  FROM transactions Where sender_id = ? OR recipient_id ORDER BY created_at DESC`;
+      db.query(getDataQuery,[req.user.id], (err,transrow)=>{
+        db.query
+        res.render('history', {
+          user: req.user,
+          transfer: transrow
+        });
+          console.log(transrow);
+      });
   
       
-    // } catch (error) {
-    //   console.error(error);
-    //   res.status(500).send('Wystąpił błąd podczas pobierania listy danych.');
-    // }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Wystąpił błąd podczas pobierania listy danych.');
+    }
 
 
 
@@ -296,46 +133,64 @@ router.post('/history', authController.isLoggedIn, (req, res) => {
 
 router.get('/admin', authController.isLoggedIn, async (req, res) => {
   console.log(req.user);
+  console.log(req.userid);
 
-  console.log("00202012391209012391023910239019230912034912039102390129")
+if(req.userid){
   if (req.user.role == 'admin') {
     try {
-      const getUsers = () => {
-        return new Promise((resolve, reject) => {
-          db.query('SELECT * FROM reg_request INNER JOIN account ON reg_request.id = account.user_id WHERE reg_request.role != "admin"', (error, result) => {
+      //const getUsers = () => {
+        
+       // return new Promise((resolve, reject) => {
+        const search = req.query.search;
+        console.log("12222222222222222222222222222222222222222222222222222");
+        console.log(search);
+        let query = 'SELECT * FROM reg_request INNER JOIN account ON reg_request.id = account.user_id WHERE reg_request.role != "admin"';
+        let queryParams = [];
+        if (search) {
+          query = 'SELECT * FROM reg_request INNER JOIN account ON reg_request.id = account.user_id WHERE reg_request.role != "admin" AND reg_request.firstName LIKE ? OR reg_request.lastName LIKE ? OR reg_request.login LIKE ?';
+          queryParams = [`%${search}%`, `%${search}%`, `%${search}%`];
+        }
+
+          db.query(query, queryParams,(error, result) => {
             if (error) {
-              reject(error);
-            } else {
-              resolve(result);
-            }
+              console.log(error);
+            } 
+
+            console.log(result);
+            console.log("12222222222222222222222222222222222222222222222222222");
+           
+            res.render('admin', {
+              users: result, 
+            });
+
+
+
           });
-        });
-      };
-     
-
-      const users = await getUsers();
-    
-
-
- 
-    res.render('admin', {
-      user: req.user,
-      bil:users,
-      
-    });
+        //});
+     // };
+      //const users = await getUsers();
+  
 
   }catch (error) {
     console.error(error);
     // Obsługa błędu
   }
-} else {
-  res.redirect('/profile');
+
+  }else {
+    res.redirect('/profile');
  }
+}else {
+  res.redirect('/profile');
+}
+
+
 });
 
-router.get('/edit/:id', (req, res) => {
-  const userId = req.params.id;
+router.get('/edit/:id',authController.isLoggedIn, (req, res) => {
+  if(req.userid){
+    if (req.user.role == 'admin') {
 
+  const userId = req.params.id;
   db.query('SELECT * FROM reg_request INNER JOIN account ON reg_request.id = account.user_id WHERE reg_request.role != "admin" AND reg_request.id = ?', [userId], (error, results) => {
 
 
@@ -344,16 +199,33 @@ router.get('/edit/:id', (req, res) => {
 
 
 
+
   });
+}else{
+  res.redirect('/profile');
+}
+}else{
+  res.redirect('/profile');
+}
+
+
+
 });
 
 router.post('/edit/:id', (req, res) => {
   const userId = req.params.id;
   const { name, email } = req.body;
+
+  // db.query(`SELECT * FROM req_request WHERE id = ${userId}`,(er, result2)=>{
+
+  // })
+
   db.query('UPDATE users SET name = ?, email = ? WHERE id = ?', [name, email, userId], (error, results) => {
     if (error) throw error;
     res.redirect('/admin');
   });
+
+
 });
 
 
@@ -380,17 +252,17 @@ console.log(amount);
 
 
 
-// router.get('/history', authController.isLoggedIn, (req, res) => {
-//   console.log(req.user);
-//   if( req.user ) {
-//     res.render('history', {
-//       user: req.user
-//     });
-//   } else {
-//     res.redirect('/login');
-//   }
+router.get('/history', authController.isLoggedIn, (req, res) => {
+  console.log(req.user);
+  if( req.user ) {
+    res.render('history', {
+      user: req.user
+    });
+  } else {
+    res.redirect('/login');
+  }
   
-// })
+})
 
 
 
@@ -593,6 +465,7 @@ router.post('/przelej-srodki', authController.isLoggedIn, (req, res) => {
 
             return res.redirect('/test')
           });
+          
         });
       });
     });
@@ -694,627 +567,6 @@ router.post('/wyplac-srodki', (req, res) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// router.post('/wyplac-srodki', (req, res) => {
-//   const accountId = req.body.account_id;
-
-//   // Pobranie danych konta oszczędnościowego
-//   db.query('SELECT * FROM k_oscz WHERE id_oszcz = ?', [accountId], (error, results) => {
-//     if (error) {
-//       console.error('Błąd zapytania SQL: ', error);
-//       return res.status(500).send('Wystąpił błąd podczas wypłacania środków.');
-//     }
-
-//     if (results.length === 0) {
-//       return res.status(404).send('Nie znaleziono konta oszczędnościowego.');
-//     }
-
-//     const accountBalance = results[0].wplacone_srodki;
-//     const accountId = results[0].id_account;
-
-//     // Rozpoczęcie transakcji
-//     db.beginTransaction((error) => {
-//       if (error) {
-//         console.error('Błąd rozpoczynania transakcji: ', error);
-//         return res.status(500).send('Wystąpił błąd podczas wypłacania środków.');
-//       }
-
-//       // Aktualizacja stanu konta oszczędnościowego
-//       db.query('UPDATE k_oscz SET wplacone_srodki = 0 WHERE id_oszcz = ?', [accountId], (error) => {
-//         if (error) {
-//           console.error('Błąd zapytania SQL: ', error);
-//           return db.rollback(() => {
-//             res.status(500).send('Wystąpił błąd podczas wypłacania środków.');
-//           });
-//         }
-
-//         // Pobranie aktualnego bilansu konta głównego
-//         db.query('SELECT bilans FROM account WHERE id_account = ?', [accountId], (error, results) => {
-//           if (error) {
-//             console.error('Błąd zapytania SQL: ', error);
-//             return db.rollback(() => {
-//               res.status(500).send('Wystąpił błąd podczas pobierania bilansu konta.');
-//             });
-//           }
-        
-//           if (results.length === 0) {
-//             return db.rollback(() => {
-//               res.status(404).send('Nie znaleziono konta głównego.');
-//             });
-//           }
-        
-//           const currentBalance = results[0].bilans;
-//           const updatedBalance = currentBalance + accountBalance;
-        
-//           // Aktualizacja bilansu na koncie głównym
-//           db.query('UPDATE account SET bilans = ? WHERE id_account = ?', [updatedBalance, accountId], (error) => {
-//             if (error) {
-//               console.error('Błąd zapytania SQL: ', error);
-//               return db.rollback(() => {
-//                 res.status(500).send('Wystąpił błąd podczas aktualizacji bilansu konta.');
-//               });
-//             }
-        
-//             // Zatwierdzenie transakcji
-//             db.commit((error) => {
-//               if (error) {
-//                 console.error('Błąd zatwierdzania transakcji: ', error);
-//                 return db.rollback(() => {
-//                   res.status(500).send('Wystąpił błąd podczas zatwierdzania transakcji.');
-//                 });
-//               }
-        
-//               return res.redirect('/test');
-//                         });
-//                       });
-//                     });
-//                   });
-//                 });
-//               });
-//             });
-              
-
-
-
-
-
-
-
-
-
-// // Obsługa żądania wypłaty środków z konta oszczędnościowego
-// router.post('/wyplac-srodki', (req, res) => {
-//   const accountId = req.body.account_id;
-
-//   // Pobranie danych konta oszczędnościowego
-//   db.query('SELECT * FROM k_oscz WHERE id_oszcz = ?', accountId, (error, results) => {
-//     if (error) {
-//       console.error('Błąd zapytania SQL: ', error);
-//       return res.status(500).send('Wystąpił błąd podczas wypłacania środków.');
-//     }
-
-//     if (results.length === 0) {
-//       return res.status(404).send('Nie znaleziono konta oszczędnościowego.');
-//     }
-
-//     const accountBalance = results[0].wplacone_srodki;
-//     const userId = results[0].user_id;
-
-//     // Rozpoczęcie transakcji
-//     db.beginTransaction((error) => {
-//       if (error) {
-//         console.error('Błąd rozpoczynania transakcji: ', error);
-//         return res.status(500).send('Wystąpił błąd podczas wypłacania środków.');
-//       }
-
-//       // Aktualizacja stanu konta oszczędnościowego
-//       db.query('UPDATE k_oscz SET wplacone_srodki = 0 WHERE id_oszcz = ?', accountId, (error) => {
-//         if (error) {
-//           console.error('Błąd zapytania SQL: ', error);
-//           return db.rollback(() => {
-//             res.status(500).send('Wystąpił błąd podczas wypłacania środków.');
-//           });
-//         }
-
-//         // Pobranie aktualnego bilansu konta głównego
-//         db.query('SELECT bilans FROM account WHERE id_account = ?', userId, (error, results) => {
-//           if (error) {
-//             console.error('Błąd zapytania SQL: ', error);
-//             return db.rollback(() => {
-//               res.status(500).send('Wystąpił błąd podczas pobierania bilansu konta.');
-//             });
-//           }
-
-//           const currentBalance = results[0].bilans;
-//           const updatedBalance = currentBalance + accountBalance;
-
-//           // Aktualizacja bilansu na koncie głównym
-//           db.query('UPDATE account SET bilans = ? WHERE id_account = ?', [updatedBalance, userId], (error) => {
-//             if (error) {
-//               console.error('Błąd zapytania SQL: ', error);
-//               return db.rollback(() => {
-//                 res.status(500).send('Wystąpił błąd podczas aktualizacji bilansu konta.');
-//               });
-//             }
-
-//             // Zatwierdzenie transakcji
-//             db.commit((error) => {
-//               if (error) {
-//                 console.error('Błąd zatwierdzania transakcji: ', error);
-//                 return db.rollback(() => {
-//                   res.status(500).send('Wystąpił blad');
-                
-//               });
-//             }
-
-//             return res.redirect('/test');
-//           });
-//         });
-//       });
-//     });
-//   });
-// });
-// });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// router.post('/wyplac-srodki', (req, res) => {
-//   const accountId = req.body.account_id;
-
-//   // Pobranie danych konta oszczędnościowego
-//   db.query('SELECT * FROM k_oscz WHERE id_oszcz = ?', accountId, (error, results) => {
-//     if (error) {
-//       console.error('Błąd zapytania SQL: ', error);
-//       return res.status(500).send('Wystąpił błąd podczas wypłacania środków.');
-//     }
-
-//     if (results.length === 0) {
-//       return res.status(404).send('Nie znaleziono konta oszczędnościowego.');
-//     }
-
-//     const accountBalance = results[0].wplacone_srodki;
-//     const userId = results[0].user_id;
-
-//     // Rozpoczęcie transakcji
-//     db.beginTransaction((error) => {
-//       if (error) {
-//         console.error('Błąd rozpoczynania transakcji: ', error);
-//         return res.status(500).send('Wystąpił błąd podczas wypłacania środków.');
-//       }
-
-//       // Aktualizacja stanu konta oszczędnościowego
-//       db.query('UPDATE k_oscz SET wplacone_srodki = 0 WHERE id_oszcz = ?', accountId, (error) => {
-//         if (error) {
-//           console.error('Błąd zapytania SQL: ', error);
-//           return db.rollback(() => {
-//             res.status(500).send('Wystąpił błąd podczas wypłacania środków.');
-//           });
-//         }
-
-//         // Aktualizacja bilansu na koncie głównym
-//         db.query('UPDATE account SET bilans = bilans + ? WHERE id_account = ?', [accountBalance, userId], (error) => {
-//           if (error) {
-//             console.error('Błąd zapytania SQL: ', error);
-//             return db.rollback(() => {
-//               res.status(500).send('Wystąpił błąd podczas aktualizacji bilansu konta.');
-//             });
-//           }
-
-//           // Zatwierdzenie transakcji
-//           db.commit((error) => {
-//             if (error) {
-//               console.error('Błąd zatwierdzania transakcji: ', error);
-//               return db.rollback(() => {
-//                 res.status(500).send('Wystąpił błąd podczas wypłacania środków.');
-//               });
-//             }
-
-//             return res.redirect('/test');
-//           });
-//         });
-//       });
-//     });
-//   });
-// });
-
-
-
-
-
-
-// router.post('/wyplac-srodki', (req, res) => {
-//   const accountId = req.body.account_id;
-
-//   // Pobranie danych konta oszczędnościowego
-//   db.query('SELECT * FROM k_oscz WHERE id_oszcz = ?', accountId, (error, results) => {
-//     if (error) {
-//       console.error('Błąd zapytania SQL: ', error);
-//       return res.status(500).send('Wystąpił błąd podczas wypłacania środków.');
-//     }
-
-//     if (results.length === 0) {
-//       return res.status(404).send('Nie znaleziono konta oszczędnościowego.');
-//     }
-
-//     const accountBalance = results[0].wplacone_srodki;
-//     const userId = results[0].user_id;
-
-//     // Rozpoczęcie transakcji
-//     db.beginTransaction((error) => {
-//       if (error) {
-//         console.error('Błąd rozpoczynania transakcji: ', error);
-//         return res.status(500).send('Wystąpił błąd podczas wypłacania środków.');
-//       }
-
-//       // Aktualizacja stanu konta oszczędnościowego
-//       db.query('UPDATE k_oscz SET wplacone_srodki = 0 WHERE id_oszcz = ?', accountId, (error) => {
-//         if (error) {
-//           console.error('Błąd zapytania SQL: ', error);
-//           return db.rollback(() => {
-//             res.status(500).send('Wystąpił błąd podczas wypłacania środków.');
-//           });
-//         }
-
-//         // Aktualizacja bilansu na koncie głównym
-//         db.query('UPDATE account SET bilans = bilans + ? WHERE user_id = ?', [accountBalance, userId], (error) => {
-//           if (error) {
-//             console.error('Błąd zapytania SQL: ', error);
-//             return db.rollback(() => {
-//               res.status(500).send('Wystąpił błąd podczas aktualizacji bilansu konta.');
-//             });
-//           }
-
-//           // Zatwierdzenie transakcji
-//           db.commit((error) => {
-//             if (error) {
-//               console.error('Błąd zatwierdzania transakcji: ', error);
-//               return db.rollback(() => {
-//                 res.status(500).send('Wystąpił błąd podczas wypłacania środków.');
-//               });
-//             }
-
-//             return res.redirect('/test');
-//           });
-//         });
-//       });
-//     });
-//   });
-// });
-
-
-
-
-
-
-
-// // Obsługa żądania wypłaty środków z konta oszczędnościowego
-// router.post('/wyplac-srodki', (req, res) => {
-//   const accountId = req.body.account_id;
-
-//   // Pobranie danych konta oszczędnościowego
-//   db.query('SELECT * FROM k_oscz WHERE id_oszcz = ?', accountId, (error, results) => {
-//     if (error) {
-//       console.error('Błąd zapytania SQL: ', error);
-//       return res.status(500).send('Wystąpił błąd podczas wypłacania środków.');
-//     }
-
-//     if (results.length === 0) {
-//       return res.status(404).send('Nie znaleziono konta oszczędnościowego.');
-//     }
-
-//     const accountBalance = results[0].wplacone_srodki;
-//     const userId = results[0].user_id;
-
-//     // Aktualizacja stanu konta oszczędnościowego
-//     db.query('UPDATE k_oscz SET wplacone_srodki = 0 WHERE id_oszcz = ?', accountId, (error) => {
-//       if (error) {
-//         console.error('Błąd zapytania SQL: ', error);
-//         return res.status(500).send('Wystąpił błąd podczas wypłacania środków.');
-//       }
-
-//       // Aktualizacja bilansu na koncie głównym
-//       db.query('UPDATE account SET bilans = bilans + ? WHERE id_account = ?', [accountBalance, userId], (error) => {
-//         if (error) {
-//           console.error('Błąd zapytania SQL: ', error);
-//           return res.status(500).send('Wystąpił błąd podczas aktualizacji bilansu konta.');
-//         }
-
-//         return res.redirect('/test');
-//       });
-//     });
-//   });
-// });
-
-
-// router.post('/wyplac-srodki', (req, res) => {
-//   const accountId = req.body.account_id;
-
-//   // Pobranie danych konta oszczędnościowego
-//   db.query('SELECT * FROM k_oscz WHERE id_oszcz = ?', accountId, (error, results) => {
-//     if (error) {
-//       console.error('Błąd zapytania SQL: ', error);
-//       return res.status(500).send('Wystąpił błąd podczas wypłacania środków.');
-//     }
-
-//     if (results.length === 0) {
-//       return res.status(404).send('Nie znaleziono konta oszczędnościowego.');
-//     }
-
-//     const accountBalance = results[0].wplacone_srodki;
-
-//     // Aktualizacja stanu konta oszczędnościowego
-//     db.query('UPDATE k_oscz SET wplacone_srodki = 0 WHERE id_oszcz = ?', accountId, (error) => {
-//       if (error) {
-//         console.error('Błąd zapytania SQL: ', error);
-//         return res.status(500).send('Wystąpił błąd podczas wypłacania środków.');
-//       }
-
-//       // Aktualizacja bilansu na koncie głównym
-//       db.query('UPDATE account SET bilans = bilans + ? WHERE id_account = ?', [accountBalance, accountId], (error) => {
-//         if (error) {
-//           console.error('Błąd zapytania SQL: ', error);
-//           return res.status(500).send('Wystąpił błąd podczas aktualizacji bilansu konta.');
-//         }
-
-//         return res.redirect('/test');
-//       });
-//     });
-//   });
-// });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// // Obsługa żądania wypłaty środków z konta oszczędnościowego
-// router.post('/wyplac-srodki', (req, res) => {
-//   const accountId = req.body.account_id;
-
-//   // Pobranie danych konta oszczędnościowego
-//   db.query('SELECT * FROM k_oscz WHERE id_oszcz = ?', accountId, (error, results) => {
-//     if (error) {
-//       console.error('Błąd zapytania SQL: ', error);
-//       return res.status(500).send('Wystąpił błąd podczas wypłacania środków.');
-//     }
-
-//     if (results.length === 0) {
-//       return res.status(404).send('Nie znaleziono konta oszczędnościowego.');
-//     }
-
-//     const accountBalance = results[0].wplacone_srodki;
-
-//     // Aktualizacja stanu konta oszczędnościowego
-//     db.query('UPDATE k_oscz SET wplacone_srodki = 0 WHERE id_oszcz = ?', accountId, (error) => {
-//       if (error) {
-//         console.error('Błąd zapytania SQL: ', error);
-//         return res.status(500).send('Wystąpił błąd podczas wypłacania środków.');
-//       }
-
-//       return res.redirect('/test');
-//     });
-//   });
-// });
-
-
-
-
-
-// router.post('/przelej-srodki', authController.isLoggedIn, (req, res) => {
-//   const userId = req.userid.id; // Pobranie identyfikatora zalogowanego użytkownika z sesji
-
-//   // Pobranie numeru konta użytkownika
-//   db.query('SELECT * FROM account WHERE user_id = ?', userId, (error, results) => {
-//     if (error) {
-//       console.error('Błąd zapytania SQL: ', error);
-//       return res.status(500).send('Wystąpił błąd podczas przesyłania środków.');
-//     }
-
-//     if (results.length === 0) {
-//       return res.status(404).send('Nie znaleziono konta dla zalogowanego użytkownika.');
-//     }
-
-//     const accountNumber = results[0].account_number;
-//     const amount = req.body.amount;
-
-//     // Sprawdzenie, czy użytkownik ma wystarczającą ilość środków na koncie
-//     if (results[0].balance < amount) {
-//       return res.status(400).send('Nie masz wystarczającej ilości środków na koncie.');
-//     }
-
-//     // Rozpoczęcie transakcji
-//     db.beginTransaction((error) => {
-//       if (error) {
-//         console.error('Błąd rozpoczynania transakcji: ', error);
-//         return res.status(500).send('Wystąpił błąd podczas przesyłania środków.');
-//       }
-
-//       // Zmniejszenie bilansu na koncie użytkownika
-//       db.query('UPDATE account SET bilans = bilans - ? WHERE user_id = ?', [amount, userId], (error) => {
-//         if (error) {
-//           console.error('Błąd zapytania SQL: ', error);
-//           return db.rollback(() => {
-//             res.status(500).send('Wystąpił błąd podczas przesyłania środków.');
-//           });
-//         }
-        
-
-       
-
-        
-//         // Zwiększenie wplaconych srodkow na koncie oszczednosciowym
-//         db.query('INSERT INTO k_oscz (id_account, wplacone_srodki)  VALUES (?, ?)', [userId, amount], (error) => {
-//           if (error) {
-//             console.error('Błąd zapytania SQL: ', error);
-//             return db.rollback(() => {
-//               res.status(500).send('Wystąpił błąd podczas przesyłania środków.');
-//             });
-//           }
-
-//           // Zatwierdzenie transakcji
-//           db.commit((error) => {
-//             if (error) {
-//               console.error('Błąd zatwierdzania transakcji: ', error);
-//               return db.rollback(() => {
-//                 res.status(500).send('Wystąpił błąd podczas przesyłania środków.');
-//               });
-//             }
-
-//             return res.redirect('/test')
-//           });
-//         });
-//       });
-//     });
-//   });
-// });
-
-// router.post('/przelej-srodki', authController.isLoggedIn, (req, res) => {
-//   const userId = req.userid.id; // Pobranie identyfikatora zalogowanego użytkownika z sesji
-
-//   // Pobranie numeru konta użytkownika
-//   db.query('SELECT * FROM account WHERE user_id = ?', userId, (error, results) => {
-//     if (error) {
-//       console.error('Błąd zapytania SQL: ', error);
-//       return res.status(500).send('Wystąpił błąd podczas przesyłania środków.');
-//     }
-
-//     if (results.length === 0) {
-//       return res.status(404).send('Nie znaleziono konta dla zalogowanego użytkownika.');
-//     }
-
-//     const accountNumber = results[0].account_number;
-//     const amount = req.body.amount;
-
-//     // Zapisanie środków na koncie "k_oszcz" na podstawie numeru konta
-//     db.query('INSERT INTO k_oszcz (id_account, wplacone_srodki) VALUES (?, ?)', [accountNumber, amount], (error) => {
-//       if (error) {
-//         console.error('Błąd zapytania SQL: ', error);
-//         return res.status(500).send('Wystąpił błąd podczas przesyłania środków.');
-//       }
-
-//       return res.send('Przelew zakończony pomyślnie.');
-//     });
-//   });
-// });
-
-// router.post('/przelej-srodki', authController.isLoggedIn, (req, res) => {
-//   const userId = req.userid.id; // Pobranie identyfikatora zalogowanego użytkownika z sesji
-
-//   // Pobranie numeru konta użytkownika
-//   db.query('SELECT * FROM account WHERE user_id = ?', userId, (error, results) => {
-//     if (error) {
-//       console.error('Błąd zapytania SQL: ', error);
-//       return res.status(500).send('Wystąpił błąd podczas sprawdzania konta użytkownika.');
-//     }
-
-//     console.log('Wyniki zapytania SQL:', results);
-//     res.send('Sprawdzanie konta zakończone. Sprawdź konsolę, aby zobaczyć wyniki zapytania SQL.');
-//   });
-// });
-
-
-
-
-
-
-
-
-
-
-
-
-
-// router.post('/create_savings_account', authController.isLoggedIn, (req, res) => {
-//   console.log(req.userid.id);
-   
-  
-//   db.query('SELECT * FROM reg_request INNER JOIN account ON reg_request.id = account.user_id WHERE reg_request.id=?',req.userid.id, (error, result) => {
-//     const id_account=result[0].id_account;
-//     console.log(result);
-
-//     const wplacone_srodki = 0; 
-//     const adminOprocentowanie = getAdminOprocentowanie();
-  
-//     const query = 'INSERT INTO k_oscz (id_account, wplacone_srodki, oprocentowanie) VALUES (?, ?, ?)';
-//     const values = [id_account, wplacone_srodki, adminOprocentowanie];
-  
-//     db.query(query, values, (err, result) => {
-//       if (err) {
-//         console.error('Błąd zapytania SQL: ', err);
-//         return res.status(500).send('Wystąpił błąd podczas tworzenia konta oszczędnościowego.');
-//       }
-  
-//       // res.status(200).render('konto-oszczednosciowe',{ message: 'Konto oszczędnościowe zostało utworzone.' });
-//       // res.status(200).render('profile',{}); // Przesłanie informacji o ukryciu przycisku
-//       const getDataQuery = `SELECT *, DATE_FORMAT(created_at, '%d.%m.%Y') as data,DATE_FORMAT(created_at, '%T') as czas  FROM transactions Where sender_id = ? OR recipient_id ORDER BY created_at DESC LIMIT 15`;
-//       db.query(getDataQuery,[req.user.id], (err,transrow)=>{
-        
-        
-//         res.status(200).render('profile', {
-//           user: req.user,
-//           transfer: transrow,
-//           oszcz: req.oszczed
-//         });
-//           console.log(transrow);
-//       });
-
-//     });
-//   });
- 
-// });
-
-
  function getAdminOprocentowanie() {
     // Pobierz oprocentowanie z odpowiedniego źródła (np. baza danych, plik konfiguracyjny itp.)
     // Przykładowo:
@@ -1339,157 +591,6 @@ router.get('/konto', authController.isLoggedIn, (req, res) => {
 
 
 
-
-
-
-
-// router.get('/konto-oszczednosciowe', authController.isLoggedIn, (req, res) => {
-//   console.log(req.user);
-//   if( req.user ) {
-//     res.render('konto-oszczednosciowe', {
-      
-//       user: req.user
-//     });
-//   } else {
-//     res.redirect('/login');
-//   }
-  
-// })
-
-
-
-
-
-
-
-
-// router.get('/konto-oszczednosciowe', authController.isLoggedIn, (req, res) => {
-//   const userId = req.userid.id;
-
-//   db.query('SELECT * FROM k_oscz WHERE id_oszcz = ?', userId, (error, results) => {
-//     if (error) {
-//       console.error('Błąd zapytania SQL: ', error);
-//       return res.status(500).send('Wystąpił błąd podczas sprawdzania konta oszczędnościowego.');
-//     }
-
-//     if (results.length > 0) {
-//       // Konto oszczędnościowe jest już utworzone, przekieruj na stronę "test"
-//       res.redirect('/test');
-//     } else {
-//       // Konto oszczędnościowe nie jest jeszcze utworzone, przekieruj na stronę "konto-oszczednosciowe"
-//       res.redirect('/konto-oszczednosciowe');
-//     }
-//   });
-// });
-
-
-
-
-
-// router.get('/konto-oszczednosciowe', authController.isLoggedIn, (req, res) => {
-//   // Sprawdzenie stanu konta oszczędnościowego dla danego użytkownika
-//   const userId = req.userid.id;
-
-//   db.query('SELECT * FROM k_oscz WHERE id_oszcz = ?', userId, (error, results) => {
-//     if (error) {
-//       console.error('Błąd zapytania SQL: ', error);
-//       return res.status(500).send('Wystąpił błąd podczas sprawdzania konta oszczędnościowego.');
-//     }
-
-//     if (results.length > 0) {
-//       // Przekierowanie na stronę docelową, jeśli konto oszczędnościowe jest już utworzone
-//       res.redirect('/test'); // Zastąp 'strona-docelowa' odpowiednią ścieżką do docelowej strony
-//     } else {
-//       // Przekierowanie do formularza tworzenia konta oszczędnościowego, jeśli konto nie zostało jeszcze utworzone
-//       res.redirect('/konto-oszczednosciowe'); // Zastąp 'formularz-utworzenia-konta-oszczednosciowego' odpowiednią ścieżką do formularza
-//     }
-//   });
-// });
-
-
-
-
-// router.post('/create_savings_account', (req, res) => {
-//   const { id_account, wplacone_srodki} = req.body;
-
-//   // Wstawienie danych do tabeli k_oscz
-//   const query = 'INSERT INTO k_oscz (id_account, wplacone_srodki, oprocentowanie) VALUES (?, ?, ?)';
-//   const values = [id_account];
-//   const adminOprocentowanie = getAdminOprocentowanie(); // Pobierz oprocentowanie z odpowiedniego źródła (np. bazy danych)
-
-
-//   db.query(query, values, (err, result) => {
-//     if (err) {
-//       console.error('Błąd zapytania SQL: ', err);
-//       return res.status(500).send('Wystąpił błąd podczas tworzenia konta oszczędnościowego.');
-//     }
-//     console.log('Konto oszczędnościowe zostało utworzone.');
-//     return res.send('Konto oszczędnościowe zostało utworzone.');
-//   });
-// });
-
-
-// function getAdminOprocentowanie() {
-//   // Pobierz oprocentowanie z odpowiedniego źródła (np. baza danych, plik konfiguracyjny itp.)
-//   // Przykładowo:
-//   const adminOprocentowanie = 0.05; // Załóżmy, że oprocentowanie administratora wynosi 5%
-
-//   return adminOprocentowanie;
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// router.post('/konto-oszczednosciowe', authController.isLoggedIn, (req, res) => {
-//   // Odczytaj dane z formularza
-//   const wplaconeSrodki = req.body.wplaconeSrodki;
-//   const idAccount = req.user.id_account;
-
-//   // Wykonaj zapytanie SQL INSERT do tabeli "k_oszcz"
-//   const insertQuery = `INSERT INTO k_oszcz (id_account, wplacone_srodki) VALUES (?, ?)`;
-//   connection.query(insertQuery, [idAccount, wplaconeSrodki], (err, result) => {
-//     if (err) {
-//       console.error(err);
-//       // Obsłuż błąd
-//       return res.status(500).send('Wystąpił błąd podczas zapisywania danych.');
-//     }
-//     // Dane zostały zapisane pomyślnie
-//     // Przekieruj użytkownika na stronę sukcesu lub inny widok
-//     res.redirect('/success');
-//   });
-// });
-
-// router.get('/konto-oszczednosciowe', (req, res) => {
-//   const query = 'SELECT * FROM account INNER JOIN k_oscz on account.id_account = k_oscz.id_account where '; // Przykładowe zapytanie
-//   console.log('tests@@@@@@@@@@@@@@@@@s');
-//   console.log(query);
-
-//   connection.query(query, (error, results) => {
-//     if (error) throw error;
-
-//     const srodkiWplacone = results[0].wplacone_srodki; // Pobranie wartości "wplacone_srodki" z wyników zapytania
-//     res.render('konto-oszczednosciowe', { srodkiWplacone }); // Przekazanie wartości do szablonu
-//   });
-// });
 
 
 router.get('/transfer', authController.isLoggedIn, (req, res) => {
