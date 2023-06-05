@@ -3,7 +3,7 @@ const express = require('express');
 const authController = require('../controllers/auth');
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
-
+const cron = require('node-cron');
 
 
 const router = express.Router();
@@ -401,8 +401,6 @@ router.get('/profile/konto-oszczednosciowe', authController.isLoggedIn, (req, re
   const userId = req.userid.id;
   
 
-
-
   db.query('SELECT * FROM k_oscz WHERE id_oszcz = ?', userId, (error, results) => {
     if (error) {
       console.error('Błąd zapytania SQL: ', error);
@@ -418,6 +416,54 @@ console.log(results.length);
     }
   });
 })
+
+
+
+
+router.get('/konto', authController.isLoggedIn, (req, res) => {
+  console.log(req.user);
+  if( req.user ) {
+    res.render('konto',{
+      user: req.user
+    });
+  } else {
+    res.redirect('/login');
+  }
+  
+})
+
+
+
+
+
+router.get('/transfer', authController.isLoggedIn, (req, res) => {
+  console.log(req.user);
+  if( req.user ) {
+    res.render('transfer',{
+      user: req.user
+    });
+  } else {
+    res.redirect('/login');
+  }
+  
+})
+
+router.get('/transfer2', authController.isLoggedIn, (req, res) => {
+  console.log(req.user);
+  if( req.user ) {
+    res.render('transfer2',{
+      user: req.user
+    });
+  } else {
+    res.redirect('/login');
+  }
+  
+})
+
+
+
+
+
 
 
 
@@ -449,9 +495,6 @@ router.get('/test', authController.isLoggedIn, (req, res) => {
     }
 
 
-
-
-   
 
 
 
@@ -517,8 +560,6 @@ router.post('/create_savings_account', authController.isLoggedIn, (req, res) => 
 
 
 
-
-
 router.post('/przelej-srodki', authController.isLoggedIn, (req, res) => {
   const userId = req.userid.id; // Pobranie identyfikatora zalogowanego użytkownika z sesji
 
@@ -532,13 +573,19 @@ router.post('/przelej-srodki', authController.isLoggedIn, (req, res) => {
     if (results.length === 0) {
       return res.status(404).send('Nie znaleziono konta dla zalogowanego użytkownika.');
     }
+    
 
     const accountNumber = results[0].account_number;
     const amount = req.body.amount;
 
+    if (amount <= 0) {
+      return res.redirect("/test");
+      
+    }
+  
     // Sprawdzenie, czy użytkownik ma wystarczającą ilość środków na koncie
-    if (results[0].balance < amount) {
-      return res.status(400).send('Nie masz wystarczającej ilości środków na koncie.');
+    if (results[0].bilans < amount) {
+      return res.redirect("/test");
     }
 
     // Rozpoczęcie transakcji
@@ -587,8 +634,6 @@ router.post('/przelej-srodki', authController.isLoggedIn, (req, res) => {
     });
   });
 });
-
-
 
 
 
@@ -682,7 +727,6 @@ router.post('/wyplac-srodki', (req, res) => {
 
 
 
-
  function getAdminOprocentowanie() {
     // Pobierz oprocentowanie z odpowiedniego źródła (np. baza danych, plik konfiguracyjny itp.)
     // Przykładowo:
@@ -690,48 +734,70 @@ router.post('/wyplac-srodki', (req, res) => {
   
     return adminOprocentowanie;
   }
-
-
-
-router.get('/konto', authController.isLoggedIn, (req, res) => {
-  console.log(req.user);
-  if( req.user ) {
-    res.render('konto',{
-      user: req.user
-    });
-  } else {
-    res.redirect('/login');
-  }
   
-})
 
+// Funkcja do naliczania odsetek
+function naliczOdsetki() {
+  db.query('SELECT * FROM k_oscz', (error, results) => {
+    if (error) {
+      console.error('Błąd zapytania SQL: ', error);
+      return;
+    }
 
+    // Iteracja przez konta oszczędnościowe
+    results.forEach((konto) => {
+      const oprocentowanie = konto.oprocentowanie;
+      const wplaconeSrodki = konto.wplacone_srodki;
+      const odsetki = (oprocentowanie) * wplaconeSrodki;
 
-
-
-router.get('/transfer', authController.isLoggedIn, (req, res) => {
-  console.log(req.user);
-  if( req.user ) {
-    res.render('transfer',{
-      user: req.user
+      // Aktualizacja salda na koncie oszczędnościowym
+      db.query('UPDATE k_oscz SET wplacone_srodki = wplacone_srodki + ? WHERE id_account = ?', [odsetki, konto.id_account], (error) => {
+        if (error) {
+          console.error('Błąd zapytania SQL: ', error);
+        }
+      });
     });
-  } else {
-    res.redirect('/login');
-  }
-  
-})
+  });
+}
 
-router.get('/transfer2', authController.isLoggedIn, (req, res) => {
-  console.log(req.user);
-  if( req.user ) {
-    res.render('transfer2',{
-      user: req.user
+// Harmonogram Cron do naliczania odsetek co minutę
+cron.schedule('*/30 * * * * *', () => {
+  naliczOdsetki();
+});
+
+// ...
+
+router.post('/przelej-srodki', authController.isLoggedIn, (req, res) => {
+  // ...
+
+  // Zwiększenie wpłaconych środków na koncie oszczędnościowym
+  db.query('UPDATE k_oscz SET wplacone_srodki = wplacone_srodki + ? WHERE id_account = ?', [amount, userId], (error) => {
+    if (error) {
+      console.error('Błąd zapytania SQL: ', error);
+      return db.rollback(() => {
+        res.status(500).send('Wystąpił błąd podczas przesyłania środków.');
+      });
+    }
+
+    // Zatwierdzenie transakcji
+    db.commit((error) => {
+      if (error) {
+        console.error('Błąd zatwierdzania transakcji: ', error);
+        return db.rollback(() => {
+          res.status(500).send('Wystąpił błąd podczas przesyłania środków.');
+        });
+      }
+
+      return res.redirect('/test')
     });
-  } else {
-    res.redirect('/login');
-  }
+  });
+
   
-})
+});
+
+
+
+
 
 
 
