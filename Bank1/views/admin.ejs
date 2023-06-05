@@ -20,27 +20,57 @@
     </ul>
   </nav>
   <main>
-    <h2>Wybierz użytkownika któremu chcesz przelac pieniadze</h2>
 
-    <p>Użytkownicy znajduja sie w rozwijanej liscie:</p>
+    <h1>Lista użytkowników</h1>
+    <form action="/admin" method="get">
+      <input type="text" name="search" placeholder="Szukaj użytkownika">
+      <button type="submit">Szukaj</button>
+    </form>
 
-    <form action="/adminTransf" method="post">
+
+    
+
+    <!-- <form action="/adminTransf" method="post">
       <label for="user_balance">Wybierz użytkownika:</label>
-      <select id="user_balance" name="balance">
-        <option value=""></option>
+      <select id="user_balance" name="balance"> -->
+
+<!-- 
+        <option value=""></option> -->
+        <ul>
         <% bil.forEach(function(user) { %>
-        <option value="<%= user.id %>"><%= user.firstName %></option>
+
+          <li>
+            <%= user.firstName %> <%= user.lastName %> 
+            <a href="/edit/<%= user.id %>">Edytuj</a>
+            <a href="/delete/<%= user.id %>">Usuń</a>
+          </li>
+
+
+
+<!-- 
+
+
+        <option value="<%= user.id %>"><%= user.firstName %> <%= user.lastName %> </option>
+ -->
+
+
+
         <% }); %>
-      </select>
+      </ul>
+
+
+
+      <!-- </select>
       <input type="number" name="amount">
       <input type="submit">
     </form>
-
+     -->
+<!-- 
     <% if (typeof message != "undefined" && message) { %>
     <h4 class="alert alert-danger mt-4"><%= messages %></h4>
-    <% } %>
+    <% } %> -->
 
-    <div>
+    <!-- <div>
       <h2>Bilans użytkowników:</h2>
       <% bil.forEach(function(user) { %>
       <div>
@@ -49,7 +79,7 @@
         <p>Stan konta: <%= user.bilans %></p>
       </div>
       <% }); %>
-    </div>
+    </div> -->
   </main>
 
 </body>

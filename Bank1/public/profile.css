@@ -18,6 +18,9 @@
     margin: 0;
     padding: 0;
   }
+  .contentt{
+    display: flex;
+  }
   
   nav ul li {
     display: inline-block;
