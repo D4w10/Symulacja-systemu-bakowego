@@ -147,7 +147,7 @@ if(req.userid){
         let query = 'SELECT * FROM reg_request INNER JOIN account ON reg_request.id = account.user_id WHERE reg_request.role != "admin"';
         let queryParams = [];
         if (search) {
-          query = 'SELECT * FROM reg_request INNER JOIN account ON reg_request.id = account.user_id WHERE reg_request.role != "admin" AND reg_request.firstName LIKE ? OR reg_request.lastName LIKE ? OR reg_request.login LIKE ?';
+          query = 'SELECT * FROM reg_request INNER JOIN account ON reg_request.id = account.user_id WHERE reg_request.role != "admin" AND (reg_request.firstName LIKE ? OR reg_request.lastName LIKE ? OR reg_request.login LIKE ?)';
           queryParams = [`%${search}%`, `%${search}%`, `%${search}%`];
         }
 
@@ -213,21 +213,149 @@ router.get('/edit/:id',authController.isLoggedIn, (req, res) => {
 });
 
 router.post('/edit/:id', (req, res) => {
+ 
   const userId = req.params.id;
-  const { name, email } = req.body;
-
-  // db.query(`SELECT * FROM req_request WHERE id = ${userId}`,(er, result2)=>{
-
-  // })
-
-  db.query('UPDATE users SET name = ?, email = ? WHERE id = ?', [name, email, userId], (error, results) => {
-    if (error) throw error;
-    res.redirect('/admin');
-  });
-
+  const { firstName, lastName, email, motherName, pesel, phoneNumber } = req.body;
+  console.log(userId);
+  // Aktualizacja danych użytkownika w bazie danych
+  db.query(
+    'UPDATE reg_request SET firstName = ?, lastName = ?, email = ?, motherName = ?, phonenumber = ?, pesel = ? WHERE id = ?',
+    [firstName, lastName, email, motherName, phoneNumber,pesel, userId],
+    (err, results) => {
+      if (err) throw err;
+      res.redirect('/edit/' + userId);
+    }
+  );
 
 });
+router.post('/addmoney/:id', (req, res) => {
+  const userId = req.params.id;
+  const amount = req.body.amount;
 
+  db.query('SELECT * FROM account WHERE user_id = ?', [userId], (error, results) => {
+    if (error) throw error;
+
+    if (results.length > 0) {
+      const currentBalance = results[0].bilans || 0;
+      const updatedBalance = currentBalance + parseFloat(amount);
+
+      db.query(
+        'UPDATE account SET bilans = ? WHERE user_id = ?',
+        [updatedBalance, userId],
+        (err, result) => {
+          if (err) throw err;
+          res.redirect('/edit/' + userId);
+        }
+      );
+    } else {
+      res.redirect('/admin');
+    }
+  });
+});
+
+// router.get('/delete/:id', authController.isLoggedIn,(req, res) => {
+//   if(req.userid){
+//     if (req.user.role == 'admin') {
+//   const userId = req.params.id;
+
+// db.query('SELECT * FROM account WHERE user_id = ?',[userId],(err,ress)=>{
+
+//   db.query('DELETE FROM k_oscz WHERE id_account = ?', [ress[0].id_account], (error, results) => {
+//     if (error) throw error;
+  
+//       db.query('DELETE FROM account Where user_id = ?',[userId],(error,result)=>{
+//         if (error) throw error;
+
+//         db.query('DELETE FROM reg_request WHERE id = ?',[userId],(error,result)=>{
+//           if (error) throw error;
+//            res.redirect('/admin');
+//         })
+
+//       })    
+
+    
+
+
+//   });
+
+
+
+// })
+
+
+
+
+
+
+// }else{
+//   res.redirect('/profile');
+// }
+// }else{
+//   res.redirect('/profile');
+// }
+
+// });
+
+router.get('/delete/:id', authController.isLoggedIn, (req, res) => {
+  if (req.userid) {
+    if (req.user.role == 'admin') {
+      const userId = req.params.id;
+
+      db.beginTransaction((err) => {
+        if (err) throw err;
+
+        db.query('SELECT * FROM account WHERE user_id = ?', [userId], (err, ress) => {
+          if (err) {
+            db.rollback(() => {
+              throw err;
+            });
+          }
+
+          const accountId = ress[0].id_account;
+
+          db.query('DELETE FROM k_oscz WHERE id_account = ?', [accountId], (err, results) => {
+            if (err) {
+              db.rollback(() => {
+                throw err;
+              });
+            }
+
+            db.query('DELETE FROM account WHERE user_id = ?', [userId], (err, result) => {
+              if (err) {
+                db.rollback(() => {
+                  throw err;
+                });
+              }
+
+              db.query('DELETE FROM reg_request WHERE id = ?', [userId], (err, result) => {
+                if (err) {
+                  db.rollback(() => {
+                    throw err;
+                  });
+                }
+
+                db.commit((err) => {
+                  if (err) {
+                    db.rollback(() => {
+                      throw err;
+                    });
+                  }
+
+                  res.redirect('/admin');
+                });
+              });
+            });
+          });
+        });
+      });
+
+    } else {
+      res.redirect('/profile');
+    }
+  } else {
+    res.redirect('/profile');
+  }
+});
 
 
 router.post('/adminTransf', authController.isLoggedIn, async (req, res) => {
@@ -351,13 +479,6 @@ router.get('/konto-oszczednosciowe', (req, res) => {
 
 
 
-
-
-
-
-
-
-
 router.post('/create_savings_account', authController.isLoggedIn, (req, res) => {
   console.log(req.userid.id);
    
@@ -393,11 +514,6 @@ router.post('/create_savings_account', authController.isLoggedIn, (req, res) => 
   });
  
 });
-
-
-
-
-
 
 
 

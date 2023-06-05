@@ -36,7 +36,7 @@
           <li>
             <%= users.firstName %> <%= users.lastName %> 
             <a href="/edit/<%= users.id %>">Edytuj</a>
-            <a href="/delete/<%= users.id %>">Usuń</a>
+            <a href="/delete/<%= users.id %>" onclick="return confirm('Czy na pewno chcesz usunąć tego użytkownika?')">Usuń</a>
           </li>
 
 

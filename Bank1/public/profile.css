@@ -6,23 +6,23 @@
     background-color: #f5f5f5;
     
   }
-  
-  nav {
+ 
+  /* nav {
     background-color: #004d9c;
     color: #fff;
     padding: 10px;
-  }
+  } 
   
-  nav ul {
+   nav ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
-  }
+  }  */
   .contentt{
     display: flex;
   }
   
-  nav ul li {
+   /* nav ul li {
     display: inline-block;
     margin-right: 10px;
   }
@@ -30,8 +30,8 @@
   nav ul li a {
     color: #fff;
     text-decoration: none;
-  }
-  
+  }  */
+
   .konto {
     background-color: #fff;
     border: 1px solid #ddd;

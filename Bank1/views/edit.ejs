@@ -7,6 +7,7 @@
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="/style.css">
     <title>Document</title>
+ 
   </head>
   
   <body>
@@ -19,13 +20,44 @@
       </ul>
     </nav>
   <h1>Edycja użytkownika</h1>
-  <%= user.firstName %>   <%= user.lastName %>
+   
+  <div class="content">
+
+  <div class="zmianadanych">
+    <h4>ID: <%= user.id %>  Imię: <%= user.firstName %>   <%= user.lastName %> </h4>
   <form action="/edit/<%= user.id %>" method="post">
-    <label for="name">Imię:</label>
-    <input type="text" id="name" name="name" value="<%= user.name %>">
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" value="<%= user.email %>">
+    <label for="firstName">Imię:</label>
+    <input type="text" id="firstName" name="firstName" value="<%= user.firstName %>"><br>
+
+    <label for="lastName">Nazwisko:</label>
+    <input type="text" id="lastName" name="lastName" value="<%= user.lastName %>"><br>
+
+    <label for="email">E-mail:</label>
+    <input type="email" id="email" maxlength="254" name="email" value="<%= user.email %>"><br>
+
+    <label for="motherMaidenName">Nazwisko panieńskie matki:</label>
+    <input type="text" id="motherMaidenName" name="motherName" value="<%= user.motherName %>"><br>
+
+    <label for="pesel">PESEL:</label>
+    <input type="text" id="pesel" name="pesel" maxlength="11" pattern="[0-9]{11}" title="Pesel musi sie składać z 11 cyfr" value="<%= user.pesel %>"><br>
+
+    <label for="phoneNumber">Numer telefonu:</label>
+    <input type="tel" id="phoneNumber" name="phoneNumber" maxlength="9" pattern="[0-9]{9}" title="Numer składa się z 9 cyfr" value="<%= user.phonenumber %>"><br>
     <input type="submit" value="Zapisz zmiany">
   </form>
+</div>
+
+<div class="money">
+  <h4>Stan konta: <%= user.bilans %></h4>
+  <form action="/addmoney/<%= user.id %>" method="post">
+    <label for="amount">Kwota:</label>
+    <input type="text" id="amount" name="amount" pattern="\d+(\.\d{1,2})?|\d+,\d{1,2}" title="Wprowadź kwotę w formacie XX,XX, XX lub XX.XX" required>
+    <button type="submit">Dodaj</button>
+  </form>
+</div>
+
+</div>
+
+
 </body>
 </html>
