@@ -253,48 +253,6 @@ router.post('/addmoney/:id', (req, res) => {
   });
 });
 
-// router.get('/delete/:id', authController.isLoggedIn,(req, res) => {
-//   if(req.userid){
-//     if (req.user.role == 'admin') {
-//   const userId = req.params.id;
-
-// db.query('SELECT * FROM account WHERE user_id = ?',[userId],(err,ress)=>{
-
-//   db.query('DELETE FROM k_oscz WHERE id_account = ?', [ress[0].id_account], (error, results) => {
-//     if (error) throw error;
-  
-//       db.query('DELETE FROM account Where user_id = ?',[userId],(error,result)=>{
-//         if (error) throw error;
-
-//         db.query('DELETE FROM reg_request WHERE id = ?',[userId],(error,result)=>{
-//           if (error) throw error;
-//            res.redirect('/admin');
-//         })
-
-//       })    
-
-    
-
-
-//   });
-
-
-
-// })
-
-
-
-
-
-
-// }else{
-//   res.redirect('/profile');
-// }
-// }else{
-//   res.redirect('/profile');
-// }
-
-// });
 
 router.get('/delete/:id', authController.isLoggedIn, (req, res) => {
   if (req.userid) {
