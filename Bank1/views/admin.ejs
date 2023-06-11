@@ -7,11 +7,10 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <link rel="stylesheet" href="/style.css">
-  <title>Document</title>
+  <title>Admin Panel</title>
 </head>
 
 <body>
-
   <nav>
     <h4>Admin panel</h4>
     <ul>
@@ -20,36 +19,32 @@
     </ul>
   </nav>
   <main>
-
     <h1>Lista użytkowników</h1>
     <form action="/admin" method="get">
       <input type="text" name="search" placeholder="Szukaj użytkownika">
       <button type="submit">Szukaj</button>
     </form>
-
-
-    
-
-        <ul>
-        <% users.forEach(function(users) { %>
-
-          <li>
-           <p>ID: <%= users.id %> </p> <p> <%= users.firstName %></p> <p><%= users.lastName %> </p> <p>Login: <%= users.login %></p>
-            <a href="/edit/<%= users.id %>">Edytuj</a>
-            <a href="/delete/<%= users.id %>" onclick="return confirm('Czy na pewno chcesz usunąć tego użytkownika?')">Usuń</a>
-          </li>
-
-
-
-
-
-        <% }); %>
-      </ul>
-
-
-
+    <div class="sort-buttons">
+      <a href="/admin?sort=id">Sortuj po ID</a>
+      <a href="/admin?sort=firstName">Sortuj po Imieniu</a>
+      <a href="/admin?sort=lastName">Sortuj po Nazwisku</a>
+      <a href="/admin?sort=bilans">Sortuj po Bilansie</a>
+      <a href="/admin?sort=login">Sortuj po Loginie</a>
+    </div>
+    <ul>
+      <% users.forEach(function(user) { %>
+        <li>
+          <p>ID: <%= user.id %></p>
+          <p>Imię: <%= user.firstName %></p>
+          <p>Nazwisko: <%= user.lastName %></p>
+          <p>Login: <%= user.login %></p>
+          <p>Bilans: <%= user.bilans %></p>
+          <a href="/edit/<%= user.id %>">Edytuj</a>
+          <a href="/delete/<%= user.id %>" onclick="return confirm('Czy na pewno chcesz usunąć tego użytkownika?')">Usuń</a>
+        </li>
+      <% }); %>
+    </ul>
   </main>
-
 </body>
 
 </html>

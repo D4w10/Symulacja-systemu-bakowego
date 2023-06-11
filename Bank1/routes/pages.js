@@ -132,62 +132,56 @@ router.get('/history', authController.isLoggedIn, (req, res) => {
 
 
 
-
-
 router.get('/admin', authController.isLoggedIn, async (req, res) => {
   console.log(req.user);
   console.log(req.userid);
 
-if(req.userid){
-  if (req.user.role == 'admin') {
-    try {
-      //const getUsers = () => {
-        
-       // return new Promise((resolve, reject) => {
+  if (req.userid) {
+    if (req.user.role == 'admin') {
+      try {
         const search = req.query.search;
-        console.log("12222222222222222222222222222222222222222222222222222");
-        console.log(search);
-        let query = 'SELECT * FROM reg_request INNER JOIN account ON reg_request.id = account.user_id WHERE reg_request.role != "admin"';
+        let query =
+          'SELECT * FROM reg_request INNER JOIN account ON reg_request.id = account.user_id WHERE reg_request.role != "admin"';
         let queryParams = [];
         if (search) {
-          query = 'SELECT * FROM reg_request INNER JOIN account ON reg_request.id = account.user_id WHERE reg_request.role != "admin" AND (reg_request.firstName LIKE ? OR reg_request.lastName LIKE ? OR reg_request.login LIKE ?)';
+          query =
+            'SELECT * FROM reg_request INNER JOIN account ON reg_request.id = account.user_id WHERE reg_request.role != "admin" AND (reg_request.firstName LIKE ? OR reg_request.lastName LIKE ? OR reg_request.login LIKE ?)';
           queryParams = [`%${search}%`, `%${search}%`, `%${search}%`];
         }
 
-          db.query(query, queryParams,(error, result) => {
-            if (error) {
-              console.log(error);
-            } 
+        // Sortowanie wyników
+        const sort = req.query.sort;
+        if (sort) {
+          const validColumns = ['id', 'firstName', 'lastName', 'bilans', 'login'];
+          if (validColumns.includes(sort)) {
+            query += ` ORDER BY ${sort}`;
+          }
+        }
 
-            console.log(result);
-            console.log("12222222222222222222222222222222222222222222222222222");
-           
-            res.render('admin', {
-              users: result, 
-            });
+        db.query(query, queryParams, (error, result) => {
+          if (error) {
+            console.log(error);
+          }
 
+          console.log(result);
 
-
+          res.render('admin', {
+            users: result,
           });
-        //});
-     // };
-      //const users = await getUsers();
-  
-
-  }catch (error) {
-    console.error(error);
-    // Obsługa błędu
-  }
-
-  }else {
+        });
+      } catch (error) {
+        console.error(error);
+        // Obsługa błędu
+      }
+    } else {
+      res.redirect('/profile');
+    }
+  } else {
     res.redirect('/profile');
- }
-}else {
-  res.redirect('/profile');
-}
-
-
+  }
 });
+
+
 
 router.get('/edit/:id',authController.isLoggedIn, (req, res) => {
   if(req.userid){
@@ -721,12 +715,12 @@ function naliczOdsetki() {
   });
 }
 
-// Harmonogram Cron do naliczania odsetek co minutę
+
 cron.schedule('*/30 * * * * *', () => {
   naliczOdsetki();
 });
 
-// ...
+
 
 router.post('/przelej-srodki', authController.isLoggedIn, (req, res) => {
   // ...
