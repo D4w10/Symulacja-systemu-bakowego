@@ -13,7 +13,9 @@ git clone https://github.com/D4w10/Symulacja-systemu-bakowego.git
 
 npm install
 
-4. Zaimportuj bazę danych
+4. Analogicznei zrób w katalogu KIP
+
+5. Zaimportuj bazę danych
         1.  w katalogu /bank1 znajduję sie plik bank1.sql
         2. Otwórz narzędzie do zarządzanie bazą (np. MySQL Workbench, phpMyAdmin, lub konsola)
             
@@ -39,9 +41,9 @@ npm install
                 *zaimportuj bazę danych   /sciezka/do/pliku/mysql.exe -t -u użytkownik -p nazwabazy(bank1) < scieżka/do/pliku/bank.sql
         3. Po zaimportowaniu bazy baza danych przejdz dalej
 
+6. Analogicznie musimy zaimportować bazę danych kip, nazywamy ją kip
 5. Gdy zaimportowałeś bazę otwórz plik .env który znajduje sie w katalogu bank1
-6. W tym pliku ustawiasz nazwę stworzonej przez siebie bazy, użytkownika bazy oraz jego hasło również opchjonalnie możesz zmienic hosta, port projektu,
+6. W tym pliku ustawiasz nazwę stworzonej przez siebie bazy, użytkownika bazy oraz jego hasło 
 
-
-7. Po poprawnej instalacji oraz konfiguracji projektu możesz uruchomić poleceniem "npm start"
+7. Po poprawnej instalacji oraz konfiguracji projektu możesz uruchomić poleceniem "npm start"(uruchamiamy serwer KIP i Bank1)
 
