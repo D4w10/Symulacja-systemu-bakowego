@@ -34,7 +34,7 @@
         <% users.forEach(function(users) { %>
 
           <li>
-            <%= users.firstName %> <%= users.lastName %> 
+           <p>ID: <%= users.id %> </p> <p> <%= users.firstName %></p> <p><%= users.lastName %> </p> <p>Login: <%= users.login %></p>
             <a href="/edit/<%= users.id %>">Edytuj</a>
             <a href="/delete/<%= users.id %>" onclick="return confirm('Czy na pewno chcesz usunąć tego użytkownika?')">Usuń</a>
           </li>

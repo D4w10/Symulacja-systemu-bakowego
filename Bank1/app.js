@@ -1,12 +1,13 @@
 const express = require("express");
 const path = require('path');
 const mysql = require("mysql");
-const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 const { connect } = require("http2");
+const dotenv = require('dotenv');
 dotenv.config({ path: './.env'});
-
-
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+const jwt = require('jsonwebtoken')
 
 const app = express();
 
@@ -49,6 +50,16 @@ db.connect( (error) => {
 app.use('/', require('./routes/pages'));
 app.use('/auth', require('./routes/auth'));
 
+const clearTokenOnStartup = (req, res, next) => {
+  res.cookie('jwt', 'logout', {
+    expires: new Date(Date.now() + 2*1000),
+    httpOnly: true
+  });
+  next();
+};
+app.use(clearTokenOnStartup);
+
 app.listen(process.env.PROJECT_PORT, () => {
   console.log(`Server started on Port ${process.env.PROJECT_PORT}`);
 })
+

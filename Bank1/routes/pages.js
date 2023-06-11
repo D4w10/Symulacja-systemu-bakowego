@@ -4,7 +4,9 @@ const authController = require('../controllers/auth');
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const cron = require('node-cron');
-
+const multer = require('multer');
+const { error } = require("console");
+const upload = multer({ dest: 'uploads/' });
 
 const router = express.Router();
 const db = mysql.createConnection({
@@ -16,6 +18,7 @@ const db = mysql.createConnection({
 
 
 router.get('/', authController.isLoggedIn, (req, res) => {
+ 
   res.render('index', {
     user: req.user
   });
@@ -755,9 +758,64 @@ router.post('/przelej-srodki', authController.isLoggedIn, (req, res) => {
 
 
 
+router.post('/receive-file', (req, res) => {
+  const fileData = req.body;
+
+  //console.log(req.body)
+  console.log("działa");
+  //res.status(200).json({ message: 'Plik odebrany pomyślnie' });
 
 
 
+  fileData.forEach((data) => {
+    const sender = data.sender[0];
+    const recipient = data.recipient;
+    console.log(recipient.banknumber);
+
+    const getRecipientQuery = 'SELECT * FROM reg_request INNER JOIN account ON reg_request.id = account.user_id  WHERE account.account_number = ?';
+    db.query(getRecipientQuery, [recipient.banknumber], (error,result) =>{
+     
+       const updateRecipientAccountQuery = 'UPDATE account SET bilans = bilans + ? WHERE user_id = ?';
+       if(result && result.length > 0){
+        console.log("POLSKA GOLA");
+        db.query(updateRecipientAccountQuery, [recipient.amount, result[0].user_id], async (error) => {
+          if (error) {
+            db.rollback(() => {
+              throw error;
+            });
+          }
+
+          const addTransactionQuery = 'INSERT INTO transactions (sender_id, recipient_id, amount, sender_account_number, recipient_account_number, descrip) VALUES (?, ?, ?, ?, ?, ?)';
+          db.query(addTransactionQuery, [sender.id, result[0].id, recipient.amount, sender.account_number, result[0].account_number, recipient.description], async (error) => {
+            if (error) {
+              db.rollback(() => {
+                throw error;
+              });
+            }
+
+            db.commit((error) => {
+              if (error) {
+                db.rollback(() => {
+                  throw error;
+                });
+              }
+
+             console.log("dane dodane pomyślnie");
+            });
+          });
+        });
+      }
+//
+    });
+       
+
+
+    });
+
+
+
+
+});
 
 
 module.exports = router;

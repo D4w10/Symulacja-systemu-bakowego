@@ -24,7 +24,7 @@
   <div class="content">
 
   <div class="zmianadanych">
-    <h4>ID: <%= user.id %>  Imię: <%= user.firstName %>   <%= user.lastName %> </h4>
+    <h4>ID: <%= user.id %>  Imię: <%= user.firstName %>   <%= user.lastName %> Login: <%= user.login %></h4>
   <form action="/edit/<%= user.id %>" method="post">
     <label for="firstName">Imię:</label>
     <input type="text" id="firstName" name="firstName" value="<%= user.firstName %>"><br>

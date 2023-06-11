@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>KIP Server</title>
+</head>
+<body>
+  <h1>KIP Server</h1>
+  <form action="/send-files" method="GET">
+    <button type="submit">Wyślij pliki JSON teraz</button>
+  </form>
+  <% if (typeof message != "undefined" && message) { %>
+    <h4 ><%= message %></h4>
+    <% } %>
+</body>
+</html>
