@@ -7,31 +7,12 @@
     
   }
  
-  /* nav {
-    background-color: #004d9c;
-    color: #fff;
-    padding: 10px;
-  } 
-  
-   nav ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-  }  */
+ 
   .contentt{
     display: flex;
   }
   
-   /* nav ul li {
-    display: inline-block;
-    margin-right: 10px;
-  }
-  
-  nav ul li a {
-    color: #fff;
-    text-decoration: none;
-  }  */
-
+   
   .konto {
     background-color: #fff;
     border: 1px solid #ddd;
@@ -157,31 +138,4 @@
     margin-top: 15px;
   }
     
-  
-
-  
-
-/*   
-  .przelej-button {
-    display: flex;
-    margin-right: 10px;
-    align-self:flex-end;
-  }
-  
-  .przelej-button a {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .przelej-button a:hover {
-    background-color: #0056b3;
-  }
-  
-  .przelej-button:last-child {
-    margin-right: 0;
-  } */
+ 

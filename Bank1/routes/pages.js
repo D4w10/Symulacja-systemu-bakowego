@@ -117,19 +117,6 @@ router.get('/history', authController.isLoggedIn, (req, res) => {
 
 })
 
-// router.get('/admin',authController.isLoggedIn,(req, res) => {
-//   console.log(req.user);
-//   if( req.user.role == 'admin' ) {
-//     let ppp;
-//     db.query('SELECT * FROM reg_request INNER JOIN account ON reg_request.id = account.user_id WHERE reg_request.role !="admin" ', (error, result) => {
-//       console.log("--------------");
-//       ppp=result;
-//       console.log(ppp);
-  
-
-//     });
-
-
 
 
 router.get('/admin', authController.isLoggedIn, async (req, res) => {
