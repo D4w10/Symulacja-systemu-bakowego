@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/admin_profile.css">
   <title>Admin Panel</title>
 </head>
 
@@ -31,9 +31,9 @@
       <a href="/admin?sort=bilans">Sortuj po Bilansie</a>
       <a href="/admin?sort=login">Sortuj po Loginie</a>
     </div>
-    <ul>
+    <div class="users-grid">
       <% users.forEach(function(user) { %>
-        <li>
+        <div class="user-card">
           <p>ID: <%= user.id %></p>
           <p>Imię: <%= user.firstName %></p>
           <p>Nazwisko: <%= user.lastName %></p>
@@ -41,9 +41,9 @@
           <p>Bilans: <%= user.bilans %></p>
           <a href="/edit/<%= user.id %>">Edytuj</a>
           <a href="/delete/<%= user.id %>" onclick="return confirm('Czy na pewno chcesz usunąć tego użytkownika?')">Usuń</a>
-        </li>
+        </div>
       <% }); %>
-    </ul>
+        </div>
   </main>
 </body>
 
