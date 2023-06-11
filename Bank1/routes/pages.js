@@ -363,8 +363,8 @@ router.get('/profile/konto-oszczednosciowe', authController.isLoggedIn, (req, re
     }
 console.log(results.length);
     if (results.length > 0) {
-      // Przekierowanie na stronę test, jeśli konto oszczędnościowe jest już utworzone
-      res.redirect('test');
+      // Przekierowanie na stronę k_oszcz_crn, jeśli konto oszczędnościowe jest już utworzone
+      res.redirect('k_oszcz_crn');
     } else {
       // Przekierowanie na stronę konto-oszczednosciowe, jeśli konto nie zostało jeszcze utworzone
       res.render('/profile/konto-oszczednosciowe');
@@ -423,7 +423,7 @@ router.get('/transfer2', authController.isLoggedIn, (req, res) => {
 
 
 
-router.get('/test', authController.isLoggedIn, (req, res) => {
+router.get('/k_oszcz_crn', authController.isLoggedIn, (req, res) => {
   console.log("sadsdsdadksjhkjh");
  // console.log(req.user.id);
   if( req.user ) {
@@ -435,7 +435,7 @@ router.get('/test', authController.isLoggedIn, (req, res) => {
       db.query(getDataQuery,[req.user.id], (err,transrow)=>{
         
         
-        res.render('test', {
+        res.render('k_oszcz_crn', {
           user: req.user,
           transfer: transrow,
           oszcz: req.oszczed
@@ -464,13 +464,9 @@ router.get('/test', authController.isLoggedIn, (req, res) => {
 
 
 
-// router.get('/test', (req, res) => {
-//   // Obsługa żądania GET dla ścieżki /test
-//   res.render('test');
- 
-// });
+
 router.get('/konto-oszczednosciowe', (req, res) => {
-  // Obsługa żądania GET dla ścieżki /test
+  // Obsługa żądania GET dla ścieżki /k_oszcz_crn
   res.render('konto-oszczednosciowe');
 });
 
@@ -504,7 +500,7 @@ router.post('/create_savings_account', authController.isLoggedIn, (req, res) => 
         }
         
         
-        res.redirect(301,'/test')
+        res.redirect(301,'/k_oszcz_crn')
           console.log(transrow);
       });
 
@@ -534,13 +530,13 @@ router.post('/przelej-srodki', authController.isLoggedIn, (req, res) => {
     const amount = req.body.amount;
 
     if (amount <= 0) {
-      return res.redirect("/test");
+      return res.redirect("/k_oszcz_crn");
       
     }
   
     // Sprawdzenie, czy użytkownik ma wystarczającą ilość środków na koncie
     if (results[0].bilans < amount) {
-      return res.redirect("/test");
+      return res.redirect("/k_oszcz_crn");
     }
 
     // Rozpoczęcie transakcji
@@ -581,7 +577,7 @@ router.post('/przelej-srodki', authController.isLoggedIn, (req, res) => {
               });
             }
 
-            return res.redirect('/test')
+            return res.redirect('/k_oszcz_crn')
           });
           
         });
@@ -670,7 +666,7 @@ router.post('/wyplac-srodki', (req, res) => {
                   });
                 }
 
-                return res.redirect('/test');
+                return res.redirect('/k_oszcz_crn');
               });
             });
           });
@@ -743,7 +739,7 @@ router.post('/przelej-srodki', authController.isLoggedIn, (req, res) => {
         });
       }
 
-      return res.redirect('/test')
+      return res.redirect('/k_oszcz_crn')
     });
   });
 

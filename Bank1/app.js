@@ -57,7 +57,7 @@ const clearTokenOnStartup = (req, res, next) => {
   });
   next();
 };
-app.use(clearTokenOnStartup);
+
 
 app.listen(process.env.PROJECT_PORT, () => {
   console.log(`Server started on Port ${process.env.PROJECT_PORT}`);
