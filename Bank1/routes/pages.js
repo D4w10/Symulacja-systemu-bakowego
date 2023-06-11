@@ -697,9 +697,11 @@ function naliczOdsetki() {
 
     // Iteracja przez konta oszczędnościowe
     results.forEach((konto) => {
-      const oprocentowanie = konto.oprocentowanie;
       const wplaconeSrodki = konto.wplacone_srodki;
-      const odsetki = (oprocentowanie) * wplaconeSrodki;
+
+      // Oprocentowanie dziennie (5%)
+      const oprocentowanieDziennie = 0.05;
+      const odsetki = (oprocentowanieDziennie / 4320) * wplaconeSrodki;
 
       // Aktualizacja salda na koncie oszczędnościowym
       db.query('UPDATE k_oscz SET wplacone_srodki = wplacone_srodki + ? WHERE id_account = ?', [odsetki, konto.id_account], (error) => {
@@ -711,11 +713,9 @@ function naliczOdsetki() {
   });
 }
 
-
-cron.schedule('*/30 * * * * *', () => {
+cron.schedule('*/20 * * * * *', () => {
   naliczOdsetki();
 });
-
 
 
 router.post('/przelej-srodki', authController.isLoggedIn, (req, res) => {
