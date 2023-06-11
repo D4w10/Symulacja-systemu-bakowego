@@ -526,7 +526,8 @@ router.post('/create_savings_account', authController.isLoggedIn, (req, res) => 
 
 router.post('/przelej-srodki', authController.isLoggedIn, (req, res) => {
   const userId = req.userid.id; // Pobranie identyfikatora zalogowanego użytkownika z sesji
-
+console.log(userId);
+console.log("4444444444444444444444444444444444444444");
   // Pobranie numeru konta użytkownika
   db.query('SELECT * FROM account WHERE user_id = ?', userId, (error, results) => {
     if (error) {
@@ -567,20 +568,18 @@ router.post('/przelej-srodki', authController.isLoggedIn, (req, res) => {
             res.status(500).send('Wystąpił błąd podczas przesyłania środków.');
           });
         }
-        
 
-       
-
+        console.log("dsadasdasdasd");
         
       // Zwiększenie wplaconych srodkow na koncie oszczednosciowym
-      db.query('UPDATE k_oscz SET wplacone_srodki = wplacone_srodki + ? WHERE id_account = ?', [amount, userId], (error) => {
+      db.query('UPDATE k_oscz SET wplacone_srodki = wplacone_srodki + ? WHERE id_account = ?', [amount, results[0].id_account], (error) => {
         if (error) {
           console.error('Błąd zapytania SQL: ', error);
           return db.rollback(() => {
             res.status(500).send('Wystąpił błąd podczas przesyłania środków.');
           });
         }
-
+        console.log("dsadasdasdasd");
           // Zatwierdzenie transakcji
           db.commit((error) => {
             if (error) {
@@ -589,13 +588,16 @@ router.post('/przelej-srodki', authController.isLoggedIn, (req, res) => {
                 res.status(500).send('Wystąpił błąd podczas przesyłania środków.');
               });
             }
-
+            console.log("przekierowanie");
             return res.redirect('/k_oszcz_crn')
           });
           
         });
       });
     });
+    
+
+
   });
 });
 
