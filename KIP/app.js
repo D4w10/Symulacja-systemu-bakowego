@@ -136,8 +136,6 @@ app.post('/send-transfer/:bankId', (req, res) => {
 
 console.log(transfer);
 
-
-
 console.log('oooooooooooooooooooooooooooooooooooooooooooooo');
 console.log(transferData);
 
@@ -145,6 +143,20 @@ console.log(transferData);
 });
 
 
+app.post('/usun-num', (req, res) => {
+  const Numbe = req.body.Numbe;
+
+  
+  const deleteQuery = `DELETE FROM kipdata WHERE account_number = ${Numbe}`;
+  db.query(deleteQuery, (error, result) => {
+    if (error) {
+      console.error('Błąd podczas usuwania identyfikatora użytkownika z bazy danych:', error);
+      res.status(500).send('Błąd podczas usuwania identyfikatora użytkownika z bazy danych.');
+    } else {
+      res.send('Identyfikator użytkownika usunięty z bazy danych.');
+    }
+  });
+});
 
 
 

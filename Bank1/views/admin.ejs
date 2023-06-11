@@ -39,6 +39,7 @@
           <p>Nazwisko: <%= user.lastName %></p>
           <p>Login: <%= user.login %></p>
           <p>Bilans: <%= user.bilans %></p>
+          <p>Numer konta: <%= user.account_number %></p>
           <a href="/edit/<%= user.id %>">Edytuj</a>
           <a href="/delete/<%= user.id %>" onclick="return confirm('Czy na pewno chcesz usunąć tego użytkownika?')">Usuń</a>
         </div>

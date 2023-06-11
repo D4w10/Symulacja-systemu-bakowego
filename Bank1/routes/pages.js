@@ -7,7 +7,7 @@ const cron = require('node-cron');
 const multer = require('multer');
 const { error } = require("console");
 const upload = multer({ dest: 'uploads/' });
-
+const axios = require('axios');
 const router = express.Router();
 const db = mysql.createConnection({
   host: process.env.DATABASE_HOST,
@@ -288,6 +288,19 @@ router.get('/delete/:id', authController.isLoggedIn, (req, res) => {
                     throw err;
                   });
                 }
+                const Numbe = ress[0].account_number
+
+                axios.post('http://localhost:4000/usun-num', { Numbe })
+               .then(response => {
+                 console.log('Identyfikator użytkownika wysłany i usunięty z bazy danych na drugim serwerze.');
+               })
+               .catch(error => {
+                 console.log('Błąd podczas wysyłania identyfikatora użytkownika do drugiego serwera.');
+                 db.rollback(() => {
+                   throw err;
+                  
+                 });
+               });
 
                 db.commit((err) => {
                   if (err) {
