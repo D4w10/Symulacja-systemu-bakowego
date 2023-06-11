@@ -2,7 +2,8 @@ const express = require('express');
 const authController = require('../controllers/auth');
 const przelewController = require('../controllers/przelewy');
 const changeController = require('../controllers/datachange');
-const router = express.Router()
+const router = express.Router();
+const historia = require('./pages')
 const cron = require('node-cron');
           
 router.post('/register', authController.register );

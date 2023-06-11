@@ -69,6 +69,27 @@
     </div>
  </div>
 </div>
+<div class="statystyki">
+  <form action="/history" method="POST">
+    <label for="start">Data początkowa:</label>
+    <input type="date" id="start" name="startDate">
+  
+    <label for="end">Data końcowa:</label>
+    <input type="date" id="end" name="endDate">
+  
+
+    <button type="submit">Wyślij</button>
+  </form>
+
+  <% if (sredniewydatki && bilanswydatkow) { %>
+    <h2>Statystyki</h2>
+    <p>Średnia wydatków: <%= sredniewydatki %> zł</p>
+    <p>Średnia Przychodów: <%= srednieprzychody %></p>
+    <p>Suma wydatków: <%= wszystkiewydatki %> zł</p>
+    <p>Suma przychodów:<%= wszystkieprzychody %> </p>
+    <p>Bilans wydatków:<%= bilanswydatkow %> </p>
+  <% } %>
+</div>
 
 </body>
 </html>
