@@ -46,4 +46,4 @@ npm install
 6. W tym pliku ustawiasz nazwę stworzonej przez siebie bazy, użytkownika bazy oraz jego hasło 
 
 7. Po poprawnej instalacji oraz konfiguracji projektu możesz uruchomić poleceniem "npm start"(uruchamiamy serwer KIP i Bank1)
-
+8. Serwer Banku jest na localhost:7777, a serwer KIP jest na localhost:4000
