@@ -481,6 +481,46 @@ router.get('/delete/:id', authController.isLoggedIn, (req, res) => {
 });
 
 
+  router.post('/messages/:id', authController.isLoggedIn, async (req, res) =>{
+
+  const idNadawcy= req.userid.id;
+  const naglowek = req.body.naglowek;
+  const tresc = req.body.tresc;
+  const idOdbiorcy = req.params.id;
+
+  try {
+    // Rozpoczęcie transakcji
+    await db.beginTransaction();
+
+
+      const messageQuery = 'INSERT INTO messages (id_nadawcy, id_odbiorcy, naglowek , tresc) VALUES (?, ?,? , ?)';
+      await db.query(messageQuery, [idNadawcy, idOdbiorcy, naglowek, tresc]);
+    
+
+    // Zatwierdzenie transakcji
+    await db.commit();
+   
+    res.redirect('/edit/' + idOdbiorcy + '?messageSent=true'); // Dodanie messageSent
+
+
+  } catch (error) {
+    // Anulowanie transakcji w przypadku błędu
+    await db.rollback();
+
+    console.error('Wystąpił błąd podczas wysyłania wiadomości:', error);
+    
+      
+    }
+  //  finally {
+  //   // Zakończenie połączenia z bazą danych
+  //   await db.release();
+  // }
+});
+
+
+
+
+
 router.post('/adminTransf', authController.isLoggedIn, async (req, res) => {
   const userId = req.body.balance; // Pobierz ID wybranego użytkownika z formularza
   const amount = req.body.amount; // Pobierz przekazywaną kwotę z formularza

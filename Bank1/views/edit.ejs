@@ -7,7 +7,19 @@
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="/style.css">
     <title>Document</title>
- 
+    <style>
+      p {
+          font-size: 18px;
+          font-weight: bold;
+          margin-top: 20px;
+      }
+      .success {
+          color: green;
+      }
+      .error {
+          color: red;
+      }
+  </style>
   </head>
   
   <body>
@@ -47,6 +59,21 @@
   </form>
 </div>
 
+<div class="zmianadanych">
+
+  <h4>Wyślij wiadomość</h4>
+
+  <form action="/messages/<%= user.id %>" method="post">
+    <textarea name="naglowek" cols="30" rows="1"></textarea><br>
+    <textarea name="tresc" rows="20" cols="30" placeholder="Wprowadź treść wiadomości"></textarea><br>
+    <button type="submit">Wyślij</button>
+  </form>
+
+  <div class="alert mt-3" id="messageAlert" style="display: none;"></div>
+
+
+ </div>
+
 <div class="money">
   <h4>Stan konta: <%= user.bilans %></h4>
   <form action="/addmoney/<%= user.id %>" method="post">
@@ -54,9 +81,29 @@
     <input type="text" id="amount" name="amount" pattern="\d+(\.\d{1,2})?|\d+,\d{1,2}" title="Wprowadź kwotę w formacie XX,XX, XX lub XX.XX" required>
     <button type="submit">Dodaj</button>
   </form>
+
+  <script>
+    const url = new URL(window.location.href);
+    const paramValue = url.searchParams.get("messageSent");
+    const alertDiv = document.getElementById("messageAlert");
+
+    if (paramValue === "true") {
+        alertDiv.classList.add("alert-success");
+        alertDiv.textContent = "Poprawnie wysłano wiadomość!";
+    } else if (paramValue === "false") {
+        alertDiv.classList.add("alert-danger");
+        alertDiv.textContent = "Wysłanie wiadomości nie powiodło się.";
+    } else {
+        alertDiv.classList.add("alert-warning");
+        alertDiv.textContent = "Nieprawidłowa wartość parametru.";
+    }
+
+    // Wyświetl alert
+    alertDiv.style.display = "block";
+</script>
+</div>
 </div>
 
-</div>
 
 
 </body>

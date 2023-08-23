@@ -1,7 +1,6 @@
 {
   "name": "kip",
   "version": "1.0.0",
-  "description": "",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -18,5 +17,6 @@
     "node-cron": "^3.0.2",
     "node-schedule": "^2.1.1",
     "nodemon": "^2.0.22"
-  }
+  },
+  "description": ""
 }

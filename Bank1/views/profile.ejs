@@ -27,6 +27,10 @@
     </ul>
   </nav>
 <div class="wrap">
+
+
+<div class="kolumna1">
+
   <div class="konto">
     
     <div class="kontodata">
@@ -52,6 +56,32 @@
   </div>
 
 
+  </div>
+  <div class="oszcz">
+  
+    <div class="historia">
+  
+  
+  
+          <% if (oszcz && oszcz.id_oszcz) { %>
+            <h4>Środki znajdujące sie na koncie oszczednosciowym: <%=oszcz.wplacone_srodki%> </h4>
+            <a href="/k_oszcz_crn">Przejdź do konta oszczędnościowego</a>
+          <% } else { %>
+            <a href="/konto-oszczednosciowe">Przejdź do konta oszczędnościowego</a>
+          <% } %>
+          
+         
+    
+   </div>
+  </div>
+
+
+</div>
+
+<div class="kolumna2">
+  <div class="konto">
+
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto, hic deleniti quaerat obcaecati nam vitae? Provident molestias quod voluptate vero, aliquam alias pariatur maxime nemo laboriosam praesentium iure voluptates ut.
   </div>
 
 
@@ -97,22 +127,6 @@
     </div>
  </div>
 
- <div class="oszcz">
-  
-  <div class="historia">
-
-
-
-        <% if (oszcz && oszcz.id_oszcz) { %>
-          <h4>Środki znajdujące sie na koncie oszczednosciowym: <%=oszcz.wplacone_srodki%> </h4>
-          <a href="/k_oszcz_crn">Przejdź do konta oszczędnościowego</a>
-        <% } else { %>
-          <a href="/konto-oszczednosciowe">Przejdź do konta oszczędnościowego</a>
-        <% } %>
-        
-       
-  
- </div>
 </div>
 
 </div>
