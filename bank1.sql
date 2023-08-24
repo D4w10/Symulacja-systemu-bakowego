@@ -67,8 +67,40 @@ CREATE TABLE `k_oscz` (
 
 LOCK TABLES `k_oscz` WRITE;
 /*!40000 ALTER TABLE `k_oscz` DISABLE KEYS */;
-INSERT INTO `k_oscz` VALUES (125,63,0.0000,0.05),(126,62,100.0108,0.05);
+INSERT INTO `k_oscz` VALUES (125,63,0.0000,0.05),(126,62,102.1120,0.05);
 /*!40000 ALTER TABLE `k_oscz` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `messages`
+--
+
+DROP TABLE IF EXISTS `messages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `messages` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_nadawcy` int NOT NULL,
+  `id_odbiorcy` int NOT NULL,
+  `naglowek` text NOT NULL,
+  `tresc` text NOT NULL,
+  `wyslano_o` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `id_nadawcy` (`id_nadawcy`),
+  KEY `id_odbiorcy` (`id_odbiorcy`),
+  CONSTRAINT `messages_ibfk_1` FOREIGN KEY (`id_nadawcy`) REFERENCES `reg_request` (`id`),
+  CONSTRAINT `messages_ibfk_2` FOREIGN KEY (`id_odbiorcy`) REFERENCES `reg_request` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `messages`
+--
+
+LOCK TABLES `messages` WRITE;
+/*!40000 ALTER TABLE `messages` DISABLE KEYS */;
+INSERT INTO `messages` VALUES (1,34,72,'agfgs','sfsdf','2023-08-23 21:45:18'),(2,34,72,'awert adf','radfs','2023-08-23 21:47:34'),(3,34,72,'wer','werw','2023-08-23 21:50:49'),(4,34,72,'fsd','df','2023-08-23 22:05:24'),(5,34,72,'fsd','df','2023-08-23 22:06:37'),(6,34,72,'fsd','df','2023-08-23 22:06:44'),(7,34,72,'fasd','sfdsdf','2023-08-23 22:07:17'),(8,34,72,'SDSDF','afdsdf','2023-08-23 22:11:16'),(9,34,72,'SDFsd','sdfsdf','2023-08-23 22:14:11'),(10,34,72,'serrtfge','erter','2023-08-23 22:16:30'),(11,34,72,'serrtfge','erter','2023-08-23 22:20:46'),(12,34,72,'serrtfge','erter','2023-08-23 22:25:32'),(13,34,72,'sdfs','dfsfs','2023-08-23 22:25:58'),(14,34,72,'asdsdf','asdfds','2023-08-23 22:26:40'),(15,34,72,'w3wer','ertertt','2023-08-23 22:28:07'),(16,34,72,'tgyhu','gyhhgy','2023-08-23 22:30:23'),(17,34,72,'fghf','dfghdf','2023-08-23 22:31:37'),(18,34,72,'tgyhu','gyhhgy','2023-08-23 22:40:00'),(19,34,72,'asdas','sdadasd','2023-08-23 22:43:23');
+/*!40000 ALTER TABLE `messages` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -148,4 +180,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-06-11 15:40:46
+-- Dump completed on 2023-08-24 15:11:36
