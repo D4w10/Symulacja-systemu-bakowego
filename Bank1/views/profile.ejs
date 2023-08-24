@@ -81,7 +81,22 @@
 <div class="kolumna2">
   <div class="konto">
 
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto, hic deleniti quaerat obcaecati nam vitae? Provident molestias quod voluptate vero, aliquam alias pariatur maxime nemo laboriosam praesentium iure voluptates ut.
+    <div>
+      <h4>Ostatnie wiadomości</h4> <a href="/messages">Wszystkie wiadomości</a>
+      <ul>
+      <% mess.forEach(function(mess) { %>
+        <% if (user.id == mess.id_odbiorcy){ %>
+          <li>
+            <h5><%= mess.naglowek %></h5>
+            <p><%= mess.tresc %></p>
+          </li>
+
+          <% } %>
+      <% }); %>
+    </ul>
+    </div>
+
+
   </div>
 
 

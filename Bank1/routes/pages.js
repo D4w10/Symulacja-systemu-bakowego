@@ -45,13 +45,25 @@ router.get('/profile', authController.isLoggedIn, (req, res) => {
       const getDataQuery = `SELECT *, DATE_FORMAT(created_at, '%d.%m.%Y') as data,DATE_FORMAT(created_at, '%T') as czas  FROM transactions Where sender_id = ? OR recipient_id ORDER BY created_at DESC LIMIT 15`;
       db.query(getDataQuery,[req.user.id], (err,transrow)=>{
         
-        
+
+      const getMessageQuery = `SELECT * FROM messages WHERE id_odbiorcy = ? ORDER BY wyslano_o LIMIT 2`
+
+      db.query(getMessageQuery,[req.user.id], (err,result)=>{
+
+
+
         res.render('profile', {
           user: req.user,
           transfer: transrow,
-          oszcz: req.oszczed
+          oszcz: req.oszczed,
+          mess: result
         });
           console.log(transrow);
+
+      
+
+        });
+
       });
   
       
@@ -61,18 +73,10 @@ router.get('/profile', authController.isLoggedIn, (req, res) => {
     }
 
 
-
-
-   
-
-
-
   } else {
     res.redirect('/login');
   }
   
-
-
 
 })
 
@@ -280,12 +284,6 @@ router.post('/history', authController.isLoggedIn, (req, res) => {
 
 
 
-
-
-
-
-
-
   
 router.get('/admin', authController.isLoggedIn, async (req, res) => {
   console.log(req.user);
@@ -337,7 +335,6 @@ router.get('/admin', authController.isLoggedIn, async (req, res) => {
 });
 
 
-
 router.get('/edit/:id',authController.isLoggedIn, (req, res) => {
   if(req.userid){
     if (req.user.role == 'admin') {
@@ -380,6 +377,7 @@ router.post('/edit/:id', (req, res) => {
   );
 
 });
+
 router.post('/addmoney/:id', (req, res) => {
   const userId = req.params.id;
   const amount = req.body.amount;
@@ -518,8 +516,17 @@ router.get('/delete/:id', authController.isLoggedIn, (req, res) => {
 });
 
 
-
-
+router.get('/messages', authController.isLoggedIn, (req, res) => {
+  console.log(req.user);
+  if( req.user ) {
+    res.render('messages',{
+      user: req.user
+    });
+  } else {
+    res.redirect('/login');
+  }
+  
+})
 
 router.post('/adminTransf', authController.isLoggedIn, async (req, res) => {
   const userId = req.body.balance; // Pobierz ID wybranego użytkownika z formularza
@@ -541,8 +548,6 @@ console.log(amount);
 });
 
 
-
-
 router.get('/history', authController.isLoggedIn, (req, res) => {
   console.log(req.user);
   if( req.user ) {
@@ -554,10 +559,6 @@ router.get('/history', authController.isLoggedIn, (req, res) => {
   }
   
 })
-
-
-
-
 
 router.get('/profile/konto-oszczednosciowe', authController.isLoggedIn, (req, res) => {
   // Sprawdzenie stanu konta oszczędnościowego dla danego użytkownika
@@ -581,8 +582,6 @@ console.log(results.length);
 })
 
 
-
-
 router.get('/konto', authController.isLoggedIn, (req, res) => {
   console.log(req.user);
   if( req.user ) {
@@ -594,9 +593,6 @@ router.get('/konto', authController.isLoggedIn, (req, res) => {
   }
   
 })
-
-
-
 
 
 router.get('/transfer', authController.isLoggedIn, (req, res) => {
@@ -611,6 +607,7 @@ router.get('/transfer', authController.isLoggedIn, (req, res) => {
   
 })
 
+
 router.get('/transfer2', authController.isLoggedIn, (req, res) => {
   console.log(req.user);
   if( req.user ) {
@@ -622,13 +619,6 @@ router.get('/transfer2', authController.isLoggedIn, (req, res) => {
   }
   
 })
-
-
-
-
-
-
-
 
 
 router.get('/k_oszcz_crn', authController.isLoggedIn, (req, res) => {
@@ -670,16 +660,10 @@ router.get('/k_oszcz_crn', authController.isLoggedIn, (req, res) => {
 
 })
 
-
-
-
 router.get('/konto-oszczednosciowe', (req, res) => {
   // Obsługa żądania GET dla ścieżki /k_oszcz_crn
   res.render('konto-oszczednosciowe');
 });
-
-
-
 
 router.post('/create_savings_account', authController.isLoggedIn, (req, res) => {
   console.log(req.userid.id);
@@ -716,8 +700,6 @@ router.post('/create_savings_account', authController.isLoggedIn, (req, res) => 
   });
  
 });
-
-
 
 router.post('/przelej-srodki', authController.isLoggedIn, (req, res) => {
   const userId = req.userid.id; // Pobranie identyfikatora zalogowanego użytkownika z sesji
@@ -795,7 +777,6 @@ console.log("4444444444444444444444444444444444444444");
 
   });
 });
-
 
 
 router.post('/wyplac-srodki', (req, res) => {
@@ -955,7 +936,6 @@ router.post('/przelej-srodki', authController.isLoggedIn, (req, res) => {
 
   
 });
-
 
 
 router.post('/receive-file', (req, res) => {
