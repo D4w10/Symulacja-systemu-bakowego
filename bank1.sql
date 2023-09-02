@@ -44,6 +44,33 @@ INSERT INTO `account` VALUES (1,11,69.00,'3214123412'),(2,34,32.00,'346234234634
 UNLOCK TABLES;
 
 --
+-- Table structure for table `info`
+--
+
+DROP TABLE IF EXISTS `info`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `info` (
+  `id_info` int NOT NULL AUTO_INCREMENT,
+  `user_login` varchar(55) NOT NULL,
+  `user_id` int NOT NULL,
+  `info_type` varchar(45) NOT NULL,
+  `text` text,
+  `created_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id_info`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `info`
+--
+
+LOCK TABLES `info` WRITE;
+/*!40000 ALTER TABLE `info` DISABLE KEYS */;
+/*!40000 ALTER TABLE `info` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `k_oscz`
 --
 
@@ -67,9 +94,29 @@ CREATE TABLE `k_oscz` (
 
 LOCK TABLES `k_oscz` WRITE;
 /*!40000 ALTER TABLE `k_oscz` DISABLE KEYS */;
-INSERT INTO `k_oscz` VALUES (125,63,0.0000,0.05),(126,62,102.1120,0.05);
+INSERT INTO `k_oscz` VALUES (125,63,0.0000,0.05),(126,62,102.4240,0.05);
 /*!40000 ALTER TABLE `k_oscz` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `k_oscz_after_insert` AFTER INSERT ON `k_oscz` FOR EACH ROW BEGIN
+  INSERT INTO info (user_login, user_id, info_type, text, created_at)
+  SELECT (SELECT login FROM reg_request WHERE id = a.user_id), a.user_id, 'Nowe konto oszczędnościowe', CONCAT('Użytkownik ', (SELECT login FROM reg_request WHERE id = a.user_id), ' storzył nowe konto oszczędnościowe'), NOW()
+  FROM account a
+  WHERE a.id_account = NEW.id_account;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `messages`
@@ -136,6 +183,84 @@ LOCK TABLES `reg_request` WRITE;
 INSERT INTO `reg_request` VALUES (11,'Admin','321321321','koc@koc','mateudz','kOCON','KOWALAL',123521432,'$2b$10$TVkW8d8mJSQKRekByWbhIe2MMBvtMcEHZ4d6HgTtYhgazurdCzrSu','admin'),(34,'admin','23123123','zbyszek@123','Zbyszek','Krawczyk','Grazyna',64444432,'$2a$08$e/62r7GFhx4lQ1zNQGAEHe4lFz7ZYXpu5XhCrW5q3O33uCQsFeW72','admin'),(72,'Jan','41512342341','dasd@dsadasd','Jan','Nowak','Wacława',543252335,'$2a$08$kaZoP.eDGDd6y7/HyCAUb.HcsJB2pxGwtVo0Z7idWaMguPJDFE9e6','user'),(73,'Mateusz','42353534663','amt@fdsdf','Mateusz','Kowal','Tulpa',123542353,'$2a$08$xnSzW1nHZl/mZd2ta/b0kejOeX9xwatqCLq2yGCUIJVfBSeX3y7Fq','user'),(74,'Stanislaw','65234234634','sdf@fasdf','Stanisław','Wielki','Wacława',543253345,'$2a$08$L/5WnzKK8FwGFwaVYM65WeDPKx8yPkXbqnnEyiufp8aXXyT4bOHgu','user');
 /*!40000 ALTER TABLE `reg_request` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `reg_request_after_insert` AFTER INSERT ON `reg_request` FOR EACH ROW BEGIN
+  INSERT INTO info (user_login, user_id, info_type, text, created_at)
+  VALUES (NEW.login, NEW.id, 'Rejestraacja użytkownia', CONCAT('Uzytkownik ',NEW.login,' Założył konto w banku'), NOW());
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `reg_request_after_update_login` AFTER UPDATE ON `reg_request` FOR EACH ROW BEGIN
+  IF OLD.login != NEW.login THEN
+    INSERT INTO info (user_login, user_id, info_type, text, created_at)
+    VALUES (NEW.login, NEW.id, 'Zmiana loginu', CONCAT('Użytkownik ', NEW.login, ' zmienił swój email z ', OLD.login, ' na ', NEW.login), NOW());
+  END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `reg_request_after_update_email` AFTER UPDATE ON `reg_request` FOR EACH ROW BEGIN
+  IF OLD.email != NEW.email THEN
+    INSERT INTO info (user_login, user_id, info_type, text, created_at)
+    VALUES ((SELECT login FROM reg_request WHERE id = NEW.id), NEW.id, 'Zmiana email', CONCAT('Użytkownik ', NEW.login, ' zmienił email z ', OLD.email, ' na ', NEW.email), NOW());
+  END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `reg_request_after_update_password` AFTER UPDATE ON `reg_request` FOR EACH ROW BEGIN
+  IF OLD.password != NEW.password THEN
+    INSERT INTO info (user_login, user_id, info_type, text, created_at)
+    VALUES ((SELECT login FROM reg_request WHERE id = NEW.id), NEW.id, 'Zmiana hasła', CONCAT('Użytkownik ', NEW.login, ' zmienił hasło'), NOW());
+  END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `transactions`
@@ -170,6 +295,26 @@ LOCK TABLES `transactions` WRITE;
 INSERT INTO `transactions` VALUES (43,72,74,100.00,'7777947762359','7777163838342','Opis','2023-06-11 13:02:04'),(44,72,74,12313.00,'7777947762359','7777163838342','Opis','2023-06-11 13:02:10');
 /*!40000 ALTER TABLE `transactions` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `transactions_after_insert` AFTER INSERT ON `transactions` FOR EACH ROW BEGIN
+  INSERT INTO info (user_login, user_id, info_type, text, created_at)
+  SELECT (SELECT login FROM reg_request WHERE id = a.user_id), a.user_id, 'Nowa tranzakcja', CONCAT('Wykony został przelew o wartości ', NEW.amount, ' z Konta', NEW.sender_account_number, ' Do konta ', NEW.recipient_account_number), NOW()
+  FROM account a
+  WHERE a.id_account = NEW.sender_id OR a.id_account = NEW.recipient_id;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -180,4 +325,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-08-24 15:11:36
+-- Dump completed on 2023-08-28 18:18:03

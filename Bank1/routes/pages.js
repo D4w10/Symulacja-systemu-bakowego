@@ -9,6 +9,8 @@ const { error } = require("console");
 const upload = multer({ dest: 'uploads/' });
 const axios = require('axios');
 const router = express.Router();
+const goalController = require('../controllers/goalController'); // Import kontrolera celów
+
 const db = mysql.createConnection({
   host: process.env.DATABASE_HOST,
   user: process.env.DATABASE_USER,
@@ -528,6 +530,8 @@ router.get('/messages', authController.isLoggedIn, (req, res) => {
   
 })
 
+
+
 router.post('/adminTransf', authController.isLoggedIn, async (req, res) => {
   const userId = req.body.balance; // Pobierz ID wybranego użytkownika z formularza
   const amount = req.body.amount; // Pobierz przekazywaną kwotę z formularza
@@ -997,5 +1001,23 @@ router.post('/receive-file', (req, res) => {
 
 });
 
+
+router.post('/goals', authController.isLoggedIn, goalController.createGoal);
+router.post('/goals/:id/deposit', authController.isLoggedIn, goalController.depositToGoal);
+router.post('/goals/:id/withdraw', authController.isLoggedIn, goalController.withdrawFromGoal);
+router.post('/goals/:id/delete', authController.isLoggedIn, goalController.deleteGoal);
+
+
+router.get('/goals', authController.isLoggedIn, goalController.getGoals, (req, res) => {
+  console.log(req.user);
+  if( req.user ) {
+    res.render('goals',{
+      user: req.user
+    });
+  } else {
+    res.redirect('/login');
+  }
+  
+})
 
 module.exports = router;

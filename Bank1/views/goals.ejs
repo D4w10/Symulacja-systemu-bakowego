@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+  <script src="https://kit.fontawesome.com/edb0032d42.js" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/profile.css">
+  <title>Document</title>
+</head>
+
+<body>
+  <nav>
+    <h4><a href="/konto"><img src="/avatar.png" alt=""></a></h4>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/profile">Profil</a></li>
+ 
+      <li><a href="/transfer">Przelew</a></li>
+    
+      <li><a href="/auth/logout">Wyloguj</a></li>
+    </ul>
+  </nav>
+
+
+  <div class="cele">
+    
+    <h2>Twoje Cele</h2>
+  
+
+
+    <form action="/goals" method="post">
+      <input type="text" name="goalName" placeholder="Nazwa celu" required>
+      <input type="text" name="description" placeholder="Opis">
+      <input type="number" name="targetAmount" placeholder="Kwota docelowa" required>
+      <input type="date" name="startDate" required>
+      <input type="date" name="endDate">
+      <button type="submit">Utwórz cel</button>
+    </form>
+    <% if (typeof message != "undefined" && message) { %>
+      <h4 class="alert alert-danger mt-4"><%= message %></h4>
+      <% } %>
+
+      <% if (typeof message2 != "undefined" && message2) { %>
+        <h4 class="alert alert-success mt-4"><%= message2 %></h4>
+        <% } %>
+
+    <% if (typeof goals != "undefined" && goals) { %>
+    
+
+    <% if (goals.length === 0) { %>
+      <p>Nie masz żadnych celów.</p>
+    <% } else { %>
+    <% goals.forEach(goals => { %>
+      <div class="cel">
+        <h3><%= goals.goal_name %></h3>
+        <p><%= goals.description %></p>
+        <p>Kwota docelowa: <%= goals.target_amount %></p>
+        <p>Kwota aktualna: <%= goals.current_amount %></p>
+        <p>Data rozpoczęcia: <%= goals.start_date %></p>
+        <p>Data zakończenia: <%= goals.end_date %></p>
+        <form action="/goals/<%= goals.id_goal %>/deposit" method="post">
+          <input type="number" name="amount" placeholder="Kwota wpłaty" required>
+          <button type="submit">Wpłać</button>
+        </form>
+        <form action="/goals/<%= goals.id_goal %>/withdraw" method="post">
+          <input type="number" name="amount" placeholder="Kwota wypłaty" required>
+          <button type="submit">Wypłać</button>
+        </form>
+        <form action="/goals/<%= goals.id_goal %>/delete" method="post">
+          <button type="submit">Usuń cel</button>
+        </form>
+      </div>
+    <% }); %>
+
+  </div>
+  <% } %>
+
+  <% } %>
+
+
+  </body>

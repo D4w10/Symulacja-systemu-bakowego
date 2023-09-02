@@ -52,7 +52,7 @@ app.use('/auth', require('./routes/auth'));
 
 const clearTokenOnStartup = (req, res, next) => {
   res.cookie('jwt', 'logout', {
-    expires: new Date(Date.now() + 2*1000),
+    expires: new Date(Date.now() + 2*10000),
     httpOnly: true
   });
   next();
