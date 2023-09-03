@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="/admin_profile.css">
+  <title>Admin Panel</title>
+</head>
+
+<body>
+  <nav>
+    <h4>Admin panel</h4>
+    <ul>
+      <li><a href="/admin">Profile</a></li>
+      <li><a href="/auth/logout">Logout</a></li>
+    </ul>
+  </nav>
+  <main>
+<div>
+    <h1>Lista informacji</h1>
+  <ul>
+    <% info.forEach(info => { %>
+      <li><strong><%= info.info_type %>:</strong> <%= info.text %></li>
+    <% }); %>
+  </ul>
+</div>
+  </main>
+</body>
+
+</html>

@@ -27,6 +27,33 @@
     </ul>
   </nav>
 
+  <h1>Twoje wiadomości</h1>
+
+  <% if (messages && messages.length > 0) { %>
+    <ul>
+      <% messages.forEach(function(message) { %>
+        <li>
+          <strong>Od:</strong> <%= message.id_nadawcy %><br>
+          <strong>Nagłówek:</strong> <%= message.naglowek %><br>
+          <strong>Treść:</strong> <%= message.tresc %><br>
+          <strong>Wysłano:</strong>  <%= message.formatted_date %> <br>
+        </li>
+      <% }); %>
+    </ul>
+  <% } else { %>
+    <p>Brak wiadomości.</p>
+  <% } %>
+
+  <!-- Dodaj linki, formularze lub inne elementy interfejsu użytkownika, jeśli to konieczne -->
+
+  <script>
+    // Funkcja do formatowania daty
+    function formatDate(dateString) {
+      const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+      const formattedDate = new Date(dateString).toLocaleDateString(undefined, options);
+      return formattedDate;
+    }
+  </script>
 
 
   </body>

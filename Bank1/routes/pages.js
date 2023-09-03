@@ -44,15 +44,19 @@ router.get('/profile', authController.isLoggedIn, (req, res) => {
  
     try {
       // Pobierz listę danych z bazy danych
-      const getDataQuery = `SELECT *, DATE_FORMAT(created_at, '%d.%m.%Y') as data,DATE_FORMAT(created_at, '%T') as czas  FROM transactions Where sender_id = ? OR recipient_id ORDER BY created_at DESC LIMIT 15`;
+      const getDataQuery =`SELECT *, DATE_FORMAT(t.created_at, '%d.%m.%Y') as data,DATE_FORMAT(t.created_at, '%T') as czas  
+      FROM transactions t 
+      inner join reg_request r ON t.recipient_id = r.id 
+      Where t.sender_id = ? OR t.recipient_id 
+      ORDER BY created_at DESC LIMIT 15` ;
       db.query(getDataQuery,[req.user.id], (err,transrow)=>{
         
 
-      const getMessageQuery = `SELECT * FROM messages WHERE id_odbiorcy = ? ORDER BY wyslano_o LIMIT 2`
+      const getMessageQuery = `SELECT * FROM messages WHERE id_odbiorcy = ? ORDER BY wyslano_o LIMIT 2`;
 
       db.query(getMessageQuery,[req.user.id], (err,result)=>{
 
-
+      
 
         res.render('profile', {
           user: req.user,
@@ -337,6 +341,39 @@ router.get('/admin', authController.isLoggedIn, async (req, res) => {
 });
 
 
+
+router.get('/admininfo', authController.isLoggedIn, async (req, res) => {
+  console.log(req.user);
+  if( req.user ) {
+
+
+    try {
+      // Pobierz informacje z bazy danych
+      const infoQuery = 'SELECT * FROM info';
+     await db.query(infoQuery,(error,info)=>{
+      res.render('admininfo', { info });
+     });
+  
+      // Renderuj szablon EJS i przekaż pobrane informacje do szablonu
+      
+    } catch (error) {
+      console.error('Błąd podczas pobierania informacji:', error);
+      res.status(500).json({ success: false, message: 'Wystąpił błąd podczas pobierania informacji.' });
+    }
+
+
+
+
+
+  } else {
+    res.redirect('/login');
+  }
+  
+})
+
+
+
+
 router.get('/edit/:id',authController.isLoggedIn, (req, res) => {
   if(req.userid){
     if (req.user.role == 'admin') {
@@ -518,17 +555,35 @@ router.get('/delete/:id', authController.isLoggedIn, (req, res) => {
 });
 
 
-router.get('/messages', authController.isLoggedIn, (req, res) => {
+router.get('/messages', authController.isLoggedIn, async (req, res) => {
   console.log(req.user);
-  if( req.user ) {
-    res.render('messages',{
-      user: req.user
-    });
-  } else {
+  
+  if (!req.user) {
     res.redirect('/login');
+    return;
   }
   
-})
+  try {
+    // Pobierz wiadomości dla zalogowanego użytkownika
+    const userId = req.userid.id;
+    const messagesQuery = `SELECT id, id_nadawcy, id_odbiorcy, naglowek, tresc, DATE_FORMAT(wyslano_o, '%d.%m.%Y %H:%i:%s') AS formatted_date FROM messages where id_odbiorcy = ?`;
+    
+    db.query(messagesQuery, [userId], (error, messages) => {
+      if (error) {
+        console.error('Wystąpił błąd podczas pobierania wiadomości:', error);
+        res.status(500).json({ success: false, message: 'Wystąpił błąd podczas pobierania wiadomości.' });
+      } else {
+        res.render('messages', {
+          user: req.user,
+          messages: messages
+        });
+      }
+    });
+  } catch (error) {
+    console.error('Wystąpił błąd podczas pobierania wiadomości:', error);
+    res.status(500).json({ success: false, message: 'Wystąpił błąd podczas pobierania wiadomości.' });
+  }
+});
 
 
 
@@ -563,6 +618,21 @@ router.get('/history', authController.isLoggedIn, (req, res) => {
   }
   
 })
+
+
+router.get('/historydetails', authController.isLoggedIn, (req, res) => {
+  console.log(req.user);
+  if( req.user ) {
+    res.render('historydetails', {
+      user: req.user
+    });
+  } else {
+    res.redirect('/login');
+  }
+  
+})
+
+
 
 router.get('/profile/konto-oszczednosciowe', authController.isLoggedIn, (req, res) => {
   // Sprawdzenie stanu konta oszczędnościowego dla danego użytkownika

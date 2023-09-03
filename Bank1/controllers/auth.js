@@ -57,7 +57,7 @@ exports.login = async (req, res) => {
         res.cookie('jwt', token, cookieOptions);
 
         if (isAdmin) {
-          res.status(200).redirect("/admin");
+          res.status(200).redirect("/admininfo");
         } else {
           res.status(200).redirect("/profile");
         }
@@ -153,7 +153,7 @@ exports.register = (req, res) => {
             
           });
              return res.render('register', {
-                  message: 'User registered'
+                  message2: 'User registered'
                 });
         
 
@@ -177,7 +177,7 @@ exports.register = (req, res) => {
 
 
         return res.render('register', {
-          message: 'User registered'
+          message2: 'User registered'
         });
       }
     })

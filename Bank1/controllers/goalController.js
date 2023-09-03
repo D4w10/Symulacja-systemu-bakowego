@@ -201,17 +201,57 @@ exports.depositToGoal = async (req, res) => {
     }
   };
 
+  exports.deleteGoal = async (req, res) => {
+    const goalId = req.params.id;
+    const userId = req.userid.id;
+    
+  
+    try {
+      await db.beginTransaction();
+  
+      // Pobierz aktualny stan celu
+      const selectGoalQuery = 'SELECT * FROM goals WHERE id_goal = ?';
+      await db.query(selectGoalQuery, [goalId], async (error,goal)=>{
+        if (!goal) {
+        throw new Error('Cel nie istnieje.');
+      }
+       const amountToReturn = goal[0].current_amount;
+      // Aktualizuj stan konta użytkownika, dodając środki z celu
+      const updateUserBalanceQuery = 'UPDATE account SET bilans = bilans + ? WHERE user_id = ?';
+      await db.query(updateUserBalanceQuery, [amountToReturn, userId]);
+  
+      // Zapisz transakcję do tabeli transactions
+      // const transactionQuery = 'INSERT INTO transactions (sender_id, recipient_id, amount, sender_account_number, recipient_account_number, descrip) VALUES (?, ?, ?, ?, ?, ?)';
+      // await db.query(transactionQuery, [userId, userId, amountToReturn, 'Konto celu', 'Konto użytkownika', 'Zwrot środków z usuniętego celu']);
+  
+      // Usuń cel
+      const deleteGoalQuery = 'DELETE FROM goals WHERE id_goal = ?';
+      await db.query(deleteGoalQuery, [goalId]);
+  
+      await db.commit();
 
-exports.deleteGoal = async (req, res) => {
-  const goalId = req.params.id;
+      
+      const goalsQuery = 'SELECT * FROM goals WHERE user_id = ?';
+      await db.query(goalsQuery, [userId],(error,goals)=>{
+         
+        res.render('goals',{
+          message2: "Cel został usunięty",
+          goals
+        })
+  
+        });
+      });
+  
+      
 
-  try {
-    const deleteGoalQuery = 'DELETE FROM goals WHERE id_goal = ?';
-    await db.query(deleteGoalQuery, [goalId]);
 
-    res.redirect('/goals');
-  } catch (error) {
-    console.error('Wystąpił błąd podczas usuwania celu:', error);
-    res.status(500).json({ success: false, message: 'Wystąpił błąd podczas usuwania celu.' });
-  }
-};
+
+
+    } catch (error) {
+      await db.rollback();
+  
+      console.error('Wystąpił błąd podczas usuwania celu:', error);
+      res.status(500).json({ success: false, message: 'Wystąpił błąd podczas usuwania celu.' });
+    }
+  };
+  

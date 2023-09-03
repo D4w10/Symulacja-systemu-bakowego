@@ -107,36 +107,41 @@
 
     <div class="listatranzakcji">
       <ul>
-        <li>
+        <!-- <li>
           <p>Id odbiorcy</p>
           <p>Numer konta </p>
           <p>bilans</p>
           <p>Opis</p>
           <p>Data</p>
           <p>Godzina</p>
-          <!-- <p>Data</p> -->
-        </li>
+          <p>Data</p> 
+        </li> -->
 
 
         <% transfer.forEach(function(transfer) { %>
           <% if (user.id == transfer.sender_id){ %>
         <li> 
-          <p style="width: 15px;"><%= transfer.recipient_id %></p>
-          <p><%= transfer.recipient_account_number %></p>
+          <!-- <p style="width: 15px;"><%= transfer.recipient_id %></p> -->
+          <!-- <p><%= transfer.recipient_account_number %></p> -->
+          <p><img src="/transicon.png"  alt="transfer" style="size: 20px;" ></p>
+          <p><%= transfer.firstName %> <%= transfer.lastName %></p>
+       
           <p>-<%= transfer.amount %></p>
           <p><%= transfer.descrip%></p>
-          <p><%= transfer.data%></p>
-          <p><%= transfer.czas%></p>
+          <!-- <p><%= transfer.data%></p>
+          <p><%= transfer.czas%></p> -->
 
         </li>
           <% }else if (user.id == transfer.recipient_id) {%>
         <li>
-          <p><%= transfer.sender_id %></p>
-          <p><%= transfer.sender_account_number %></p>
+          <!-- <p><%= transfer.sender_id %></p>
+          <p><%= transfer.sender_account_number %></p> -->
+          <p><img src="/transicon.png" alt="transfer"></p>
+          <p><%= transfer.firstName %> <%= transfer.lastName %></p>
           <p><%= transfer.amount %></p>
           <p><%= transfer.descrip%></p>
-          <p><%= transfer.data%></p>
-          <p><%= transfer.czas%></p>
+          <!-- <p><%= transfer.data%></p>
+          <p><%= transfer.czas%></p> -->
         </li>
         <% } %>
         <% }); %>
