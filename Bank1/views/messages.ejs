@@ -9,8 +9,8 @@
 
   <script src="https://kit.fontawesome.com/edb0032d42.js" crossorigin="anonymous"></script>
 
-  <link rel="stylesheet" href="/style.css">
-  <!-- <link rel="stylesheet" href="/profile.css"> -->
+  <link rel="stylesheet" type="text/css" href="/navstyle.css">
+  <link rel="stylesheet" href="/messagesstyle.css">
   <title>Document</title>
 </head>
 
@@ -28,7 +28,7 @@
   </nav>
 
   <h1>Twoje wiadomości</h1>
-
+<div class="message">
   <% if (messages && messages.length > 0) { %>
     <ul>
       <% messages.forEach(function(message) { %>
@@ -43,7 +43,7 @@
   <% } else { %>
     <p>Brak wiadomości.</p>
   <% } %>
-
+</div>
   <!-- Dodaj linki, formularze lub inne elementy interfejsu użytkownika, jeśli to konieczne -->
 
   <script>

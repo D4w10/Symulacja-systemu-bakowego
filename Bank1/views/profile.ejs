@@ -9,8 +9,10 @@
 
   <script src="https://kit.fontawesome.com/edb0032d42.js" crossorigin="anonymous"></script>
 
-  <link rel="stylesheet" href="/style.css">
-  <link rel="stylesheet" href="/profile.css">
+  <!-- <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/profile.css"> -->
+  <link rel="stylesheet" type="text/css" href="/navstyle.css">
+ <link rel="stylesheet" type="text/css" href="/profile.css">
   <title>Document</title>
 </head>
 
@@ -28,12 +30,12 @@
       <li><a href="/auth/logout">Wyloguj</a></li>
     </ul>
   </nav>
-<div class="wrap">
 
+  <div class="container">
 
-<div class="kolumna1">
+ <div class="kolumna1">
 
-  <div class="konto">
+  <div class="element1k1">
     
     <div class="kontodata">
 
@@ -55,13 +57,14 @@
 
     <div class="przelej-button">
     <a href="/transfer">Przelej</a>
+
   </div>
 
 
   </div>
-  <div class="oszcz">
+  <div class="element2k1">
   
-    <div class="historia">
+    <div class="oszcz2">
   
   
   
@@ -77,11 +80,11 @@
    </div>
   </div>
 
-
 </div>
 
 <div class="kolumna2">
-  <div class="konto">
+
+  <div class="element1k2">
 
     <div>
       <h4>Ostatnie wiadomości</h4> <a href="/messages">Wszystkie wiadomości</a>
@@ -100,35 +103,26 @@
 
 
   </div>
-
-
-  <div class="historia">
-    <h4>historia</h4>  <a href="/history" class="history">cała historia</a>
+ 
+  <div class="element2k2">
+    <div class="hisnav">
+<h4>Historia</h4> 
+ <a href="/history" class="history">cała historia</a>
+    </div>
+    
 
     <div class="listatranzakcji">
+      
       <ul>
-        <!-- <li>
-          <p>Id odbiorcy</p>
-          <p>Numer konta </p>
-          <p>bilans</p>
-          <p>Opis</p>
-          <p>Data</p>
-          <p>Godzina</p>
-          <p>Data</p> 
-        </li> -->
-
+     
 
         <% transfer.forEach(function(transfer) { %>
           <% if (user.id == transfer.sender_id){ %>
         <li> 
           <!-- <p style="width: 15px;"><%= transfer.recipient_id %></p> -->
           <!-- <p><%= transfer.recipient_account_number %></p> -->
-          <p><img src="/transicon.png"  alt="transfer" style="size: 20px;" ></p>
-          <p><%= transfer.firstName %> <%= transfer.lastName %></p>
-       
-          <p>-<%= transfer.amount %></p>
-          <p><%= transfer.descrip%></p>
-          <!-- <p><%= transfer.data%></p>
+          <p><img src="/transicon.png"  alt="transfer" style="size: 20px;" > Przelew &nbsp;  <%= transfer.firstName %>   <%= transfer.lastName %> &nbsp; -<%= transfer.amount %>  </p>
+          <!-- <p><%= transfer.data%></p> 
           <p><%= transfer.czas%></p> -->
 
         </li>
@@ -136,10 +130,7 @@
         <li>
           <!-- <p><%= transfer.sender_id %></p>
           <p><%= transfer.sender_account_number %></p> -->
-          <p><img src="/transicon.png" alt="transfer"></p>
-          <p><%= transfer.firstName %> <%= transfer.lastName %></p>
-          <p><%= transfer.amount %></p>
-          <p><%= transfer.descrip%></p>
+          <p><img src="/transicon.png" alt="transfer"> Przelew &nbsp;   <%= transfer.firstName %> <%= transfer.lastName %> &nbsp; <%= transfer.amount %> </p>
           <!-- <p><%= transfer.data%></p>
           <p><%= transfer.czas%></p> -->
         </li>
@@ -150,8 +141,8 @@
  </div>
 
 </div>
-
 </div>
+
 
 </body>
 </html>

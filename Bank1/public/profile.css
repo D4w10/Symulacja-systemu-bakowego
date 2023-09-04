@@ -11,9 +11,23 @@
   .contentt{
     display: flex;
   }
+  .container {
+    display: flex;
+    justify-content: space-between;
+  }
+  .kolumna1 {
+    flex: 1; 
+    margin-right: 20px;
+  }
+  
+  
+  .kolumna2 {
+    flex: 1;
+    margin-left: 20px;
+  }
   
    
-  .konto {
+  .element1k1,.element1k2,.element2k1,.element2k2 {
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -101,22 +115,30 @@
   }
   
 
-  h4>img{
+  /* h4>img{
     width: 100px;
+  } */
+  .element2k2{
+    display: flex;
+    flex-wrap: wrap;
   }
+ 
   .listatranzakcji{
     padding-top: 20px;
     flex-basis: 100%;
+    display: flex;
+    justify-content: space-between;
   }
   .listatranzakcji ul {
     list-style-type: none;
     padding: 0;
+    width: 100%;
   }
 
   .listatranzakcji li {
     display: flex;
     align-items: center;
- 
+    
     border: 1px solid #ddd;
     border-radius: 4px;
     padding: 5px;
@@ -125,15 +147,21 @@
   .listatranzakcji li p {
     margin: 0;
     flex: 1;
+    display: flex;
     border: 1px solid #ddd;
     border-radius: 4px;
     padding: 5px;
+    justify-content: space-around;
   }
-  .wrap{
+  .listatranzakcji li p img {
+    width: 2em;
+    margin-right: 2em;
+  }
+  /* .wrap{
     display: flex;
     justify-content: center;
     align-items: center;
-  }
+  } */
   .perc>p{
     margin-top: 15px;
   }

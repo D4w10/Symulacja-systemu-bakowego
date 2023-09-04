@@ -1,0 +1,125 @@
+
+        .wrap {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .kolumna1,
+        .kolumna2 {
+            flex: 1;
+        }
+
+        .element1k1,
+        .element2k1,
+        .element1k2,
+        .element2k2 {
+            background-color: #f9f9f9;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 5px;
+        }
+
+        .oszcz2 {
+            text-align: center;
+        }
+
+        .oszcz2 h4 {
+            font-weight: bold;
+        }
+
+        .kontodata {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .imie {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .numerkonto {
+            text-align: center;
+        }
+
+        .Numer {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .kontosrodki {
+            text-align: center;
+        }
+
+        .srodki {
+            font-size: 24px;
+            font-weight: bold;
+            color: green;
+        }
+
+        .przelej-button a {
+            background-color: #333;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .przelej-button a:hover {
+            background-color: #555;
+        }
+
+        h4 {
+            font-weight: bold;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul li {
+            margin: 10px 0;
+        }
+
+        .history {
+            font-weight: bold;
+            text-decoration: none;
+            color: #333;
+            margin-left: 20px;
+        }
+
+        .history:hover {
+            color: #555;
+        }
+
+        .listatranzakcji {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .listatranzakcji ul {
+            padding: 0;
+        }
+
+        .listatranzakcji li {
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+
+        .listatranzakcji img {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+            vertical-align: middle;
+        }

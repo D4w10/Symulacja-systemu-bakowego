@@ -96,7 +96,11 @@ router.get('/history', authController.isLoggedIn, (req, res) => {
 
     try {
       // Pobierz listę danych z bazy danych
-      const getDataQuery = `SELECT *, DATE_FORMAT(created_at, '%d.%m.%Y') as data,DATE_FORMAT(created_at, '%T') as czas  FROM transactions Where sender_id = ? OR recipient_id ORDER BY created_at DESC`;
+      const getDataQuery = `SELECT *, DATE_FORMAT(t.created_at, '%d.%m.%Y') as data,DATE_FORMAT(t.created_at, '%T') as czas  
+      FROM transactions t 
+      inner join reg_request r ON t.recipient_id = r.id 
+      Where t.sender_id = ? OR t.recipient_id 
+      ORDER BY created_at DESC LIMIT 15` ;
       db.query(getDataQuery,[req.user.id], (err,transrow)=>{
         
         const statrec = `

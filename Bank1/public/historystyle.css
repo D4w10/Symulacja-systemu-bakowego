@@ -1,0 +1,155 @@
+/* 
+.contentt {
+    padding: 20px;
+  }
+  
+  .statystyki {
+    float: left;
+    width: 50%;
+    padding: 20px;
+  }
+  
+  .historia {
+    float: right;
+    width: 50%;
+    padding: 20px;
+  }
+  
+  .listatranzakcji ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .listatranzakcji ul li {
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    padding: 10px;
+  }
+  
+  form {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  input[type="date"] {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+  }
+  
+  button[type="submit"] {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+  }
+  
+
+  .history {
+    text-decoration: none;
+    color: #333;
+    background-color: #ddd;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+  
+ 
+  .listatranzakcji p {
+    margin: 5px 0;
+  }
+  
+  .listatranzakcji li p:first-child {
+    font-weight: bold;
+  }
+   */
+   .contentt {
+    padding: 20px;
+  }
+  
+  .statystyki {
+    float: left;
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #ddd; /* Dodanie obramowania */
+    margin-bottom: 20px; /* Dodatkowy odstęp od listy transakcji */
+  }
+  
+  .historia {
+    float: left; /* Zmieniamy float na left */
+    width: 100%;
+    padding: 20px;
+  }
+  .listatranzakcji{
+    width: 100%;
+  }
+  .listatranzakcji ul {
+    width: 100%;
+    list-style-type: none;
+    padding: 0;
+    display: flex; /* Ustawienie elementów obok siebie */
+    flex-wrap: wrap; /* Zawijanie elementów na nową linię, jeśli brakuje miejsca */
+  }
+  
+  .listatranzakcji ul li {
+    width: 100%; /* Dwa elementy w jednym wierszu (50% - marginesy) */
+    /* margin-right: 20px;
+    margin-bottom: 20px; */
+    border: 1px solid #ddd; /* Dodanie obramowania */
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .listatranzakcji ul li p {
+    width: 10%;
+    text-align: center;
+  }
+  /* Styl formularza */
+  form {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  input[type="date"] {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+  }
+  
+  button[type="submit"] {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  /* Dodatkowe style */
+  .history {
+    text-decoration: none;
+    color: #333;
+    background-color: #ddd;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+  
+  /* Styl listy transakcji */
+  .listatranzakcji p {
+    margin: 5px 0;
+    padding: 0;
+  }
+  
+  .listatranzakcji ul li p:first-child {
+    font-weight: bold;
+    align-items: baseline;
+  }
+  
