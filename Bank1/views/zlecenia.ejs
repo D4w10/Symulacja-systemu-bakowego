@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+  <script src="https://kit.fontawesome.com/edb0032d42.js" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/profile.css">
+  <title>Document</title>
+</head>
+
+<body>
+  <nav>
+    <!-- <h4><a href="/konto"><img src="/avatar.png" alt=""></a></h4> -->
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/profile">Profil</a></li>
+      <li><a href="/auth/logout">Wyloguj</a></li>
+    </ul>
+  </nav>
+<div class="container mt-4">
+   
+
+
+
+    <h1>Automatyczne Przelewy</h1>
+  <form method="post" action="/rozpocznij-przelewy">
+    <label for="accountNumber">Numer konta odbiorcy:</label>
+    <input type="text" id="accountNumber" name="accountNumber" required>
+
+    <label for="amount">Kwota:</label>
+    <input type="number" id="amount" name="amount" required>
+
+    <label for="times">Interwał czasowy:</label>
+    <select id="times" name="times">
+      <option value="30sekund">30 sekund</option>
+      <option value="1minuta">1 minuta</option>
+      <!-- Dodaj inne opcje interwału, jeśli jest taka potrzeba -->
+    </select>
+
+
+    <button type="submit">Rozpocznij Przelewy</button>
+  </form>
+  <% if (typeof message != "undefined" && message) { %>
+    <h4 class="alert alert-success mt-4"><%= message %></h4>
+    <% } %>
+
+
+
+
+ 
+</body>
+</html>
