@@ -38,8 +38,8 @@
 
     <label for="times">Interwał czasowy:</label>
     <select id="times" name="times">
-      <option value="30sekund">30 sekund</option>
-      <option value="1minuta">1 minuta</option>
+      <option value="30">30 sekund</option>
+      <option value="60">1 minuta</option>
       <!-- Dodaj inne opcje interwału, jeśli jest taka potrzeba -->
     </select>
 
@@ -49,6 +49,43 @@
   <% if (typeof message != "undefined" && message) { %>
     <h4 class="alert alert-success mt-4"><%= message %></h4>
     <% } %>
+
+    <% if (typeof del != "undefined" && del) { %>
+      <h4 class="alert alert-danger mt-4"><%= del %></h4>
+      <% } %>
+
+
+
+    <!-- <% if (showl && showl.length > 0) { %>
+      <ul>
+        <% showl.forEach(function(show) { %>
+          <li>
+            <strong>Od:</strong> <%= show.recipient_account %><br>
+            
+          </li>
+        <% }); %>
+      </ul>
+    <% } else { %>
+      <p>Brak wiadomości.</p>
+    <% } %> -->
+
+    <% if (showl && showl.length > 0) { %>
+      <ul>
+        <% showl.forEach(function(show) { %>
+          <li>
+            <strong>Od:</strong> <%= show.recipient_account %><br>
+            <!-- Dodaj przycisk do zatrzymywania przelewu -->
+            <a href="/zatrzymaj-przelew/<%= show.id %>" onclick="return confirm('Czy na pewno chcesz usunąć tego użytkownika?')">Usuń</a>
+
+          </li>
+        <% }); %>
+      </ul>
+    <% } else { %>
+      <p>Brak wiadomości.</p>
+    <% } %>
+
+
+
 
 
 

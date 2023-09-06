@@ -1094,13 +1094,22 @@ router.get('/goals', authController.isLoggedIn, goalController.getGoals, (req, r
   
 })
 router.get('/zlecenia', authController.isLoggedIn, (req, res) => {
+  
   console.log(req.user);
 
   if( req.user ) {
-    res.render('zlecenia',{
-      user: req.user
-      
-    });
+    const show_list='SELECT * from current_transfers where sender_id=?';
+    db.query(show_list,[req.user.id],(error,result)=>{
+      res.render('zlecenia',{
+        user: req.user,
+        showl:result
+
+
+        
+      });
+      console.log(result);
+    })
+   
   } else {
     res.redirect('/login');
   }
@@ -1109,115 +1118,315 @@ router.get('/zlecenia', authController.isLoggedIn, (req, res) => {
 
 
 
+
+
+
+
+
+
+
+
 router.post('/rozpocznij-przelewy', authController.isLoggedIn, (req, res) => {
   const accountNumber = req.body.accountNumber;
   const amount = parseFloat(req.body.amount);
   const interval = req.body.times;
 
-  const decreaseBalanceQuery = 'UPDATE account SET bilans = bilans - ? WHERE user_id = ?';
-  const increaseBalanceQuery = 'UPDATE account SET bilans = bilans + ? WHERE account_number = ?';
+  // const decreaseBalanceQuery = 'UPDATE account SET bilans = bilans - ? WHERE user_id = ?';
+  // const increaseBalanceQuery = 'UPDATE account SET bilans = bilans + ? WHERE account_number = ?';
+  // const findAccountNumberQuery = 'SELECT account_number FROM account WHERE user_id = ?';
 
-  // Pobieranie numeru konta nadawcy na podstawie ID użytkownika
+  // // Pobieranie numeru konta nadawcy na podstawie ID użytkownika
   const userId = req.user.id;
-  const findAccountNumberQuery = 'SELECT account_number FROM account WHERE user_id = ?';
+  
 
-  db.query(findAccountNumberQuery, [userId], (err, results) => {
+
+
+
+
+
+
+
+  const insertTransferQuery = 'INSERT INTO current_transfers (recipient_account,sender_id, amount, transfer_interval, status) VALUES (?, ?, ?, ?,?)';
+  db.query(insertTransferQuery, [accountNumber,userId ,amount, interval, 'w_trakcie'], (err, result) => {
     if (err) {
-      console.error('Błąd podczas pobierania numeru konta nadawcy:', err);
-      res.status(500).send('Wystąpił błąd podczas przelewu.');
+      console.error('Błąd podczas dodawania przelewu do bazy danych:', err);
+      res.status(500).send('Wystąpił błąd podczas dodawania przelewu.');
       return;
     }
+    const show_list='SELECT * from current_transfers where sender_id=?';
+      db.query(show_list,[req.user.id],(error,result)=>{
+        res.render('zlecenia',{
+          user: req.user,
+          showl:result,
+          message:"Przelew zrealizowany pomyślnie"
+  
+  
+          
+        });
+      })
+  
+    console.log('Dodano nowy przelew do bazy danych.');
+    // Tutaj możesz wykonać jakieś akcje po dodaniu przelewu
+  });
 
-    if (results.length === 0) {
-      console.error('Nie znaleziono numeru konta nadawcy.');
-      res.status(500).send('Wystąpił błąd podczas przelewu.');
-      return;
-    }
-
-    const yourAccountNumber = results[0].account_number;
-    console.log('Zapytanie SQL do obniżenia salda konta:', decreaseBalanceQuery);
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // db.query(findAccountNumberQuery, [userId], (err, results) => {
+  //   if (err) {
+  //     console.error('Błąd podczas pobierania numeru konta nadawcy:', err);
+  //     res.status(500).send('Wystąpił błąd podczas przelewu.');
+  //     return;
+  //   }
+
+  //   if (results.length === 0) {
+  //     console.error('Nie znaleziono numeru konta nadawcy.');
+  //     res.status(500).send('Wystąpił błąd podczas przelewu.');
+  //     return;
+  //   }
+
+  //   const yourAccountNumber = results[0].account_number;
+  //   console.log('Zapytanie SQL do obniżenia salda konta:', decreaseBalanceQuery);
+
+
+
+
+
+  //   // res.render('zlecenia', { message: 'Przelew zrealizowany pomyślnie.' });
+  //   const show_list='SELECT * from current_transfers where sender_id=?';
+  //   db.query(show_list,[req.user.id],(error,result)=>{
+  //     res.render('zlecenia',{
+  //       user: req.user,
+  //       showl:result,
+  //       message:"Przelew zrealizowany pomyślnie"
+
+
+        
+  //     });
+  //   })
 
 
 
     
 
 
-    // Logika obsługi przelewów cyklicznych
-    const cronExpression = interval === '30sekund' ? '*/30 * * * * *' : interval === '1minuta' ? '* * * * *' : '';
+  //   // Logika obsługi przelewów cyklicznych
+  //   const cronExpression = interval === '30sekund' ? '*/30 * * * * *' : interval === '1minuta' ? '* * * * *' : '';
 
-    if (cronExpression) {
-      const task = cron.schedule(cronExpression, async () => {
-        const query = 'SELECT * FROM account WHERE account_number = ?';
-        db.query(query, [accountNumber], (err, results) => {
-          if (err) {
-            console.error('Błąd podczas sprawdzania konta odbiorcy:', err);
-            return;
-          }
+  //   if (cronExpression) {
+  //     const task = cron.schedule(cronExpression, async () => {
+  //       const query = 'SELECT * FROM account WHERE account_number = ?';
+  //       db.query(query, [accountNumber], (err, results) => {
+  //         if (err) {
+  //           console.error('Błąd podczas sprawdzania konta odbiorcy:', err);
+  //           return;
+  //         }
       
-          if (results.length === 0) {
-            console.error('Konto odbiorcy nie istnieje.');
-            return;
-          }
+  //         if (results.length === 0) {
+  //           console.error('Konto odbiorcy nie istnieje.');
+  //           return;
+  //         }
       
-          const recipientBalance = results[0].bilans;
+  //         const recipientBalance = results[0].bilans;
       
-          if (recipientBalance < amount) {
-            console.error('Niewystarczające środki na koncie odbiorcy.');
-            return;
-          }
+  //         if (recipientBalance < amount) {
+  //           console.error('Niewystarczające środki na koncie odbiorcy.');
+  //           return;
+  //         }
       
-          const senderQuery = 'SELECT bilans FROM account WHERE user_id = ?';
-          db.query(senderQuery, [userId], (err, senderResults) => {
-            if (err) {
-              console.error('Błąd podczas pobierania salda konta nadawcy:', err);
-              return;
-            }
+  //         const senderQuery = 'SELECT bilans FROM account WHERE user_id = ?';
+  //         db.query(senderQuery, [userId], (err, senderResults) => {
+  //           if (err) {
+  //             console.error('Błąd podczas pobierania salda konta nadawcy:', err);
+  //             return;
+  //           }
       
-            if (senderResults.length === 0) {
-              console.error('Nie znaleziono konta nadawcy.');
-              return;
-            }
+  //           if (senderResults.length === 0) {
+  //             console.error('Nie znaleziono konta nadawcy.');
+  //             return;
+  //           }
       
-            const senderBalance = senderResults[0].bilans;
+  //           const senderBalance = senderResults[0].bilans;
       
-            if (senderBalance < amount) {
-              console.error('Niewystarczające środki na koncie nadawcy.');
-              return;
-            }
+  //           if (senderBalance < amount) {
+  //             console.error('Niewystarczające środki na koncie nadawcy.');
+  //             return;
+  //           }
       
-            // Tutaj możesz dodać operacje na kontach
+  //           // Tutaj możesz dodać operacje na kontach
       
+  //           // Zawsze obniż saldo konta nadawcy
+  //           db.query(decreaseBalanceQuery, [amount, userId], (err) => {
+  //             if (err) {
+  //               console.error('Błąd podczas zmniejszania salda konta nadawcy:', err);
+  //             }
+  //           });
+      
+  //           // Obniż saldo konta odbiorcy
+  //           db.query(increaseBalanceQuery, [amount, accountNumber], (err) => {
+  //             if (err) {
+  //               console.error('Błąd podczas zmniejszania salda konta odbiorcy:', err);
+  //             }
+  //           });
+      
+  //           console.log(`Wykonuję cykliczny przelew co ${interval}: Kwota=${amount}, Numer konta odbiorcy=${accountNumber}`);
+
+  //         });
+  //       });
+
+
+  //     console.log(`Cykliczne przelewy zostały zaplanowane co ${interval}`);
+  // });  } else {
+  //     console.error('Nieprawidłowy interwał czasowy.');
+  //   }
+  // });
+
+
+
+
+});
+function show_list_db(){
+  return new Promise((resolve, reject) => {
+    db.query("SELECT * from current_transfers",(error,result)=>{
+      if(error){
+        reject(error);
+      }
+      else{
+        resolve(result);
+      }
+    })
+    
+  })
+}
+function updatedb(amount,user_id,account_number){
+   const decreaseBalanceQuery = 'UPDATE account SET bilans = bilans - ? WHERE user_id = ?';
+  const increaseBalanceQuery = 'UPDATE account SET bilans = bilans + ? WHERE account_number = ?';
+
+
             // Zawsze obniż saldo konta nadawcy
-            db.query(decreaseBalanceQuery, [amount, userId], (err) => {
+            db.query(decreaseBalanceQuery, [amount, user_id], (err) => {
               if (err) {
                 console.error('Błąd podczas zmniejszania salda konta nadawcy:', err);
               }
             });
       
             // Obniż saldo konta odbiorcy
-            db.query(increaseBalanceQuery, [amount, accountNumber], (err) => {
+            db.query(increaseBalanceQuery, [amount, account_number], (err) => {
               if (err) {
                 console.error('Błąd podczas zmniejszania salda konta odbiorcy:', err);
               }
             });
       
-            console.log(`Wykonuję cykliczny przelew co ${interval}: Kwota=${amount}, Numer konta odbiorcy=${accountNumber}`);
-          });
-        });
+
+          
 
 
-      console.log(`Cykliczne przelewy zostały zaplanowane co ${interval}`);
-  });  } else {
-      console.error('Nieprawidłowy interwał czasowy.');
-    }
-  });
+ 
+  
+}
+cron.schedule('* * * * *',async()=>{
+  try{
+    const resultselect=await show_list_db();
+    resultselect.forEach(element => {
+      const amount=element.amount;
+      const user_id=element.sender_id;
+      const account_number=element.recipient_account;
+      const interval=element.transfer_interval;
+      if(interval>0){
+        updatedb(amount,user_id,account_number);
+        const odbiorca_select='SELECT * from reg_request r inner join account a on r.id = a.user_id where a.account_number = ? ';
+        //dane odbiorcy
+        db.query(odbiorca_select,[account_number],(error,result)=>{
+          try{
+            const res_select=result[0];
+            const sender_select='SELECT * from reg_request r inner join account a on r.id = a.user_id where r.id = ? ';
+            db.query(sender_select,[user_id],(er,ress)=>{
+
+              try{
+                const sender_wynik=ress[0];
+                  const transaction_query='INSERT INTO transactions (sender_id, recipient_id, amount, sender_account_number, recipient_account_number, descrip) VALUES (?, ?, ?, ?, ?, ?)';
+            db.query(transaction_query,[user_id,res_select.id,amount,sender_wynik.account_number,account_number,'Przelew stały']);
+
+              }
+              catch(err){
+                console.log(err);
+              }
+            })
+
+          
+          }
+          catch(err){
+            console.log(err);
+          }
+        })
+      }
+
+      
+    });
+  }
+  catch(error){
+    console.error(error);
+  }
 });
 
+router.get('/zatrzymaj-przelew/:id', authController.isLoggedIn, (req, res) => {
+  if (req.userid) {
+    
+      const id_job = req.params.id;
+      const deleted_query='DELETE FROM current_transfers WHERE id=? ';
+
+
+      db.beginTransaction((err) => {
+        if (err) throw err;
+       
+              db.query(deleted_query,[id_job]);
+
+          
+
+                
+
+                db.commit((err) => {
+                  if (err) {
+                    db.rollback(() => {
+                      throw err;
+                    });
+                  }
+
+                  const show_list='SELECT * from current_transfers where sender_id=?';
+                  db.query(show_list,[req.user.id],(error,result)=>{
+                    res.render('zlecenia',{
+                      user: req.user,
+                      showl:result,
+                      del:"Przelew usuniety"
+              
+              
+                      
+                    });
+                  })
+                });
+              });
+      
+
+    
+  } else {
+    res.redirect('/profile');
+  }
+});
 
 
 
