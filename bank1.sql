@@ -1,8 +1,8 @@
 -- MySQL dump 10.13  Distrib 8.0.32, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: bank1
+-- Host: localhost    Database: bank1
 -- ------------------------------------------------------
--- Server version	8.0.32
+-- Server version	8.0.33
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -30,7 +30,7 @@ CREATE TABLE `account` (
   PRIMARY KEY (`id_account`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `account_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `reg_request` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,8 +39,66 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (1,11,69.00,'3214123412'),(2,34,32.00,'346234234634'),(62,72,86987.00,'7777947762359'),(63,73,56539546.00,'7777482839414'),(64,74,20390.00,'7777163838342');
+INSERT INTO `account` VALUES (1,11,69.00,'3214123412'),(2,34,32.00,'346234234634'),(62,72,541.00,'7777947762359'),(63,73,56538666.00,'7777482839414'),(64,74,20390.00,'7777163838342'),(65,75,1766.00,'7777217438113'),(66,76,1189.00,'7777997090356'),(67,78,894.00,'7777176200638');
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `current_transfers`
+--
+
+DROP TABLE IF EXISTS `current_transfers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `current_transfers` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `recipient_account` varchar(255) NOT NULL,
+  `sender_id` int NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `transfer_interval` int NOT NULL,
+  `status` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `current_transfers`
+--
+
+LOCK TABLES `current_transfers` WRITE;
+/*!40000 ALTER TABLE `current_transfers` DISABLE KEYS */;
+/*!40000 ALTER TABLE `current_transfers` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `goals`
+--
+
+DROP TABLE IF EXISTS `goals`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `goals` (
+  `id_goal` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `goal_name` varchar(255) NOT NULL,
+  `description` text,
+  `target_amount` decimal(20,2) NOT NULL,
+  `current_amount` decimal(20,2) DEFAULT '0.00',
+  `start_date` date NOT NULL,
+  `end_date` date DEFAULT NULL,
+  PRIMARY KEY (`id_goal`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `goals_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `reg_request` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `goals`
+--
+
+LOCK TABLES `goals` WRITE;
+/*!40000 ALTER TABLE `goals` DISABLE KEYS */;
+/*!40000 ALTER TABLE `goals` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -58,7 +116,7 @@ CREATE TABLE `info` (
   `text` text,
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id_info`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,6 +125,7 @@ CREATE TABLE `info` (
 
 LOCK TABLES `info` WRITE;
 /*!40000 ALTER TABLE `info` DISABLE KEYS */;
+INSERT INTO `info` VALUES (1,'Ludwik',75,'Rejestraacja użytkownia','Uzytkownik Ludwik Założył konto w banku','2023-09-02 14:55:24'),(2,'Jan',72,'Zmiana email','Użytkownik Jan zmienił email z dasd@dsadasd na jsajsaaed@dfsf','2023-09-02 14:58:14'),(3,'Witold',76,'Rejestraacja użytkownia','Uzytkownik Witold Założył konto w banku','2023-09-02 15:01:08'),(4,'Witold123',78,'Rejestraacja użytkownia','Uzytkownik Witold123 Założył konto w banku','2023-09-02 15:02:47');
 /*!40000 ALTER TABLE `info` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -94,7 +153,7 @@ CREATE TABLE `k_oscz` (
 
 LOCK TABLES `k_oscz` WRITE;
 /*!40000 ALTER TABLE `k_oscz` DISABLE KEYS */;
-INSERT INTO `k_oscz` VALUES (125,63,0.0000,0.05),(126,62,102.4240,0.05);
+INSERT INTO `k_oscz` VALUES (125,63,0.0000,0.05),(126,62,106.8640,0.05);
 /*!40000 ALTER TABLE `k_oscz` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -171,7 +230,7 @@ CREATE TABLE `reg_request` (
   PRIMARY KEY (`id`,`pesel`),
   UNIQUE KEY `pesel_UNIQUE` (`pesel`),
   UNIQUE KEY `login_UNIQUE` (`login`)
-) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -180,7 +239,7 @@ CREATE TABLE `reg_request` (
 
 LOCK TABLES `reg_request` WRITE;
 /*!40000 ALTER TABLE `reg_request` DISABLE KEYS */;
-INSERT INTO `reg_request` VALUES (11,'Admin','321321321','koc@koc','mateudz','kOCON','KOWALAL',123521432,'$2b$10$TVkW8d8mJSQKRekByWbhIe2MMBvtMcEHZ4d6HgTtYhgazurdCzrSu','admin'),(34,'admin','23123123','zbyszek@123','Zbyszek','Krawczyk','Grazyna',64444432,'$2a$08$e/62r7GFhx4lQ1zNQGAEHe4lFz7ZYXpu5XhCrW5q3O33uCQsFeW72','admin'),(72,'Jan','41512342341','dasd@dsadasd','Jan','Nowak','Wacława',543252335,'$2a$08$kaZoP.eDGDd6y7/HyCAUb.HcsJB2pxGwtVo0Z7idWaMguPJDFE9e6','user'),(73,'Mateusz','42353534663','amt@fdsdf','Mateusz','Kowal','Tulpa',123542353,'$2a$08$xnSzW1nHZl/mZd2ta/b0kejOeX9xwatqCLq2yGCUIJVfBSeX3y7Fq','user'),(74,'Stanislaw','65234234634','sdf@fasdf','Stanisław','Wielki','Wacława',543253345,'$2a$08$L/5WnzKK8FwGFwaVYM65WeDPKx8yPkXbqnnEyiufp8aXXyT4bOHgu','user');
+INSERT INTO `reg_request` VALUES (11,'Admin','321321321','koc@koc','mateudz','kOCON','KOWALAL',123521432,'$2b$10$TVkW8d8mJSQKRekByWbhIe2MMBvtMcEHZ4d6HgTtYhgazurdCzrSu','admin'),(34,'admin','23123123','zbyszek@123','Zbyszek','Krawczyk','Grazyna',64444432,'$2a$08$e/62r7GFhx4lQ1zNQGAEHe4lFz7ZYXpu5XhCrW5q3O33uCQsFeW72','admin'),(72,'Jan','41512342341','jsajsaaed@dfsf','Jan','Nowak','Wacława',543252335,'$2a$08$kaZoP.eDGDd6y7/HyCAUb.HcsJB2pxGwtVo0Z7idWaMguPJDFE9e6','user'),(73,'Mateusz','42353534663','amt@fdsdf','Mateusz','Kowal','Tulpa',123542353,'$2a$08$xnSzW1nHZl/mZd2ta/b0kejOeX9xwatqCLq2yGCUIJVfBSeX3y7Fq','user'),(74,'Stanislaw','65234234634','sdf@fasdf','Stanisław','Wielki','Wacława',543253345,'$2a$08$L/5WnzKK8FwGFwaVYM65WeDPKx8yPkXbqnnEyiufp8aXXyT4bOHgu','user'),(75,'Ludwik','45321312431','ludwik@luc.c','Ludwik','wielki','małą',543534443,'$2a$08$KXQeEcwuD.ZvXAkogoiGY.zUDF5tGNF0IcfXvFfnbBt50CIeMpBP2','user'),(76,'Witold','02000231312','witolsdkoks@rtveuroagd.ru','Witold','Mito','UL',675456456,'$2a$08$xLDSdzJIN2sQti5FxbtWJuY427Qmm7yFVVnem8NGPHeSL8vPktq2C','user'),(78,'Witold123','02000031312','wit2olsdkoks@rtveuroagd.ru','Witold','Mitos','UL',675544566,'$2a$08$9VTK0GxQdW3fGGX0vQ0OS.UONKPP5nRC88AQxIU4oblrWYQ/toGxi','user');
 /*!40000 ALTER TABLE `reg_request` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -283,7 +342,7 @@ CREATE TABLE `transactions` (
   KEY `recipient_id` (`recipient_id`),
   CONSTRAINT `transactions_ibfk_1` FOREIGN KEY (`sender_id`) REFERENCES `reg_request` (`id`),
   CONSTRAINT `transactions_ibfk_2` FOREIGN KEY (`recipient_id`) REFERENCES `reg_request` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=77 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -292,7 +351,7 @@ CREATE TABLE `transactions` (
 
 LOCK TABLES `transactions` WRITE;
 /*!40000 ALTER TABLE `transactions` DISABLE KEYS */;
-INSERT INTO `transactions` VALUES (43,72,74,100.00,'7777947762359','7777163838342','Opis','2023-06-11 13:02:04'),(44,72,74,12313.00,'7777947762359','7777163838342','Opis','2023-06-11 13:02:10');
+INSERT INTO `transactions` VALUES (43,72,74,100.00,'7777947762359','7777163838342','Opis','2023-06-11 13:02:04'),(44,72,74,12313.00,'7777947762359','7777163838342','Opis','2023-06-11 13:02:10'),(45,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:03:00'),(46,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:04:00'),(47,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:04:00'),(48,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:05:00'),(49,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:05:00'),(50,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:06:00'),(51,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:06:00'),(52,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:07:00'),(53,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:07:00'),(54,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:08:00'),(55,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:08:00'),(56,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:09:00'),(57,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:09:00'),(58,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:10:00'),(59,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:10:00'),(60,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:11:00'),(61,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:11:00'),(62,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:12:00'),(63,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:12:00'),(64,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:13:00'),(65,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:13:00'),(66,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:14:00'),(67,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:14:00'),(68,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:15:00'),(69,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:15:00'),(70,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:16:00'),(71,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:16:00'),(72,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:17:00'),(73,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:17:00'),(74,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:18:00'),(75,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:18:00'),(76,72,75,1.00,'7777947762359','7777217438113','Przelew stały','2023-09-06 15:19:00');
 /*!40000 ALTER TABLE `transactions` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -325,4 +384,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-08-28 18:18:03
+-- Dump completed on 2023-09-06 17:30:06
