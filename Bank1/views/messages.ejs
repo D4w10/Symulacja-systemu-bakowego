@@ -28,12 +28,12 @@
   </nav>
 
   <h1>Twoje wiadomości</h1>
+  <main>
 <div class="message">
   <% if (messages && messages.length > 0) { %>
     <ul>
       <% messages.forEach(function(message) { %>
         <li>
-          <strong>Od:</strong> <%= message.id_nadawcy %><br>
           <strong>Nagłówek:</strong> <%= message.naglowek %><br>
           <strong>Treść:</strong> <%= message.tresc %><br>
           <strong>Wysłano:</strong>  <%= message.formatted_date %> <br>
@@ -44,6 +44,7 @@
     <p>Brak wiadomości.</p>
   <% } %>
 </div>
+</main>
   <!-- Dodaj linki, formularze lub inne elementy interfejsu użytkownika, jeśli to konieczne -->
 
   <script>

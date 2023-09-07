@@ -1,0 +1,39 @@
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Ustawia wysokość na 100% widoku przeglądarki */
+  }
+.message {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  .message ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .message li {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .message li:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .message li strong {
+    font-weight: bold;
+  }
+  
+  .message li {
+    margin-bottom: 10px;
+  }
+  
+  .message p {
+    text-align: center;
+  }
+  

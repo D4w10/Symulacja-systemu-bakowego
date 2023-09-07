@@ -46,12 +46,13 @@ router.get('/profile', authController.isLoggedIn, (req, res) => {
       // Pobierz listę danych z bazy danych
       const getDataQuery =`SELECT *, DATE_FORMAT(t.created_at, '%d.%m.%Y') as data,DATE_FORMAT(t.created_at, '%T') as czas  
       FROM transactions t 
-      inner join reg_request r ON t.recipient_id = r.id 
-      Where t.sender_id = ? OR t.recipient_id 
+      inner join reg_request ON t.recipient_id = reg_request.id or t.sender_id = reg_request.id
+       Where t.sender_id = ? OR t.recipient_id = ?
       ORDER BY created_at DESC LIMIT 15` ;
-      db.query(getDataQuery,[req.user.id], (err,transrow)=>{
-        
+      db.query(getDataQuery,[req.user.id,req.user.id], (err,transrow)=>{
+        console.log("testttttsafdsfd");
 
+console.log(transrow[0]);
       const getMessageQuery = `SELECT * FROM messages WHERE id_odbiorcy = ? ORDER BY wyslano_o LIMIT 2`;
 
       db.query(getMessageQuery,[req.user.id], (err,result)=>{
@@ -64,7 +65,7 @@ router.get('/profile', authController.isLoggedIn, (req, res) => {
           oszcz: req.oszczed,
           mess: result
         });
-          console.log(transrow);
+         // console.log(transrow);
 
       
 
@@ -98,10 +99,10 @@ router.get('/history', authController.isLoggedIn, (req, res) => {
       // Pobierz listę danych z bazy danych
       const getDataQuery = `SELECT *, DATE_FORMAT(t.created_at, '%d.%m.%Y') as data,DATE_FORMAT(t.created_at, '%T') as czas  
       FROM transactions t 
-      inner join reg_request r ON t.recipient_id = r.id 
-      Where t.sender_id = ? OR t.recipient_id 
-      ORDER BY created_at DESC LIMIT 15` ;
-      db.query(getDataQuery,[req.user.id], (err,transrow)=>{
+      inner join reg_request ON t.recipient_id = reg_request.id or t.sender_id = reg_request.id
+       Where t.sender_id = ? OR t.recipient_id = ?
+      ORDER BY created_at DESC` ;
+      db.query(getDataQuery,[req.user.id,req.user.id], (err,transrow)=>{
         
         const statrec = `
         SELECT AVG(amount) AS sred_wyd, SUM(amount) AS all_wyd
@@ -189,7 +190,11 @@ router.post('/history', authController.isLoggedIn, (req, res) => {
 
     try {
       // Pobierz listę danych z bazy danych
-      const getDataQuery = `SELECT *, DATE_FORMAT(created_at, '%d.%m.%Y') as data,DATE_FORMAT(created_at, '%T') as czas  FROM transactions Where sender_id = ? OR recipient_id ORDER BY created_at DESC`;
+      const getDataQuery = `SELECT *, DATE_FORMAT(t.created_at, '%d.%m.%Y') as data,DATE_FORMAT(t.created_at, '%T') as czas  
+      FROM transactions t 
+      inner join reg_request ON t.recipient_id = reg_request.id or t.sender_id = reg_request.id
+       Where t.sender_id = ? OR t.recipient_id = ?
+      ORDER BY created_at DESC`;
       db.query(getDataQuery,[req.user.id], (err,transrow)=>{
         
         const statrec = `

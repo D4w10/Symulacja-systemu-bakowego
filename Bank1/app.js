@@ -55,9 +55,22 @@ const clearTokenOnStartup = (req, res, next) => {
     expires: new Date(Date.now() + 2*10000),
     httpOnly: true
   });
+  res.redirect('/login');
+
   next();
 };
 
+
+const tokenExpiration = Date.now() + process.env.JWT_COOKIE_EXPIRES * 15 * 60 * 1000; // Pobierz czas wygaśnięcia tokenu
+
+// Oblicz pozostały czas życia tokenu w milisekundach
+const currentTime = Date.now();
+const timeUntilExpiration = tokenExpiration - currentTime;
+
+// Ustaw obsługę odświeżania strony po wygaśnięciu tokenu
+setTimeout(() => {
+  window.location.reload(); // Odśwież stronę
+}, timeUntilExpiration);
 
 app.listen(process.env.PROJECT_PORT, () => {
   console.log(`Server started on Port ${process.env.PROJECT_PORT}`);

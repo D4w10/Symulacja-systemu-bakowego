@@ -164,24 +164,24 @@ async function makeTransferIn(amount, banknumber, description, senderId, res) {
                     });
                   }
 
-                  const addTransactionQuery = 'INSERT INTO transactions (sender_id, recipient_id, amount, sender_account_number, recipient_account_number, descrip) VALUES (?, ?, ?, ?, ?, ?)';
-                  db.query(addTransactionQuery, [senderId, recipientId, amount, senderAccountNumber, recipientAccountNumber, description], async (error) => {
-                    if (error) {
-                      db.rollback(() => {
-                        throw error;
-                      });
-                    }
-
-                    db.commit((error) => {
+                    const addTransactionQuery = 'INSERT INTO transactions (sender_id, recipient_id, amount, sender_account_number, recipient_account_number, descrip) VALUES (?, ?, ?, ?, ?, ?)';
+                    db.query(addTransactionQuery, [senderId, recipientId, amount, senderAccountNumber, recipientAccountNumber, description], async (error) => {
                       if (error) {
                         db.rollback(() => {
                           throw error;
                         });
                       }
 
-                      res.status(200).render('transfer', { message: 'Przelew wykonany pomyślnie.' });
+                      db.commit((error) => {
+                        if (error) {
+                          db.rollback(() => {
+                            throw error;
+                          });
+                        }
+
+                        res.status(200).render('transfer', { message: 'Przelew wykonany pomyślnie.' });
+                      });
                     });
-                  });
                 });
               });
             });
@@ -243,6 +243,7 @@ async function makeTransferIn(amount, banknumber, description, senderId, res) {
               throw error;
             });
           }});
+          
           
         axios.post(`http://localhost:4000/send-transfer/bank1`, transferData)
         .then(response => {
