@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="chatt.css">
+</head>
+<body>
+  <!-- Obrazek przycisku -->
+  <div id="chatButton" class="chat-button">
+    <img src="chat.png" alt="FAQ" class="chat-icon">
+  </div>
+
+
+
+<!-- Okno czatu (początkowo ukryte) -->
+<div id="chatBox" class="chat-box hidden">
+  <div class="chat-header">
+    <h2>Chat</h2>
+    <button id="closeChat" class="close-chat-button">×</button>
+  </div>
+  <div class="chat-messages">
+    <!-- Tutaj będą wyświetlane wiadomości czatu -->
+  </div>
+  <div class="chat-input">
+    <input type="text" id="messageInput" placeholder="Napisz wiadomość...">
+    <button id="sendMessage">Wyślij</button>
+  </div>
+
+<script>
+var chatButton = document.getElementById('chatButton');
+    var chatBox = document.getElementById('chatBox');
+    var closeChat = document.getElementById('closeChat');
+
+    chatButton.addEventListener('click', function () {
+      chatBox.style.display = 'block'; // Wyświetl okno czatu
+      chatButton.style.display = 'none'; // Ukryj przycisk czatu
+    });
+
+    closeChat.addEventListener('click', function () {
+  chatBox.style.display = 'none'; // Ukryj okno czatu
+  chatButton.querySelector('.chat-icon').style.display = 'block'; // Ukryj ikonę czatu
+
+  // Dodaj style liniowe, aby przycisk był widoczny i wciąż zajmował miejsce
+  chatButton.style.display = 'flex';
+  chatButton.style.position = 'fixed';
+  chatButton.style.bottom = '60px';
+  chatButton.style.left = '60px';
+  chatButton.style.transform = 'scale(1)';
+});
+</script>
+</body>
+</html>

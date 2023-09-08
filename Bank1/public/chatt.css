@@ -1,0 +1,111 @@
+ /* Styl obrazka przycisku */
+ .chat-button {
+  position: fixed;
+  bottom: 60px;
+  left: 60px;
+  width: 60px;
+  height: 60px;
+  background-color:NONE;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 2; /* Z-index ustawiony na wyższą warstwę, aby przycisk był na wierzchu */
+  transition: transform 0.3s ease-in-out; /* Dodaj przejście tylko dla transformacji */
+}
+
+/* Styl obrazka przycisku (po najechaniu) */
+.chat-button:hover {
+  transform: scale(1.1);
+}
+
+/* Styl obrazka ikony */
+.chat-icon {
+border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  color: #fff;
+}
+
+
+/* Styl okna czatu (początkowo ukryte) */
+.chat-box {
+  display: none;
+  position: fixed;
+  bottom: 90px; /* Dostosuj pozycję okna czatu według potrzeb */
+  left: 20px;
+  width: 300px; /* Dostosuj szerokość okna czatu według potrzeb */
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  z-index: 1; /* Z-index ustawiony na niższą warstwę, aby okno czatu było pod przyciskiem */
+}
+
+.chat-header {
+  background-color: #004d9c;
+  color: #fff;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.close-chat-button {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.chat-messages {
+  padding: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.chat-input {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+}
+
+#messageInput {
+  flex-grow: 1;
+  border: none;
+  padding: 5px;
+}
+
+#sendMessage {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+
+.faq-question-button {
+  background-color: #f0f0f0;
+  border: 2px solid black;
+  border-radius:5px ;
+  padding: 10px;
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+}
+
+/* Styl dla aktywnego przycisku (po kliknięciu) */
+.faq-question-button.active {
+  background-color: #ddd;
+}
+
+/* Styl dla odpowiedzi na pytania */
+
+.faq-answer {
+  display: none;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  margin-top: 5px;
+}
