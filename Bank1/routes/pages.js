@@ -1365,5 +1365,49 @@ router.get('/chat', (req, res) => {
 
 
 
+router.post('/wystaw-opinie',authController.isLoggedIn, (req, res) => {
+  const { ocena, tresc } = req.body;
+  const dataWystawienia = new Date();
+  // const userId = req.session.userId || null; // Pobierz ID użytkownika z sesji lub ustaw null, jeśli niezalogowany
+  const userId = req.user.id || null;
+
+  const insertQuery = 'INSERT INTO opinie (data_wystawienia, ocena, tresc, uzytkownik_id) VALUES (?, ?, ?, ?)';
+  db.query(insertQuery, [dataWystawienia, ocena, tresc, userId], (err, result) => {
+    if (err) {
+      console.error('Błąd podczas wstawiania opinii:', err);
+      return res.status(500).send('Błąd podczas zapisywania opinii.');
+    }
+
+    res.status(200).send('Opinia została pomyślnie dodana.');
+  });
+});
+
+
+router.post('/wystaw-opiniee', (req, res) => {
+  const { ocena, tresc } = req.body;
+  const dataWystawienia = new Date();
+  // const userId = req.session.userId || null; // Pobierz ID użytkownika z sesji lub ustaw null, jeśli niezalogowany
+  const userId =  null;
+
+  const insertQuery = 'INSERT INTO opinie (data_wystawienia, ocena, tresc, uzytkownik_id) VALUES (?, ?, ?, ?)';
+  db.query(insertQuery, [dataWystawienia, ocena, tresc, userId], (err, result) => {
+    if (err) {
+      console.error('Błąd podczas wstawiania opinii:', err);
+      return res.status(500).send('Błąd podczas zapisywania opinii.');
+    }
+
+    res.status(200).send('Opinia została pomyślnie dodana.');
+  });
+});
+
+
+
+
+
+
+
+
+
+
 
 module.exports = router;

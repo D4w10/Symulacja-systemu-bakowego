@@ -356,6 +356,40 @@ stars.forEach((star) => {
     });
   });
 });
+
+submitOpinionButton.addEventListener('click', function () {
+    // Pobierz ilość gwiazdek
+    const selectedRating = currentRating;
+
+    // Pobierz treść opinii
+    const opinionText = opinionTextArea.value;
+
+    // Wyślij dane do serwera
+    fetch('/wystaw-opinie', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ocena: selectedRating,
+        tresc: opinionText,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          // Jeśli przesyłanie opinii zakończyło się sukcesem, wyświetl odpowiedni komunikat
+          alert('Opinia została A dodana.');
+        } else {
+          // W przeciwnym przypadku wyświetl błąd
+          alert('Błąd podczas przesyłania opinii.');
+        }
+      })
+      .catch((error) => {
+        console.error('Błąd:', error);
+        alert('Błąd podczas przesyłania opinii.');
+      });
+  });
 </script>
 </body>
 </html>
