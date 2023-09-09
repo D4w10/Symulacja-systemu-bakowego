@@ -35,7 +35,8 @@ border-radius: 50%;
   position: fixed;
   bottom: 90px; /* Dostosuj pozycję okna czatu według potrzeb */
   left: 20px;
-  width: 300px; /* Dostosuj szerokość okna czatu według potrzeb */
+  padding-bottom: 50px;
+  width: 500px; /* Dostosuj szerokość okna czatu według potrzeb */
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
@@ -48,6 +49,7 @@ border-radius: 50%;
   padding: 10px;
   display: flex;
   justify-content: space-between;
+  
 }
 
 .close-chat-button {
@@ -108,4 +110,19 @@ border-radius: 50%;
   border: 1px solid #ddd;
   background-color: #f9f9f9;
   margin-top: 5px;
+}
+/* Styl dla gwiazdek */
+.star-rating {
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.star-rating .star {
+  color: gray; /* Kolor domyślny gwiazdek */
+  transition: color 0.2s; /* Animacja zmiany koloru */
+}
+
+.star-rating .star.hovered,
+.star-rating .star.selected {
+  color: red; /* Kolor po najechaniu i po kliknięciu */
 }
