@@ -1,8 +1,8 @@
 -- MySQL dump 10.13  Distrib 8.0.32, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: bank1
+-- Host: localhost    Database: bank1
 -- ------------------------------------------------------
--- Server version	8.0.32
+-- Server version	8.0.33
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -194,7 +194,7 @@ CREATE TABLE `k_oscz` (
 
 LOCK TABLES `k_oscz` WRITE;
 /*!40000 ALTER TABLE `k_oscz` DISABLE KEYS */;
-INSERT INTO `k_oscz` VALUES (125,63,0.0000,0.05),(126,62,107.3620,0.05);
+INSERT INTO `k_oscz` VALUES (125,63,0.0000,0.05),(126,62,113.4175,0.05);
 /*!40000 ALTER TABLE `k_oscz` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -248,6 +248,35 @@ LOCK TABLES `messages` WRITE;
 /*!40000 ALTER TABLE `messages` DISABLE KEYS */;
 INSERT INTO `messages` VALUES (20,34,72,'Witam w banku','Witam i o zdrowie pytam','2023-09-07 12:01:53');
 /*!40000 ALTER TABLE `messages` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `opinie`
+--
+
+DROP TABLE IF EXISTS `opinie`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `opinie` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `data_wystawienia` datetime DEFAULT NULL,
+  `ocena` int DEFAULT NULL,
+  `tresc` text,
+  `uzytkownik_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `uzytkownik_id` (`uzytkownik_id`),
+  CONSTRAINT `opinie_ibfk_1` FOREIGN KEY (`uzytkownik_id`) REFERENCES `reg_request` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `opinie`
+--
+
+LOCK TABLES `opinie` WRITE;
+/*!40000 ALTER TABLE `opinie` DISABLE KEYS */;
+INSERT INTO `opinie` VALUES (1,'2023-09-09 13:45:31',5,'232',72),(2,'2023-09-09 13:46:38',2,'233',72),(3,'2023-09-09 13:47:51',3,'dsds',72),(4,'2023-09-09 13:49:46',5,'SDS',72),(5,'2023-09-09 13:50:25',4,'DSD',72),(6,'2023-09-09 13:51:58',1,'Super ;)',72),(7,'2023-09-09 13:52:09',1,'Super ;)',72),(8,'2023-09-09 13:52:47',1,'Super ;)',72),(9,'2023-09-09 13:52:52',3,'',72),(10,'2023-09-09 14:01:02',3,'SDS',NULL);
+/*!40000 ALTER TABLE `opinie` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -422,4 +451,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-07 14:34:26
+-- Dump completed on 2023-09-10 17:43:39

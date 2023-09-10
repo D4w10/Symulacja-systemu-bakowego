@@ -17,6 +17,34 @@
         
         </ul>
       </nav>
+      
+    
+    <h1>Opinie użytkowników</h1>
+    <% if (opinions.length > 0) { %>
+      <h2>Średnia ocen: <%= averageRating %></h2>
+    <% } else { %>
+      <p>Brak opinii do wyświetlenia.</p>
+    <% } %>
+
+    <ul>
+        <% opinions.forEach((opinion) => { %>
+            <li>
+                <h3>Ocena: <%= opinion.ocena %> gwiazdek</h3>
+                <p> Opinia: <%= opinion.tresc %></p>
+                <p>Data wystawienia: <%= opinion.data_wystawienia %></p>
+                <p>Użytkownik: 
+                  <% if (typeof opinion.uzytkownik_id === 'number') { %>
+                    Zarejestrowany
+                  <% } else { %>
+                    Niezarejestrowany
+                  <% } %>
+                </p>
+                
+            </li>
+        <% }); %>
+    </ul>
+   
+    
     
 </body>
 </html>

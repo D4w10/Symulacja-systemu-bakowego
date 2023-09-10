@@ -353,25 +353,59 @@ router.get('/admin_opinion', authController.isLoggedIn, async (req, res) => {
   console.log(req.user);
   console.log(req.userid);
 
-  if (req.userid) {
-    if (req.user.role == 'admin') {
-      try {
-        
+  
 
-
-          res.render('admin_opinion', {
-          });
-       
-      } catch (error) {
-        console.error(error);
-        // Obsługa błędu
-      }
-    } else {
-      res.redirect('/profile');
-    }
-  } else {
-    res.redirect('/profile');
+  // Sprawdź, czy użytkownik jest zalogowany
+  if (!req.userid) {
+    return res.redirect('/profile');
   }
+
+  // Sprawdź, czy użytkownik ma rolę admina
+  if (req.user.role !== 'admin') {
+    return res.redirect('/profile');
+  }
+
+  const query = 'SELECT * FROM opinie';
+  db.query(query, (err, result) => {
+    if (err) {
+      console.error('Błąd podczas pobierania opinii:', err);
+      return res.status(500).send('Błąd podczas pobierania opinii.');
+    }
+   
+
+
+
+    function formatDateToDdMmYyyy(date) {
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = String(date.getFullYear());
+      return `${day}-${month}-${year}`;
+    }
+    
+    const opinions = result.map(opinion => ({
+      ...opinion,
+      data_wystawienia: formatDateToDdMmYyyy(opinion.data_wystawienia),
+    })); // Pobrane opinie z datą w odpowiednim formacie
+    function calculateAverageRating(opinions) {
+      if (opinions.length === 0) {
+        return 0; // Jeśli brak opinii, średnia wynosi 0.
+      }
+    
+      // Oblicz sumę wszystkich ocen
+      const totalRating = opinions.reduce((sum, opinion) => sum + opinion.ocena, 0);
+    
+      // Oblicz średnią
+      const averageRating = totalRating / opinions.length;
+    
+      // Zaokrąglij średnią do dwóch miejsc po przecinku
+      return averageRating.toFixed(2);
+      
+    }
+    const averageRating = calculateAverageRating(opinions);
+
+    // Renderuj widok z danymi opinii
+    res.render('admin_opinion.ejs', { opinions,averageRating });
+  });
 });
 
 
@@ -396,6 +430,7 @@ router.get('/admin_opinion', authController.isLoggedIn, async (req, res) => {
 
 router.get('/admininfo', authController.isLoggedIn, async (req, res) => {
   console.log(req.user);
+
   if( req.user ) {
 
 
