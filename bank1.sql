@@ -152,12 +152,12 @@ DROP TABLE IF EXISTS `info`;
 CREATE TABLE `info` (
   `id_info` int NOT NULL AUTO_INCREMENT,
   `user_login` varchar(55) NOT NULL,
-  `user_id` int NOT NULL,
+  `user_id` int DEFAULT NULL,
   `info_type` varchar(45) NOT NULL,
   `text` text,
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id_info`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -166,7 +166,7 @@ CREATE TABLE `info` (
 
 LOCK TABLES `info` WRITE;
 /*!40000 ALTER TABLE `info` DISABLE KEYS */;
-INSERT INTO `info` VALUES (1,'Ludwik',75,'Rejestraacja użytkownia','Uzytkownik Ludwik Założył konto w banku','2023-09-02 14:55:24'),(2,'Jan',72,'Zmiana email','Użytkownik Jan zmienił email z dasd@dsadasd na jsajsaaed@dfsf','2023-09-02 14:58:14'),(3,'Witold',76,'Rejestraacja użytkownia','Uzytkownik Witold Założył konto w banku','2023-09-02 15:01:08'),(4,'Witold123',78,'Rejestraacja użytkownia','Uzytkownik Witold123 Założył konto w banku','2023-09-02 15:02:47'),(5,'test',79,'Rejestraacja użytkownia','Uzytkownik test Założył konto w banku','2023-09-07 12:34:40');
+INSERT INTO `info` VALUES (1,'Ludwik',75,'Rejestraacja użytkownia','Uzytkownik Ludwik Założył konto w banku','2023-09-02 14:55:24'),(2,'Jan',72,'Zmiana email','Użytkownik Jan zmienił email z dasd@dsadasd na jsajsaaed@dfsf','2023-09-02 14:58:14'),(3,'Witold',76,'Rejestraacja użytkownia','Uzytkownik Witold Założył konto w banku','2023-09-02 15:01:08'),(4,'Witold123',78,'Rejestraacja użytkownia','Uzytkownik Witold123 Założył konto w banku','2023-09-02 15:02:47'),(5,'test',79,'Rejestraacja użytkownia','Uzytkownik test Założył konto w banku','2023-09-07 12:34:40'),(6,'Jan',72,'Opinia','Użytkownik o loginie \"Jan\" wysłał opinię: sssa','2023-09-10 21:59:40'),(7,'Niezarejestrowany',NULL,'Opinia','Użytkownik o loginie \"Niezarejestrowany\" wysłał opinię: ????','2023-09-10 22:03:16'),(8,'Niezarejestrowany',NULL,'Opinia','Użytkownik o loginie \"Niezarejestrowany\" wysłał opinię: AA','2023-09-10 22:04:36'),(9,'Jan',72,'Opinia','Użytkownik o loginie \"Jan\" wysłał opinię: sa','2023-09-10 22:05:07');
 /*!40000 ALTER TABLE `info` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -194,7 +194,7 @@ CREATE TABLE `k_oscz` (
 
 LOCK TABLES `k_oscz` WRITE;
 /*!40000 ALTER TABLE `k_oscz` DISABLE KEYS */;
-INSERT INTO `k_oscz` VALUES (125,63,0.0000,0.05),(126,62,113.4175,0.05);
+INSERT INTO `k_oscz` VALUES (125,63,0.0000,0.05),(126,62,113.4877,0.05);
 /*!40000 ALTER TABLE `k_oscz` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -266,7 +266,7 @@ CREATE TABLE `opinie` (
   PRIMARY KEY (`id`),
   KEY `uzytkownik_id` (`uzytkownik_id`),
   CONSTRAINT `opinie_ibfk_1` FOREIGN KEY (`uzytkownik_id`) REFERENCES `reg_request` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -275,9 +275,44 @@ CREATE TABLE `opinie` (
 
 LOCK TABLES `opinie` WRITE;
 /*!40000 ALTER TABLE `opinie` DISABLE KEYS */;
-INSERT INTO `opinie` VALUES (1,'2023-09-09 13:45:31',5,'232',72),(2,'2023-09-09 13:46:38',2,'233',72),(3,'2023-09-09 13:47:51',3,'dsds',72),(4,'2023-09-09 13:49:46',5,'SDS',72),(5,'2023-09-09 13:50:25',4,'DSD',72),(6,'2023-09-09 13:51:58',1,'Super ;)',72),(7,'2023-09-09 13:52:09',1,'Super ;)',72),(8,'2023-09-09 13:52:47',1,'Super ;)',72),(9,'2023-09-09 13:52:52',3,'',72),(10,'2023-09-09 14:01:02',3,'SDS',NULL);
+INSERT INTO `opinie` VALUES (1,'2023-09-09 13:45:31',5,'232',72),(2,'2023-09-09 13:46:38',2,'233',72),(3,'2023-09-09 13:47:51',3,'dsds',72),(4,'2023-09-09 13:49:46',5,'SDS',72),(5,'2023-09-09 13:50:25',4,'DSD',72),(6,'2023-09-09 13:51:58',1,'Super ;)',72),(7,'2023-09-09 13:52:09',1,'Super ;)',72),(8,'2023-09-09 13:52:47',1,'Super ;)',72),(9,'2023-09-09 13:52:52',3,'',72),(10,'2023-09-09 14:01:02',3,'SDS',NULL),(11,'2023-09-10 21:49:25',5,'nie',72),(13,'2023-09-10 21:59:41',4,'sssa',72),(18,'2023-09-10 22:03:17',5,'????',NULL),(19,'2023-09-10 22:04:37',5,'AA',NULL),(20,'2023-09-10 22:05:07',5,'sa',72);
 /*!40000 ALTER TABLE `opinie` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `dodaj_informacje_o_opinii` AFTER INSERT ON `opinie` FOR EACH ROW BEGIN
+  DECLARE user_login VARCHAR(255);
+  DECLARE info_type VARCHAR(255);
+  DECLARE text VARCHAR(255);
+
+  -- Sprawdź, czy użytkownik jest zarejestrowany
+  IF NEW.uzytkownik_id IS NULL THEN
+    -- Jeśli niezarejestrowany, ustaw domyślny login
+    SET user_login = 'Niezarejestrowany';
+  ELSE
+    -- Pobierz login użytkownika na podstawie jego ID
+    SELECT login INTO user_login FROM reg_request WHERE id = NEW.uzytkownik_id;
+  END IF;
+
+  -- Ustaw typ informacji i treść
+  SET info_type = 'Opinia';
+  SET text = CONCAT('Użytkownik o loginie "', user_login, '" wysłał opinię: ', NEW.tresc);
+
+  -- Wstaw dane do tabeli "info"
+  INSERT INTO info (user_login,user_id, info_type, text, created_at) VALUES (user_login,NEW.uzytkownik_id, info_type, text, NOW());
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `reg_request`
@@ -451,4 +486,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-10 17:43:39
+-- Dump completed on 2023-09-10 22:06:01
