@@ -18,7 +18,10 @@
         </ul>
       </nav>
       
+    <!-- Dodaj przyciski do sortowania -->
     
+<button id="sortDescending">Sortuj malejąco</button>
+<button id="sortAscending">Sortuj rosnąco </button>
     <h1>Opinie użytkowników</h1>
     <% if (opinions.length > 0) { %>
       <h2>Średnia ocen: <%= averageRating %></h2>
@@ -26,25 +29,47 @@
       <p>Brak opinii do wyświetlenia.</p>
     <% } %>
 
-    <ul>
-        <% opinions.forEach((opinion) => { %>
-            <li>
-                <h3>Ocena: <%= opinion.ocena %> gwiazdek</h3>
-                <p> Opinia: <%= opinion.tresc %></p>
-                <p>Data wystawienia: <%= opinion.data_wystawienia %></p>
-                <p>Użytkownik: 
-                  <% if (typeof opinion.uzytkownik_id === 'number') { %>
-                    Zarejestrowany
-                  <% } else { %>
-                    Niezarejestrowany
-                  <% } %>
-                </p>
-                
-            </li>
-        <% }); %>
-    </ul>
-   
+    <ul id="opinionsList">
+      <% opinions.forEach((opinion) => { %>
+          <li data-rating="<%= opinion.ocena %>">
+              <h3>Ocena: <%= opinion.ocena %> gwiazdek</h3>
+              <p> Opinia: <%= opinion.tresc %></p>
+              <p>Data wystawienia: <%= opinion.data_wystawienia %></p>
+              <p>Użytkownik: 
+                <% if (typeof opinion.uzytkownik_id === 'number') { %>
+                  Zarejestrowany
+                <% } else { %>
+                  Niezarejestrowany
+                <% } %>
+              </p>
+          </li>
+      <% }); %>
+  </ul>
+  
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+      const opinionsList = document.getElementById("opinionsList");
+      const sortDescendingButton = document.getElementById("sortDescending");
+      const sortAscendingButton = document.getElementById("sortAscending");
+  
+      sortDescendingButton.addEventListener("click", function () {
+          const sortedOpinions = Array.from(opinionsList.children)
+              .sort((a, b) => b.getAttribute("data-rating") - a.getAttribute("data-rating"));
+  
+          sortedOpinions.forEach(opinion => opinionsList.appendChild(opinion));
+      });
+  
+      sortAscendingButton.addEventListener("click", function () {
+          const sortedOpinions = Array.from(opinionsList.children)
+              .sort((a, b) => a.getAttribute("data-rating") - b.getAttribute("data-rating"));
+  
+          sortedOpinions.forEach(opinion => opinionsList.appendChild(opinion));
+      });
+  });
+  </script>
+  
     
+   
     
 </body>
 </html>
