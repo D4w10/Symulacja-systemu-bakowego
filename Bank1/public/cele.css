@@ -1,0 +1,114 @@
+nav {
+    background-color: #004d9c; /* Kolor niebieski */
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 80px; /* Ustaw wysokość nawigacji */
+  }
+  
+  nav h4 {
+    margin: 0;
+  }
+  
+  nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center; /* Wyśrodkuj w pionie */
+  }
+  
+  nav ul li {
+    margin-right: 20px;
+  }
+  
+  nav ul li a {
+    text-decoration: none;
+    color: #fff; /* Kolor biały */
+    font-weight: bold;
+  }
+  
+  /* Styl dla sekcji z celami */
+  .cele {
+    margin: 20px auto; /* Wyśrodkuj w pionie i poziomie */
+    max-width: 600px; /* Ogranicz szerokość sekcji */
+    text-align: center; /* Wyśrodkuj tekst w sekcji */
+  }
+  
+  .cele h2 {
+    color: #007BFF; /* Kolor niebieski */
+  }
+  
+  .cele form input[type="text"],
+  .cele form input[type="number"],
+  .cele form input[type="date"],
+  .cele form button {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc; /* Kolor szary */
+  }
+  
+  .cele form button {
+    background-color: #004d9c; /* Kolor niebieski */
+    color: #fff; /* Kolor biały */
+    border: none;
+    cursor: pointer;
+  }
+  
+  .cele form button:hover {
+    background-color: #0056b3; /* Kolor niebieski (ciemniejszy odcień) */
+  }
+  
+  .cel {
+    background-color: #f4f4f4; /* Kolor tła jasnoszary */
+    border: 1px solid #ccc; /* Kolor szary */
+    padding: 10px;
+    margin: 10px auto; /* Wyśrodkuj w pionie i poziomie */
+    max-width: 400px; /* Ogranicz szerokość celu */
+  }
+  
+  /* Dodatkowe style dla alertów */
+  .alert {
+    padding: 10px;
+    margin-top: 10px;
+  }
+  
+  .alert.alert-danger {
+    background-color: #FF6B6B; /* Kolor czerwony */
+    color: #fff; /* Kolor biały */
+  }
+  
+  .alert.alert-success {
+    background-color: #5CB85C; /* Kolor zielony */
+    color: #fff; /* Kolor biały */
+  }
+/* Styl dla sekcji z celami */
+.cele {
+    margin: 20px auto; /* Wyśrodkuj w pionie i poziomie */
+    max-width: 800px; /* Ogranicz szerokość sekcji */
+    text-align: center; /* Wyśrodkuj tekst w sekcji */
+    display: flex; /* Ustaw sekcję na flexbox */
+    flex-wrap: wrap; /* Pozwól elementom zawijać się do nowego wiersza */
+    justify-content: space-around; /* Rozłóż elementy w równych odstępach */
+  }
+  
+  .wrapp {
+    display: flex; /* Ustaw divy we wrapp na flexbox */
+    flex-wrap: wrap; /* Pozwól elementom zawijać się do nowego wiersza */
+    justify-content: space-between; /* Rozłóż elementy w równych odstępach */
+  }
+  
+  .cel {
+    background-color: #f4f4f4; /* Kolor tła jasnoszary */
+    border: 1px solid #ccc; /* Kolor szary */
+    padding: 30px; /* Zwiększ padding wewnątrz celu */
+    margin: 10px; /* Dodaj odstęp między celami */
+  
+    box-sizing: border-box; /* Uwzględnij padding i border w szerokości elementu */
+  }
+
+
+
+  

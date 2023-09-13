@@ -59,6 +59,7 @@
       <p>Nie masz żadnych celów.</p>
     <% } else { %>
     <% goals.forEach(goals => { %>
+      <div class="wrapp">
       <div class="cel">
         <h3><%= goals.goal_name %></h3>
         <p><%= goals.description %></p>
@@ -79,6 +80,8 @@
         </form>
       </div>
     <% }); %>
+  </div>
+  </div>
 
   </div>
   <% } %>

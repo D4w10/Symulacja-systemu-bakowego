@@ -1,3 +1,4 @@
+
 Witaj w projekcie "Sysmulacja systemu bankowego" 
 
 INSTALACJA 
