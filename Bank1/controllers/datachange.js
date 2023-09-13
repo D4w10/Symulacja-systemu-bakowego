@@ -66,7 +66,7 @@ exports.datachange = async (req, res) => {
           console.log('Hasło zostało zmienione');
 
           res.render('konto', {
-            message: "Hasło zostało zmienione",
+            message2: "Hasło zostało zmienione",
             user: resultuse[0]
           });
         });
@@ -105,7 +105,7 @@ exports.datachangemail = async (req, res) => {
         db.query('SELECT * FROM reg_request INNER JOIN account ON reg_request.id = account.user_id WHERE reg_request.id = ?', [decoded.id], async (error, resultuse) => {
 
         res.render('konto', {
-          message: "Adres email został zmieniony",
+          message2: "Adres email został zmieniony",
           user: resultuse[0]
          });
         })

@@ -11,6 +11,8 @@
 
   <link rel="stylesheet" type="text/css" href="/navstyle.css">
   <link rel="stylesheet" href="/profile.css">
+  <link rel="stylesheet" href="/cele.css">
+
   <title>Document</title>
 </head>
 
@@ -62,8 +64,8 @@
         <p><%= goals.description %></p>
         <p>Kwota docelowa: <%= goals.target_amount %></p>
         <p>Kwota aktualna: <%= goals.current_amount %></p>
-        <p>Data rozpoczęcia: <%= goals.start_date %></p>
-        <p>Data zakończenia: <%= goals.end_date %></p>
+        <p>Data rozpoczęcia: <%= goals.start %></p>
+        <p>Data zakończenia: <%= goals.end %></p>
         <form action="/goals/<%= goals.id_goal %>/deposit" method="post">
           <input type="number" name="amount" placeholder="Kwota wpłaty" required>
           <button type="submit">Wpłać</button>

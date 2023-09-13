@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-  
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
   <script src="https://kit.fontawesome.com/edb0032d42.js" crossorigin="anonymous"></script>
@@ -14,8 +13,6 @@
   <link rel="stylesheet" href="/profile.css"> -->
   <link rel="stylesheet" type="text/css" href="/navstyle.css">
  <link rel="stylesheet" type="text/css" href="/profile.css">
- <link rel="stylesheet" type="text/css" href="/chatt.css">
-
   <title>Document</title>
 </head>
 
@@ -160,8 +157,6 @@
             <p><%= transfer.czas%></p> -->
           </li>
           <% } %>
-           
-       
 
         <% }); %>
       </ul>
@@ -171,225 +166,6 @@
 </div>
 </div>
 
-<!-- Obrazek przycisku -->
-<div id="chatButton" class="chat-button">
-  <img src="chat.png" alt="FAQ" class="chat-icon">
-</div>
 
-<!-- Okno czatu (początkowo ukryte) -->
-<div id="chatBox" class="chat-box hidden">
-  <div class="chat-header">
-    <h2>Chat</h2>
-    <button id="closeChat" class="close-chat-button">×</button>
-  </div>
-  <div class="chat-messages">
-    <!-- Dodaj więcej takich elementów FAQ -->
-    <div class="faq-item">
-      <button class="faq-question-button">Pytanie 1: Jak otworzyć konto bankowe?</button>
-      <div class="faq-answer hidden">
-        <p>Aby otworzyć konto bankowe, należy odwiedzić najbliższą placówkę bankową i złożyć wniosek wypełniając niezbędne dokumenty. Wymagane dokumenty to dowód osobisty oraz potwierdzenie miejsca zamieszkania.</p>
-      </div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-question-button">Pytanie 2: Jak złożyć wniosek o kredyt?</button>
-      <div class="faq-answer hidden">
-        <p>Wniosek o kredyt można złożyć w banku osobiście lub online na stronie internetowej banku. Należy wypełnić wniosek kredytowy i dostarczyć wymagane dokumenty, takie jak zaświadczenie o dochodach.</p>
-      </div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-question-button">Pytanie 3: Jak sprawdzić saldo konta?</button>
-      <div class="faq-answer hidden">
-        <p>Aby sprawdzić saldo konta, można skorzystać z bankomatu, aplikacji mobilnej banku lub internetowego systemu bankowego. Wystarczy zalogować się do systemu i wybrać opcję "Sprawdź saldo konta".</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Dodaj przycisk "Ocen" -->
-  <button id="showOpinion" class="faq-button">Oceń</button>
-
-  <!-- Dodaj sekcję oceny FAQ (na początek ukrytą) -->
-  <div id="opinion-section" class="hidden">
-    <h2>Oceń nasze FAQ</h2>
-    <p>Czy nasze pytania i odpowiedzi były pomocne? Oceń je i zostaw swoją opinię.</p>
-
-    <!-- Dodaj gwiazdki do oceny (na początek ukryte) -->
-    <div class="star-rating hidden">
-      <span class="star" data-rating="1">★</span>
-      <span class="star" data-rating="2">★</span>
-      <span class="star" data-rating="3">★</span>
-      <span class="star" data-rating="4">★</span>
-      <span class="star" data-rating="5">★</span>
-    </div>
-
-    <!-- Dodaj pole opinii (na początek ukryte) -->
-    <textarea id="opinion" class="hidden" placeholder="Napisz swoją opinię"></textarea>
-
-    <!-- Dodaj przycisk do przesłania opinii (na początek ukryty) -->
-    <button id="submitOpinion" class="hidden">Prześlij opinię</button>
-  </div>
-</div>
-
-<script>
-  var chatButton = document.getElementById('chatButton');
-  var chatBox = document.getElementById('chatBox');
-  var closeChat = document.getElementById('closeChat');
-  var showOpinionButton = document.getElementById('showOpinion');
-  var opinionSection = document.getElementById('opinion-section'); // Dodaj referencję do sekcji opinii
-  var starRating = document.querySelectorAll('.star');
-  var opinionTextArea = document.getElementById('opinion');
-  var submitOpinionButton = document.getElementById('submitOpinion');
-  var selectedRating = 0; // Przechowuje wybraną ocenę
-  
-
-
-  // Ukryj sekcję opinii na początku
-  opinionSection.style.display = 'none';
-
-  chatButton.addEventListener('click', function () {
-    chatBox.style.display = 'block'; // Wyświetl okno czatu
-    chatButton.style.display = 'none'; // Ukryj przycisk czatu
-  });
-
-  closeChat.addEventListener('click', function () {
-    chatBox.style.display = 'none'; // Ukryj okno czatu
-
-    // Dodaj klasę do obrazka czatu, aby zachować animację
-    chatButton.querySelector('.chat-icon').classList.add('chat-icon-animation');
-
-    // Zaktualizuj tylko styl przycisku czatu, aby stał się widoczny i skalowany po najechaniu
-    chatButton.style.display = 'flex';
-    chatButton.style.position = 'fixed';
-    chatButton.style.bottom = '60px';
-    chatButton.style.left = '60px';
-
-    // Dodaj efekt skalowania po najechaniu myszką
-    chatButton.addEventListener('mouseenter', function () {
-      chatButton.style.transform = 'scale(1.1)';
-    });
-
-    // Przywróć skalowanie do normalnej wielkości po zjechaniu myszką
-    chatButton.addEventListener('mouseleave', function () {
-      chatButton.style.transform = 'scale(1)';
-    });
-  });
-
-  // Pobierz wszystkie elementy FAQ
-  const faqItems = document.querySelectorAll('.faq-item');
-
-  // Dodaj nasłuchiwacza na każdy element FAQ
-  faqItems.forEach((faqItem) => {
-    const questionButton = faqItem.querySelector('.faq-question-button');
-    const answer = faqItem.querySelector('.faq-answer');
-
-    // Ukryj odpowiedzi na pytania na początku
-    answer.style.display = 'none';
-
-    questionButton.addEventListener('click', () => {
-      // Kiedy przycisk zostanie kliknięty, przełącz widoczność odpowiedzi
-      if (answer.style.display === 'block') {
-        answer.style.display = 'none';
-        questionButton.classList.remove('active'); // Usuń klasę aktywności z przycisku
-      } else {
-        answer.style.display = 'block';
-        questionButton.classList.add('active'); // Dodaj klasę aktywności do przycisku
-      }
-    });
-  });
-
-  // Dodaj obsługę przycisku "Ocen"
-  showOpinionButton.addEventListener('click', function () {
-    // Ukryj pytania FAQ
-    faqItems.forEach((faqItem) => {
-      faqItem.style.display = 'none';
-    });
-
-    // Ukryj przycisk "Ocen"
-    showOpinionButton.style.display = 'none';
-
-    // Pokaż sekcję oceny FAQ
-    opinionSection.style.display = 'block';
-  });
- // Pobierz wszystkie gwiazdki
-const stars = document.querySelectorAll('.star');
-
-// Zmienna przechowująca ocenę
-let currentRating = 0;
-
-// Ustaw nasłuchiwacza na każdą gwiazdkę
-stars.forEach((star) => {
-  star.addEventListener('mouseenter', function () {
-    // Zmień kolor tylko na czerwony dla tej gwiazdki i wszystkich poprzednich
-    const rating = parseInt(star.getAttribute('data-rating'));
-    stars.forEach((s, index) => {
-      if (index < rating) {
-        s.classList.add('hovered');
-      } else {
-        s.classList.remove('hovered');
-      }
-    });
-  });
-
-  star.addEventListener('mouseleave', function () {
-    // Usuń efekt najechania - przywróć domyślny kolor, ale tylko dla gwiazdek o niższej ocenie niż obecna ocena
-    stars.forEach((s, index) => {
-      if (index < currentRating) {
-        s.classList.add('hovered');
-      } else {
-        s.classList.remove('hovered');
-      }
-    });
-  });
-
-  star.addEventListener('click', function () {
-    // Ustaw ocenę po kliknięciu
-    const rating = parseInt(star.getAttribute('data-rating'));
-    currentRating = rating;
-    document.getElementById('selectedRating').innerText = `Twoja ocena: ${rating}`;
-    
-    // Zaktualizuj tylko kolor gwiazdek do wybranej oceny
-    stars.forEach((s, index) => {
-      if (index < rating) {
-        s.classList.add('selected');
-      } else {
-        s.classList.remove('selected');
-      }
-    });
-  });
-});
-
-submitOpinionButton.addEventListener('click', function () {
-    // Pobierz ilość gwiazdek
-    const selectedRating = currentRating;
-
-    // Pobierz treść opinii
-    const opinionText = opinionTextArea.value;
-
-    // Wyślij dane do serwera
-    fetch('/wystaw-opinie', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        ocena: selectedRating,
-        tresc: opinionText,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success) {
-          // Jeśli przesyłanie opinii zakończyło się sukcesem, wyświetl odpowiedni komunikat
-          alert('Opinia została A dodana.');
-        } else {
-          // W przeciwnym przypadku wyświetl błąd
-          alert('Błąd podczas przesyłania opinii.');
-        }
-      })
-      .catch((error) => {
-        console.error('Błąd:', error);
-        alert('Błąd podczas przesyłania opinii.');
-      });
-  });
-</script>
 </body>
 </html>

@@ -126,3 +126,63 @@ border-radius: 50%;
 .star-rating .star.selected {
   color: red; /* Kolor po najechaniu i po kliknięciu */
 }
+
+
+
+
+
+/* Przycisk "Oceń" */
+#showOpinion {
+  background-color: #007BFF;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  margin: 0 auto; /* Wyśrodkowanie przycisku na poziomie */
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: block; /* Zmiana na block, aby przycisk zajmował całą dostępną szerokość */
+}
+
+#showOpinion:hover {
+  background-color: #0056b3;
+}
+
+
+
+
+
+
+
+/* Styl dla elementów FAQ */
+.faq-item {
+  margin-bottom: 20px;
+}
+
+.faq-question-button {
+  background-color: rgb(150, 148, 148);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 100%;
+  text-align: left;
+}
+
+.faq-question-button:hover {
+  background-color: #0056b3;
+}
+
+.faq-answer {
+  background-color: #f4f4f4;
+  padding: 10px;
+  border-radius: 5px;
+  display: none;
+}
+
+/* Styl dla elementów FAQ widocznych po kliknięciu */
+.faq-item.active .faq-answer {
+  display: block;
+}

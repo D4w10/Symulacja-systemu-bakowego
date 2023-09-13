@@ -50,7 +50,7 @@ router.get('/profile', authController.isLoggedIn, (req, res) => {
        Where t.sender_id = ? OR t.recipient_id = ?
       ORDER BY created_at DESC LIMIT 15` ;
       db.query(getDataQuery,[req.user.id,req.user.id], (err,transrow)=>{
-        console.log("testttttsafdsfd");
+        
 
 console.log(transrow[0]);
       const getMessageQuery = `SELECT * FROM messages WHERE id_odbiorcy = ? ORDER BY wyslano_o LIMIT 2`;
@@ -65,7 +65,8 @@ console.log(transrow[0]);
           oszcz: req.oszczed,
           mess: result
         });
-         // console.log(transrow);
+        console.log("testttttsafdsfd");
+         console.log(transrow);
 
       
 

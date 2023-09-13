@@ -13,7 +13,7 @@ exports.getGoals = async (req, res) => {
   const userId = req.userid.id;
 
   try {
-    const goalsQuery = 'SELECT * FROM goals WHERE user_id = ?';
+    const goalsQuery = `SELECT *, date_FORMAT(start_date, '%Y-%m-%d') as start,date_FORMAT(end_date, '%Y-%m-%d') as end FROM goals WHERE user_id = ?`;
     await db.query(goalsQuery, [userId],(error,goals)=>{
         console.log("-=--==-----------==============================");
     console.log(goals);

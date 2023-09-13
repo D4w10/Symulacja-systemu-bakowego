@@ -1,0 +1,78 @@
+
+.zawart {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.dane {
+    flex: 1;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+.datachange {
+    flex: 1;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+
+.datachange form,
+.datachangemail form {
+    margin-top: 20px;
+}
+
+.datachange form label,
+.datachangemail form label {
+    font-weight: bold;
+}
+
+.datachange form input[type="password"],
+.datachangemail form input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.datachange form button[type="submit"],
+.datachangemail form button[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.datachange form button[type="submit"]:hover,
+.datachangemail form button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Komunikat o błędzie */
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+/* Komunikat o sukcesie */
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 20px;
+}

@@ -1,0 +1,144 @@
+/* Reset some default styles */
+body, h1, h4, p {
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Define a background color for the body */
+  body {
+    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Style the navigation menu */
+  nav {
+    background-color: #004080;
+    color: #fff;
+    text-align: center;
+    height: 100px;
+    line-height: 100px;
+  }
+  
+  nav ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  nav ul li {
+    display: inline;
+    margin-right: 20px;
+  }
+  
+  nav ul li a {
+    text-decoration: none;
+    color: #fff;
+  }
+  
+  /* Style the container */
+  .container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Style the form elements */
+  form {
+    margin-top: 20px;
+  }
+  
+  label {
+    font-weight: bold;
+  }
+  
+  input[type="text"],
+  input[type="number"],
+  select {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  button[type="submit"] {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  /* Style the alert messages */
+  .alert {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 4px;
+  }
+  
+  .alert-success {
+    background-color: #4CAF50;
+    color: #fff;
+  }
+  
+  .alert-danger {
+    background-color: #f44336;
+    color: #fff;
+  }
+  
+  /* Style the list of items */
+  /* ul {
+    list-style: none;
+    margin-top: 20px;
+  }
+   */
+  li {
+    margin-bottom: 10px;
+  }
+  
+  /* Style the link to stop a transaction */
+  a {
+    color: #f44336;
+    text-decoration: none;
+    margin-left: 10px;
+  }
+  /* Navigation menu styles */
+nav ul li a {
+    text-decoration: none;
+    color: #fff;
+    transition: color 0.3s; /* Add smooth color transition on hover */
+  }
+  
+  nav ul li a:hover {
+    color: #ff9900; /* Change the color on hover */
+  }
+  
+  /* Stop transaction link styles */
+  a {
+    color: #f44336;
+    text-decoration: none;
+    margin-left: 10px;
+    transition: color 0.3s; /* Add smooth color transition on hover */
+  }
+  
+  a:hover {
+    color: #ff0000; /* Change the color on hover */
+  }
+  
+  /* Button hover styles */
+  button[type="submit"] {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s; /* Add smooth color and scale transition on hover */
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #555; /* Change the background color on hover */
+    transform: scale(1.05); /* Increase the size on hover */
+  }
+  
